@@ -3,15 +3,8 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #000000;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #121212;
-    --foreground: #ededed;
-  }
+  --background: #121212;
+  --foreground: #ededed;
 }
 
 body {
@@ -20,6 +13,6 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-.mid-screen {
-  @apply flex items-center justify-center h-screen;
+.sin-screen {
+  @apply flex items-center justify-center  w-[300px] mx-auto;
 }
