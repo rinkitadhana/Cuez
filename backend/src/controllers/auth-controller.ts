@@ -3,6 +3,28 @@ import User from "../models/user-model"
 import { errorHandler } from "../utils/errorHandler"
 import bcrypt from "bcryptjs"
 import { clearJWT, generateJWT } from "../utils/jwt-util"
+import { sendRegistrationOTP } from "../services/auth-service"
+
+const sendOTP = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { email, username } = req.body
+
+    if (!email || !username) {
+      res.status(400).json({ message: "Missing credentials!" })
+      return
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(email)) {
+      res.status(400).json({ message: "Invalid email format!" })
+      return
+    }
+    const result = await sendRegistrationOTP(email, username)
+    res.status(200).json({ message: "OTP sent successfully!" })
+  } catch (error) {
+    console.log("Error in sendOTP controller: ", error)
+    res.status(500).json({ message: "Server error!" })
+  }
+}
 
 const registerUser = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -73,4 +95,4 @@ const logoutUser = async (req: Request, res: Response): Promise<void> => {
   }
 }
 
-export { registerUser, loginUser, logoutUser }
+export { sendOTP, registerUser, loginUser, logoutUser }
