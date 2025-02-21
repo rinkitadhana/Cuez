@@ -4,6 +4,7 @@ import { errorHandler } from "../utils/errorHandler"
 import bcrypt from "bcryptjs"
 import { clearJWT, generateJWT } from "../utils/jwt-util"
 import { sendRegistrationOTP } from "../services/auth-service"
+import OTP from "../models/OTP-model"
 
 const sendOTP = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -27,12 +28,21 @@ const sendOTP = async (req: Request, res: Response): Promise<void> => {
 
 const registerUser = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { username, email, password } = req.body
+    const { username, email, password, otp } = req.body
 
-    if (!username || !email || !password) {
+    if (!username || !email || !password || !otp) {
       res.status(400).json({ message: "Missing credentials!" })
       return
     }
+    const otpRecord = await OTP.findOne({ email })
+    if (!otpRecord) {
+      res.status(400).json({ message: "OTP expired or not found!" })
+    }
+
+    if (otpRecord?.otp != otp) {
+      res.status(400).json({ message: "Invalid OTP!" })
+    }
+
     const existingEmail = await User.findOne({ email })
     const existingUsername = await User.findOne({ username })
     if (existingEmail || existingUsername) {
@@ -52,6 +62,7 @@ const registerUser = async (req: Request, res: Response): Promise<void> => {
       password: hashedPassword,
     })
     await newUser.save()
+    await OTP.deleteOne({ email })
     res.status(201).json({ message: "User created successfully!" })
   } catch (error) {
     errorHandler(res, error)
