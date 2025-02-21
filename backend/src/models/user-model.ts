@@ -4,7 +4,6 @@ interface IUser extends Document {
   username: string
   email: string
   password: string
-  isVerified: boolean
   createdAt: Date
   updatedAt: Date
 }
@@ -38,10 +37,6 @@ const userSchema = new mongoose.Schema<IUser>(
       type: String,
       required: [true, "Password is required!"],
       minlength: [8, "Password must be at least 8 characters long!"],
-    },
-    isVerified: {
-      type: Boolean,
-      default: false,
     },
   },
   {
