@@ -1,4 +1,4 @@
-import { generateOTP } from "utils/generateOTP"
+import { generateOTP } from "../utils/generateOTP"
 import User from "../models/user-model"
 import OTP from "../models/OTP-model"
 import { sendOTPEmail } from "./email-service"
