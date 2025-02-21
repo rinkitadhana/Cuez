@@ -2,6 +2,7 @@ import mongoose, { Document, Schema } from "mongoose"
 
 export interface IOTP extends Document {
   email: string
+  username: string
   otp: string
   createdAt: Date
 }
@@ -10,6 +11,10 @@ const OTPSchema = new Schema<IOTP>({
   email: {
     type: String,
     required: true,
+  },
+  username: {
+    type: String,
+    required: true
   },
   otp: {
     type: String,
