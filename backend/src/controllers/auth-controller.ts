@@ -18,8 +18,7 @@ const sendOTP = async (req: Request, res: Response): Promise<void> => {
       res.status(400).json({ message: "Invalid email format!" })
       return
     }
-    const result = await sendRegistrationOTP(email, username)
-    res.status(200).json({ message: "OTP sent successfully!" })
+    await sendRegistrationOTP(res, email, username)
   } catch (error) {
     console.log("Error in sendOTP controller: ", error)
     res.status(500).json({ message: "Server error!" })

@@ -2,19 +2,20 @@ import { generateOTP } from "utils/generateOTP"
 import User from "../models/user-model"
 import OTP from "../models/OTP-model"
 import { sendOTPEmail } from "./email-service"
+import { Response } from "express"
 
 const sendRegistrationOTP = async (
+  res: Response,
   email: string,
   username: string
-): Promise<{ success: boolean; message: string }> => {
+): Promise<void> => {
   try {
     const existingUser = await User.findOne({ email })
     if (existingUser) {
-      return { success: false, message: "Email already registerd!" }
+      res.status(400).json({ message: "Email already registerd!" })
+      return
     }
-
     const otp = generateOTP()
-
     await OTP.findOneAndDelete({ email })
     await OTP.create({
       email,
@@ -24,12 +25,13 @@ const sendRegistrationOTP = async (
 
     const emailSent = await sendOTPEmail(email, username, otp)
     if (!emailSent) {
-      return { success: false, message: "Failed to send OTP email!" }
+      res.status(400).json({ message: "Failed to send OTP email!" })
+      return
     }
-    return { success: true, message: "OTP sent successfully" }
+    res.status(200).json({ message: "OTP sent successfully" })
   } catch (error) {
     console.log("Error in sendingRegistrationOTP: ", error)
-    return { success: false, message: "Server Error" }
+    res.status(500).json({ message: "Server Error" })
   }
 }
 
