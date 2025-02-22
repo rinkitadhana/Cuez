@@ -50,28 +50,29 @@ export const getOTPEmailTemplate = (username: string, otp: string): string => {
   </div>
 
   <!-- OTP Section -->
-  <div
-    style="
-      background-color: #f8faff;
-      border: 2px dashed #4d6bfe;
-      border-radius: 12px;
-      padding: 25px 20px;
-      margin: 32px 0;
-      text-align: center;
-    "
-  >
-    <h2
+   <div
       style="
-        color: #4d6bfe;
-        font-size: 42px;
-        font-weight: 700;
-        letter-spacing: 12px;
-        margin: 0;
+        background-color: #f8faff;
+        border: 2px dashed #4d6bfe;
+        border-radius: 12px;
+        padding: 32px 24px;
+        margin: 32px 0;
+        text-align: center;
       "
     >
-      ${otp}
-    </h2>
-  </div>
+      <h2
+        style="
+          color: #4d6bfe;
+          font-size: 36px;
+          font-weight: 700;
+          letter-spacing: 12px;
+          margin: 0;
+          font-family: 'SF Mono', 'Courier New', monospace;
+        "
+      >
+        ${otp}
+      </h2>
+    </div>
 
   <!-- Timer Section -->
   <div
