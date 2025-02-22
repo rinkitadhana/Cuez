@@ -3,14 +3,14 @@ import User from "../models/user-model"
 import { errorHandler } from "../utils/errorHandler"
 import bcrypt from "bcryptjs"
 import { clearJWT, generateJWT } from "../utils/jwt-util"
-import { sendRegistrationOTP } from "../services/auth-service"
 import OTP from "../models/OTP-model"
+import { generateOTP } from "../utils/generateOTP"
+import { sendOTPEmail } from "../services/email-service"
 
 const sendOTP = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { email, username } = req.body
-
-    if (!email || !username) {
+    const { email } = req.body
+    if (!email) {
       res.status(400).json({ message: "Missing credentials!" })
       return
     }
@@ -19,7 +19,25 @@ const sendOTP = async (req: Request, res: Response): Promise<void> => {
       res.status(400).json({ message: "Invalid email format!" })
       return
     }
-    await sendRegistrationOTP(res, email, username)
+
+    const existingUser = await User.findOne({ email })
+    if (existingUser) {
+      res.status(400).json({ message: "Email already registerd!" })
+      return
+    }
+    const otp = generateOTP()
+    await OTP.findOneAndDelete({ email })
+    await OTP.create({
+      email,
+      otp,
+    })
+
+    const emailSent = await sendOTPEmail(email, email.split("@")[0], otp)
+    if (!emailSent) {
+      res.status(400).json({ message: "Failed to send OTP email!" })
+      return
+    }
+    res.status(200).json({ message: "OTP sent successfully" })
   } catch (error) {
     console.log("Error in sendOTP controller: ", error)
     res.status(500).json({ message: "Server error!" })

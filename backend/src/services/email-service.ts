@@ -9,13 +9,13 @@ export const sendOTPEmail = async (
     const mailOptions = {
       from: process.env.EMAIL_USER,
       to: email,
-      subject: "Cuez Email Verification OTP",
+      subject: "Email Verification OTP",
       html: getOTPEmailTemplate(username, otp),
     }
     await transporter.sendMail(mailOptions)
     return true
   } catch (error) {
     console.log("Error sending email:", error)
-    return true
+    return false
   }
 }

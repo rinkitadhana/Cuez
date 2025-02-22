@@ -7,25 +7,24 @@ export interface IOTP extends Document {
   createdAt: Date
 }
 
-const OTPSchema = new Schema<IOTP>({
-  email: {
-    type: String,
-    required: true,
+const OTPSchema = new Schema<IOTP>(
+  {
+    email: {
+      type: String,
+      required: true,
+    },
+    otp: {
+      type: String,
+      required: true,
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now,
+      expires: 600,
+    },
   },
-  username: {
-    type: String,
-    required: true
-  },
-  otp: {
-    type: String,
-    required: true,
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-    expires: 600,
-  },
-}, {collection: "otp-data"})
+  { collection: "otp-data" }
+)
 
 const OTP = mongoose.model<IOTP>("OTP", OTPSchema)
 export default OTP
