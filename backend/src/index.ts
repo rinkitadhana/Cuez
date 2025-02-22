@@ -3,6 +3,7 @@ import dotenv from "dotenv"
 import connectDB from "./config/database"
 import userRoute from "./routes/auth-route"
 import cookieParser from "cookie-parser"
+import cors from "cors"
 dotenv.config()
 
 //define
@@ -12,6 +13,14 @@ const PORT = process.env.PORT || 4000
 //middlewares
 app.use(express.json())
 app.use(cookieParser())
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL || "http://localhost:6969",
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+)
 
 //database
 connectDB()
