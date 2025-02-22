@@ -144,3 +144,9 @@ export const getOTPEmailTemplate = (username: string, otp: string): string => {
 
 `
 }
+
+export const getLoginEmailTemplate = (username: string): string => {
+  return `
+  <div>New login to ${username}</div>
+  `
+}

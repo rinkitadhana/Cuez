@@ -5,7 +5,7 @@ import bcrypt from "bcryptjs"
 import { clearJWT, generateJWT } from "../utils/jwt-util"
 import OTP from "../models/OTP-model"
 import { generateOTP } from "../utils/generateOTP"
-import { sendOTPEmail } from "../services/email-service"
+import { sendLoginEmail, sendOTPEmail } from "../services/email-service"
 
 const sendOTP = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -108,6 +108,7 @@ const loginUser = async (req: Request, res: Response): Promise<void> => {
       return
     }
     generateJWT(res, user._id as string)
+    sendLoginEmail(user.email, user.username)
     res.status(200).json({ message: "Login successful!" })
   } catch (error) {
     errorHandler(res, error)
