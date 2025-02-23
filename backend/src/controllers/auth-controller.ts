@@ -6,6 +6,12 @@ import { clearJWT, generateJWT } from "../utils/jwt-util"
 import OTP from "../models/OTP-model"
 import { generateOTP } from "../utils/generateOTP"
 import { sendLoginEmail, sendOTPEmail } from "../services/email-service"
+import jwt from "jsonwebtoken"
+import dotenv from "dotenv"
+dotenv.config()
+
+const JWT_SECRET_RESET = (process.env.JWT_SECRET_RESET as string) || "secret"
+const JWT_EXPIRY_RESET = "10m"
 
 const sendOTP = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -19,19 +25,17 @@ const sendOTP = async (req: Request, res: Response): Promise<void> => {
       res.status(400).json({ message: "Invalid email format!" })
       return
     }
-
-    const existingUser = await User.findOne({ email })
-    if (existingUser) {
-      res.status(400).json({ message: "Email already registerd!" })
-      return
-    }
+    // const existingUser = await User.findOne({ email })
+    // if (existingUser) {
+    //   res.status(400).json({ message: "Email already registerd!" })
+    //   return
+    // }
     const otp = generateOTP()
     await OTP.findOneAndDelete({ email })
     await OTP.create({
       email,
       otp,
     })
-
     const emailSent = await sendOTPEmail(email, email.split("@")[0], otp)
     if (!emailSent) {
       res.status(400).json({ message: "Failed to send OTP email!" })
@@ -124,4 +128,62 @@ const logoutUser = async (req: Request, res: Response): Promise<void> => {
   }
 }
 
-export { sendOTP, registerUser, loginUser, logoutUser }
+const verifyOTP = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { email, otp } = req.body
+    if (!email || !otp) {
+      res.status(400).json("Missing credentials!")
+      return
+    }
+    const otpRecord = await OTP.findOne({ email })
+    if (!otpRecord) {
+      res.status(400).json({ message: "OTP expired or not found!" })
+      return
+    }
+    if (otpRecord?.otp != otp) {
+      res.status(400).json({ message: "Invalid OTP!" })
+      return
+    }
+    const token = jwt.sign({ email }, JWT_SECRET_RESET, {
+      expiresIn: JWT_EXPIRY_RESET,
+    })
+    await OTP.deleteOne({ email })
+    res.status(200).json({ message: "OTP verified successfully!", token })
+  } catch (error) {
+    console.log("Error in verifying OTP: ", error)
+    res.status(500).json({ message: "Server Error!" })
+  }
+}
+
+const resetPassword = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { password, token } = req.body
+    if (!password || !token) {
+      res.status(400).json({ message: "Missing credentials!" })
+      return
+    }
+    const decoded = jwt.verify(token, JWT_SECRET_RESET) as { email: string }
+    const userEmail = decoded.email
+    const hashedPassword = await bcrypt.hash(password, 10)
+    const user = await User.findOne({ email: userEmail })
+    if (!user) {
+      res.status(400).json({ message: "User not found!" })
+      return
+    }
+    user.password = hashedPassword
+    await user.save()
+    res.status(200).json({ message: "Password reset successfully!" })
+  } catch (error) {
+    console.log("Error in resetPassword: ", error)
+    res.status(500).json({ message: "Server Error!" })
+  }
+}
+
+export {
+  sendOTP,
+  registerUser,
+  loginUser,
+  logoutUser,
+  verifyOTP,
+  resetPassword,
+}
