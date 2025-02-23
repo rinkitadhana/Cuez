@@ -17,10 +17,19 @@ const SignUp = () => {
   const [code, setCode] = useState<string>("")
   const [timer, setTimer] = useState<number>(0)
   const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(false)
+  const [emailError, setEmailError] = useState<boolean>(false)
 
   const handleSendOTP = () => {
-    setIsButtonDisabled(true)
-    setTimer(30)
+    if (email == "") {
+      setEmailError(true)
+      setTimeout(() => {
+        setEmailError(false)
+      }, 5000)
+    } else {
+      setEmailError(false)
+      setIsButtonDisabled(true)
+      setTimer(30)
+    }
   }
 
   const formatTimer = (time: number): string => {
@@ -88,6 +97,7 @@ const SignUp = () => {
               text="Email address"
               type="email"
               value={email}
+              error={emailError}
               onChange={(e) => setEmail(e.target.value)}
               ficon={<Mail strokeWidth={1.5} />}
             />
