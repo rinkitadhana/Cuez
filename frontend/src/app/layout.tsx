@@ -15,6 +15,12 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Cuez",
   description: "Cuez - A social media app for programmers",
+  icons: {
+    icon: {
+      url: "./img/icon/cuez-logo.png",
+      type: "image/png",
+    },
+  },
 }
 
 export default function RootLayout({
