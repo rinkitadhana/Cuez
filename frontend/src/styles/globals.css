@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #121212;
+  --foreground: #ededed;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.sin-screen {
+  @apply flex items-center justify-center  w-[300px] mx-auto;
+}
+
+.trans-btn {
+  @apply select-none border px-3 py-2 cursor-pointer hover:bg-zinc-800 transition duration-200 border-zinc-500 rounded-[10px];
+}
+.trans-btn-n {
+  @apply select-none border px-3 py-2 cursor-not-allowed  border-zinc-500/50 text-white/50 rounded-[10px];
+}
