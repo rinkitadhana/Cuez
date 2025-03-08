@@ -1,9 +1,16 @@
 "use client"
-import ButtonBlue from "@/components/ButtonBlue"
 import Error from "@/components/Error"
 import Input from "@/components/Input"
 import Footer from "@/layout/Footer"
-import { Eye, EyeOff, Hash, LockKeyhole, Mail, UserRound } from "lucide-react"
+import {
+  Eye,
+  EyeOff,
+  Hash,
+  LoaderCircle,
+  LockKeyhole,
+  Mail,
+  UserRound,
+} from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { useEffect, useState } from "react"
@@ -120,7 +127,16 @@ const ForgotPassword = () => {
             </div>
           </div>
           <div className=" flex flex-col gap-4">
-            <ButtonBlue text="Continue" />
+            <button className="blue-btn" type="submit">
+              {/* {isLoggingIn ? (
+                <div className="flex items-center justify-center gap-2">
+                  <LoaderCircle className="animate-spin" />
+                  Loading
+                </div>
+              ) : (
+                "Log in"
+              )} */}
+            </button>{" "}
             <div className="  flex justify-end">
               <Link
                 href="/login"

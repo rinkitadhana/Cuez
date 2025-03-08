@@ -1,23 +1,38 @@
 "use client"
-import ButtonBlue from "@/components/ButtonBlue"
-import Error from "@/components/Error"
 import Input from "@/components/Input"
+import { useSendOtp } from "@/hooks/useSendOTP"
+import { useRegister } from "@/hooks/useSignup"
 import Footer from "@/layout/Footer"
-import { Eye, EyeOff, Hash, LockKeyhole, Mail, UserRound } from "lucide-react"
+import useMessageStore from "@/store/messageStore"
+import {
+  Eye,
+  EyeOff,
+  Hash,
+  LoaderCircle,
+  LockKeyhole,
+  Mail,
+  UserRound,
+} from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { useEffect, useState } from "react"
 
 const SignUp = () => {
+  const { setMessage } = useMessageStore()
   const [username, setUsername] = useState<string>("")
   const [email, setEmail] = useState<string>("")
   const [password, setPassword] = useState<string>("")
   const [confirmPassword, setConfirmPassword] = useState<string>("")
   const [passwordsMatch, setPasswordsMatch] = useState<boolean>(true)
-  const [code, setCode] = useState<string>("")
+  const [otp, setOtp] = useState<string>("")
   const [timer, setTimer] = useState<number>(0)
   const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(false)
   const [emailError, setEmailError] = useState<boolean>(false)
+  const [usernameError, setUsernameError] = useState<boolean>(false)
+  const [passwordError, setPasswordError] = useState<boolean>(false)
+  const [otpError, setOtpError] = useState<boolean>(false)
+  const { mutate: sendOtp } = useSendOtp()
+  const { mutate: register, isPending: isRegistering } = useRegister()
 
   const handleSendOTP = () => {
     if (email == "") {
@@ -30,6 +45,44 @@ const SignUp = () => {
       setIsButtonDisabled(true)
       setTimer(30)
     }
+    sendOtp(email)
+  }
+
+  const handleSignup = () => {
+    if (username == "") {
+      setUsernameError(true)
+      setTimeout(() => {
+        setUsernameError(false)
+      }, 5000)
+    }
+    if (email == "") {
+      setEmailError(true)
+      setTimeout(() => {
+        setEmailError(false)
+      }, 5000)
+    }
+    if (password == "") {
+      setPasswordError(true)
+      setTimeout(() => {
+        setPasswordError(false)
+      }, 5000)
+    }
+    if (otp == "") {
+      setOtpError(true)
+      setTimeout(() => {
+        setOtpError(false)
+      }, 5000)
+    }
+    if (!passwordsMatch) {
+      setMessage("Password doesn't match!", "error")
+      return
+    }
+    register({
+      email,
+      username,
+      password,
+      otp,
+    })
   }
 
   const formatTimer = (time: number): string => {
@@ -61,17 +114,10 @@ const SignUp = () => {
     }
   }, [password, confirmPassword])
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    console.log("Username:", username)
-    console.log("Email:", email)
-    console.log("Password:", password)
-  }
-
   return (
     <section className="flex flex-col py-4 h-screen">
       <div className="flex-grow sin-screen ">
-        <form className=" flex flex-col gap-6" onSubmit={handleSubmit}>
+        <div className=" flex flex-col gap-6">
           <div className=" flex flex-col gap-4">
             <Image
               className=" size-50 select-none"
@@ -90,6 +136,7 @@ const SignUp = () => {
               text="Username"
               type="text"
               value={username}
+              error={usernameError}
               onChange={(e) => setUsername(e.target.value)}
               ficon={<UserRound strokeWidth={1.5} />}
             />
@@ -105,6 +152,7 @@ const SignUp = () => {
               text="Password"
               type="password"
               value={password}
+              error={passwordError}
               onChange={(e) => setPassword(e.target.value)}
               ficon={<LockKeyhole strokeWidth={1.5} />}
               licon1={<Eye strokeWidth={1.5} />}
@@ -114,20 +162,20 @@ const SignUp = () => {
               text="Confirm password"
               type="password"
               value={confirmPassword}
-              error={!passwordsMatch}
+              error={!passwordsMatch || passwordError}
               onChange={(e) => setConfirmPassword(e.target.value)}
               ficon={<LockKeyhole strokeWidth={1.5} />}
               licon1={<Eye strokeWidth={1.5} />}
               licon2={<EyeOff strokeWidth={1.5} />}
             />
-            {!passwordsMatch && <Error text="Password doesn't match!" />}
             <div className="flex items-center gap-3 w-full">
               <div className="flex-1">
                 <Input
                   text="Code"
                   type="text"
-                  value={code}
-                  onChange={(e) => setCode(e.target.value)}
+                  value={otp}
+                  error={otpError}
+                  onChange={(e) => setOtp(e.target.value)}
                   ficon={<Hash strokeWidth={1.5} />}
                 />
               </div>
@@ -145,7 +193,21 @@ const SignUp = () => {
             </div>
           </div>
           <div className=" flex flex-col gap-4">
-            <ButtonBlue text="Sign up" />
+            <button
+              disabled={isRegistering}
+              onClick={handleSignup}
+              type="submit"
+              className="blue-btn"
+            >
+              {isRegistering ? (
+                <div className="flex items-center justify-center gap-2">
+                  <LoaderCircle className="animate-spin" />
+                  Loading
+                </div>
+              ) : (
+                "Sign up"
+              )}
+            </button>
             <div className="  flex justify-between">
               <Link
                 href="forgot-password"
@@ -161,7 +223,7 @@ const SignUp = () => {
               </Link>
             </div>
           </div>
-        </form>
+        </div>
       </div>
       <Footer />
     </section>

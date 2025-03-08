@@ -1,8 +1,8 @@
 "use client"
-import ButtonBlue from "@/components/ButtonBlue"
 import Input from "@/components/Input"
+import { useLogin } from "@/hooks/useLogin"
 import Footer from "@/layout/Footer"
-import { Eye, EyeOff, LockKeyhole, UserRound } from "lucide-react"
+import { Eye, EyeOff, LoaderCircle, LockKeyhole, UserRound } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { useState } from "react"
@@ -10,17 +10,30 @@ import { useState } from "react"
 const LogIn = () => {
   const [identifier, setIdentifier] = useState<string>("")
   const [password, setPassword] = useState<string>("")
+  const [identifierError, setIdentifierError] = useState<boolean>(false)
+  const [passwordError, setPasswordError] = useState<boolean>(false)
+  const { mutate: login, isPending: isLoggingIn } = useLogin()
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    console.log("Identifier:", identifier)
-    console.log("Password:", password)
+  const handleLogin = () => {
+    if (identifier == "") {
+      setIdentifierError(true)
+      setTimeout(() => {
+        setIdentifierError(false)
+      }, 5000)
+    }
+    if (password == "") {
+      setPasswordError(true)
+      setTimeout(() => {
+        setPasswordError(false)
+      }, 5000)
+    }
+    login({ identifier, password })
   }
 
   return (
     <section className="flex flex-col py-4 h-screen">
       <div className="flex-grow sin-screen ">
-        <form className=" flex flex-col gap-6" onSubmit={handleSubmit}>
+        <div className=" flex flex-col gap-6">
           <div className=" flex flex-col gap-4">
             <Image
               className=" size-50 select-none"
@@ -37,6 +50,7 @@ const LogIn = () => {
               text="Username / email address"
               type="text"
               value={identifier}
+              error={identifierError}
               onChange={(e) => setIdentifier(e.target.value)}
               ficon={<UserRound strokeWidth={1.5} />}
             />
@@ -44,6 +58,7 @@ const LogIn = () => {
               text="Password"
               type="password"
               value={password}
+              error={passwordError}
               onChange={(e) => setPassword(e.target.value)}
               ficon={<LockKeyhole strokeWidth={1.5} />}
               licon1={<Eye strokeWidth={1.5} />}
@@ -51,7 +66,21 @@ const LogIn = () => {
             />
           </div>
           <div className=" flex flex-col gap-4">
-            <ButtonBlue text="Log in" />
+            <button
+              disabled={isLoggingIn}
+              onClick={handleLogin}
+              className="blue-btn"
+              type="submit"
+            >
+              {isLoggingIn ? (
+                <div className="flex items-center justify-center gap-2">
+                  <LoaderCircle className="animate-spin" />
+                  Loading
+                </div>
+              ) : (
+                "Log in"
+              )}
+            </button>
             <div className="  flex justify-between">
               <Link
                 href="forgot-password"
@@ -67,7 +96,7 @@ const LogIn = () => {
               </Link>
             </div>
           </div>
-        </form>
+        </div>
       </div>
       <Footer />
     </section>
