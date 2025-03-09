@@ -18,12 +18,14 @@ const Message: React.FC = () => {
   if (!message) return null
 
   return (
-    <div
-      className={`fixed top-5 left-1/2 -translate-x-1/2 px-5 py-2.5 rounded-md ${
-        type === "success" ? "bg-green-500" : "bg-red-500"
-      } text-white z-[1000] shadow-lg`}
-    >
-      {message}
+    <div className="fixed md:top-10 top-5 flex justify-center items-center w-full select-none">
+      <div
+        className={`md:w-1/3 w-[90%] mx-4 md:mx-auto px-5 py-2.5 text-white text-center font-medium rounded-[10px] z-[1000] ${
+          type === "success" ? "bg-green-500" : "bg-red-500 "
+        }`}
+      >
+        {message}
+      </div>
     </div>
   )
 }
