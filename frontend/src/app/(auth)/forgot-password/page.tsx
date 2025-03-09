@@ -80,6 +80,12 @@ const ForgotPassword = () => {
         setPasswordError(false)
       }, 5000)
     }
+    if (confirmPassword == "") {
+      setPasswordError(true)
+      setTimeout(() => {
+        setPasswordError(false)
+      }, 5000)
+    }
     if (!passwordsMatch) {
       setMessage("Password doesn't match!", "error")
       return
@@ -110,8 +116,12 @@ const ForgotPassword = () => {
 
 
   useEffect(() => {
-    if (password && confirmPassword) {
-      setPasswordsMatch(password === confirmPassword)
+    if (password) {
+      if (confirmPassword) {
+        setPasswordsMatch(password === confirmPassword)
+      } else {
+        setPasswordsMatch(false)
+      }
     } else {
       setPasswordsMatch(true)
     }

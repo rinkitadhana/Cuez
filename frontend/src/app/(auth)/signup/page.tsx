@@ -67,6 +67,12 @@ const SignUp = () => {
         setPasswordError(false)
       }, 5000)
     }
+    if (confirmPassword == "") {
+      setPasswordError(true)
+      setTimeout(() => {
+        setPasswordError(false)
+      }, 5000)
+    }
     if (otp == "") {
       setOtpError(true)
       setTimeout(() => {
@@ -107,8 +113,12 @@ const SignUp = () => {
   }, [timer])
 
   useEffect(() => {
-    if (password && confirmPassword) {
-      setPasswordsMatch(password === confirmPassword)
+    if (password) {
+      if (confirmPassword) {
+        setPasswordsMatch(password === confirmPassword)
+      } else {
+        setPasswordsMatch(false)
+      }
     } else {
       setPasswordsMatch(true)
     }
