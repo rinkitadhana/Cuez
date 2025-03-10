@@ -52,7 +52,8 @@ const ForgotPassword = () => {
   }
 
 
-  const handleVerifyOtp = () => {
+  const handleVerifyOtp = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
     if (email == "") {
       setEmailError(true)
       setTimeout(() => {
@@ -73,7 +74,8 @@ const ForgotPassword = () => {
     })
   }
 
-  const handleResetPassword = () => {
+  const handleResetPassword = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
     if (password == "") {
       setPasswordError(true)
       setTimeout(() => {
@@ -131,7 +133,7 @@ const ForgotPassword = () => {
     <section className="flex flex-col py-4 h-screen">
       <div className="flex-grow sin-screen ">
         {otpVerified ? (
-          <div className=" flex flex-col gap-6">
+          <form className=" flex flex-col gap-6" onSubmit={handleResetPassword}>
           <div className=" flex flex-col gap-4">
             <Image
               className=" size-50 select-none"
@@ -168,7 +170,7 @@ const ForgotPassword = () => {
             />
           </div>
           <div className=" flex flex-col gap-4">
-            <button onClick={handleResetPassword} className="blue-btn" type="submit">
+            <button disabled={isLoggingIn} className="blue-btn" type="submit">
               {isLoggingIn ? (
                 <div className="flex items-center justify-center gap-2">
                   <LoaderCircle className="animate-spin" />
@@ -187,9 +189,9 @@ const ForgotPassword = () => {
               </Link>
             </div>
             </div>
-          </div>
+          </form>
         ) : (
-          <div className=" flex flex-col gap-6">
+          <form className=" flex flex-col gap-6" onSubmit={handleVerifyOtp}>
             <div className=" flex flex-col gap-4">
             <Image
               className=" size-50 select-none"
@@ -231,6 +233,7 @@ const ForgotPassword = () => {
                 }`}
                 onClick={handleSendOTP}
                 disabled={isButtonDisabled}
+                type="button"
               >
                 {isButtonDisabled
                   ? `Resend in ${formatTimer(timer)}s`
@@ -239,7 +242,7 @@ const ForgotPassword = () => {
             </div>
           </div>
           <div className=" flex flex-col gap-4">
-            <button onClick={handleVerifyOtp} className="blue-btn" type="submit">
+            <button className="blue-btn" type="submit">
               {isLoggingIn ? (
                 <div className="flex items-center justify-center gap-2">
                   <LoaderCircle className="animate-spin" />
@@ -258,7 +261,7 @@ const ForgotPassword = () => {
               </Link>
             </div>
           </div>
-        </div>
+        </form>
           )
         }
       </div>

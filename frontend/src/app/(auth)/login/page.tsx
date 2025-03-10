@@ -14,7 +14,8 @@ const LogIn = () => {
   const [passwordError, setPasswordError] = useState<boolean>(false)
   const { mutate: login, isPending: isLoggingIn } = useLogin()
 
-  const handleLogin = () => {
+  const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
     if (identifier == "") {
       setIdentifierError(true)
       setTimeout(() => {
@@ -33,7 +34,7 @@ const LogIn = () => {
   return (
     <section className="flex flex-col py-4 h-screen">
       <div className="flex-grow sin-screen ">
-        <div className=" flex flex-col gap-6">
+        <form className=" flex flex-col gap-6" onSubmit={handleLogin}>
           <div className=" flex flex-col gap-4">
             <Image
               className=" size-50 select-none"
@@ -68,7 +69,6 @@ const LogIn = () => {
           <div className=" flex flex-col gap-4">
             <button
               disabled={isLoggingIn}
-              onClick={handleLogin}
               className="blue-btn"
               type="submit"
             >
@@ -96,7 +96,7 @@ const LogIn = () => {
               </Link>
             </div>
           </div>
-        </div>
+        </form>
       </div>
       <Footer />
     </section>
