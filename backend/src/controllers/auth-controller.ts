@@ -17,7 +17,7 @@ const sendOTP = async (req: Request, res: Response): Promise<void> => {
   try {
     const { email } = req.body
     if (!email) {
-      res.status(400).json({ message: "Missing credentials!" })
+      res.status(400).json({ message: "Please enter your email!" })
       return
     }
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -53,16 +53,18 @@ const registerUser = async (req: Request, res: Response): Promise<void> => {
     const { username, email, password, otp } = req.body
 
     if (!username || !email || !password || !otp) {
-      res.status(400).json({ message: "Missing credentials!" })
+      res.status(400).json({ message: "Please enter all fields!" })
       return
     }
     const otpRecord = await OTP.findOne({ email })
     if (!otpRecord) {
       res.status(400).json({ message: "OTP expired or not found!" })
+      return
     }
 
     if (otpRecord?.otp != otp) {
       res.status(400).json({ message: "Invalid OTP!" })
+      return
     }
 
     const existingEmail = await User.findOne({ email })
@@ -96,7 +98,7 @@ const loginUser = async (req: Request, res: Response): Promise<void> => {
     const { identifier, password } = req.body
 
     if (!identifier || !password) {
-      res.status(400).json({ message: "Missing credentials!" })
+      res.status(400).json({ message: "Please enter all fields!" })
       return
     }
     const user = identifier.includes("@")
@@ -132,7 +134,7 @@ const verifyOTP = async (req: Request, res: Response): Promise<void> => {
   try {
     const { email, otp } = req.body
     if (!email || !otp) {
-      res.status(400).json("Missing credentials!")
+      res.status(400).json({ message: "Please enter all fields!" })
       return
     }
     const otpRecord = await OTP.findOne({ email })
@@ -159,7 +161,7 @@ const resetPassword = async (req: Request, res: Response): Promise<void> => {
   try {
     const { password, token } = req.body
     if (!password || !token) {
-      res.status(400).json({ message: "Missing credentials!" })
+      res.status(400).json({ message: "Please enter all fields!" })
       return
     }
     const decoded = jwt.verify(token, JWT_SECRET_RESET) as { email: string }
