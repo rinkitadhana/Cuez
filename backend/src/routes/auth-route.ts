@@ -1,4 +1,6 @@
+import { protectRoute } from "../middlewares/ProtectRoute"
 import {
+  getMe,
   loginUser,
   logoutUser,
   registerUser,
@@ -15,5 +17,5 @@ router.post("/login", loginUser)
 router.post("/logout", logoutUser)
 router.post("/forgot-password/verify-otp", verifyOTP)
 router.post("/forgot-password/reset", resetPassword)
-
+router.get("/me", protectRoute, getMe)
 export default router
