@@ -18,7 +18,7 @@ const register = async (
   userData: RegisterRequest
 ): Promise<RegisterResponse> => {
   const response = await axios.post<RegisterResponse>(
-    config.backendUrl + "/register",
+    config.backendUrl + "/auth/register",
     userData
   )
   return response.data

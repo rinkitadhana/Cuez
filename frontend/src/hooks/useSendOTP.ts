@@ -9,7 +9,7 @@ interface SendOtpResponse {
 
 const sendOtp = async (email: string): Promise<SendOtpResponse> => {
   const response = await axios.post<SendOtpResponse>(
-    config.backendUrl + "/send-otp",
+    config.backendUrl + "/auth/send-otp",
     { email }
   )
   return response.data

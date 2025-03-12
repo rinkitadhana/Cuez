@@ -14,7 +14,7 @@ interface LoginResponse {
 
 const login = async (userData: LoginRequest): Promise<LoginResponse> => {
   const response = await axios.post<LoginResponse>(
-    config.backendUrl + "/login",
+    config.backendUrl + "/auth/login",
     userData
   )
   return response.data

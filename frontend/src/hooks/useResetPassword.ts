@@ -12,9 +12,11 @@ interface ResetPasswordResponse {
   message: string
 }
 
-const resetPassword = async (userData: ResetPasswordRequest): Promise<ResetPasswordResponse> => {
+const resetPassword = async (
+  userData: ResetPasswordRequest
+): Promise<ResetPasswordResponse> => {
   const response = await axios.post<ResetPasswordResponse>(
-    config.backendUrl + "/forgot-password/reset",
+    config.backendUrl + "/auth/forgot-password/reset",
     userData
   )
   return response.data
@@ -31,7 +33,8 @@ export const useResetPassword = () => {
     },
     onError: (error: AxiosError) => {
       const message =
-        (error.response?.data as ResetPasswordResponse)?.message || "Password reset failed!"
+        (error.response?.data as ResetPasswordResponse)?.message ||
+        "Password reset failed!"
       setMessage(message, "error")
     },
   })

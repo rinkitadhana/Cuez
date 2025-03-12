@@ -13,9 +13,11 @@ interface VerifyOtpResponse {
   token: string
 }
 
-const verifyOtp = async (userData: VerifyOtpRequest): Promise<VerifyOtpResponse> => {
+const verifyOtp = async (
+  userData: VerifyOtpRequest
+): Promise<VerifyOtpResponse> => {
   const response = await axios.post<VerifyOtpResponse>(
-    config.backendUrl + "/forgot-password/verify-otp",
+    config.backendUrl + "/auth/forgot-password/verify-otp",
     userData
   )
   return response.data
@@ -30,7 +32,8 @@ export const useVerifyOtp = () => {
     },
     onError: (error: AxiosError) => {
       const message =
-        (error.response?.data as VerifyOtpResponse)?.message || "OTP verification failed!"
+        (error.response?.data as VerifyOtpResponse)?.message ||
+        "OTP verification failed!"
       setMessage(message, "error")
     },
   })
