@@ -10,6 +10,8 @@ declare global {
   }
 }
 
+const JWT_SECRET = process.env.JWT_SECRET || "secret"
+
 export const protectRoute = async (
   req: Request,
   res: Response,
@@ -21,12 +23,7 @@ export const protectRoute = async (
       res.status(401).json({ message: "Not authorized, no token" })
       return
     }
-
-    const JWT_SECRET = process.env.JWT_SECRET
-    const decode = jwt.verify(
-      token,
-      JWT_SECRET as jwt.Secret
-    ) as jwt.JwtPayload & { userId: string }
+    const decode = jwt.verify(token, JWT_SECRET) as { userId: string }
     if (!decode) {
       res.status(401).json({ message: "Not authorized, invalid token" })
       return
