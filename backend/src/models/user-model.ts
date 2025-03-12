@@ -48,15 +48,15 @@ const userSchema = new mongoose.Schema<IUser>(
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
-        default:[]
-      }
+        default: [],
+      },
     ],
     followings: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
-        default: []
-      }
+        default: [],
+      },
     ],
     profileImg: {
       type: String,
@@ -64,7 +64,7 @@ const userSchema = new mongoose.Schema<IUser>(
     },
     coverImg: {
       type: String,
-      default: ""
+      default: "",
     },
     bio: {
       type: String,
@@ -72,12 +72,12 @@ const userSchema = new mongoose.Schema<IUser>(
     },
     link: {
       type: String,
-      default: ""
+      default: "",
     },
     location: {
       type: String,
-      default: "Earth"
-    }
+      default: "Earth, Milky Way",
+    },
   },
   {
     timestamps: true,
