@@ -23,6 +23,28 @@ export const metadata: Metadata = {
       type: "image/png",
     },
   },
+  openGraph: {
+    title: "Cuez",
+    description: "A social media app for programmers",
+    url: "https://cuez.vercel.app",
+    siteName: "Cuez",
+    images: [
+      {
+        url: "./img/OG/Cuez.png",
+        width: 1200,
+        height: 630,
+        alt: "Cuez - A social media app for programmers",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Cuez",
+    description: "A social media app for programmers",
+    images: ["./img/OG/Cuez.png"],
+  },
 }
 
 export default function RootLayout({
