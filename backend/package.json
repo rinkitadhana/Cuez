@@ -24,6 +24,7 @@
   "dependencies": {
     "@types/jsonwebtoken": "^9.0.8",
     "bcryptjs": "^3.0.1",
+    "cloudinary": "^2.6.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",

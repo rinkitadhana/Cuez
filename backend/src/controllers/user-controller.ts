@@ -1,6 +1,8 @@
 import { errorHandler } from "../utils/errorHandler"
 import User, { IUser } from "../models/user-model"
 import { Request, Response } from "express"
+import { v2 as cloudinary } from "cloudinary"
+
 
 const getUserProfile = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -73,12 +75,66 @@ const followUnfollowUser = async (
 
 		suggestedUsers.forEach((user) => (user.password = null));
 
-		res.status(200).json(suggestedUsers);
+		res.status(200).json({suggestedUsers, message: "Suggested users fetched successfully!"});
 	} catch (error) {
 		errorHandler(res, error)
   }
 }
 
+const updateUserProfile = async (req: Request, res: Response): Promise<void> => {
+  try{
+    const { fullName, username, bio, link, location} = req.body
+    const { profileImg, coverImg } = req.body
+
+    const userId = req.user._id
+
+    const user = await User.findById(userId)
+
+    if(!user){
+      res.status(404).json({message: "User not found!"})
+      return
+    }
+
+    if(profileImg){
+      if(user.profileImg){
+        const publicId = user.profileImg.split("/").pop()?.split(".")[0]
+        if (publicId) {
+          await cloudinary.uploader.destroy(`profile-images/${publicId}`)
+        }
+      }
+      const uploadedImg = await cloudinary.uploader.upload(profileImg, {
+        folder: "profile-images",
+      })
+      user.profileImg = uploadedImg.secure_url
+    }
+    if(coverImg){
+      if(user.coverImg){
+        const publicId = user.coverImg.split("/").pop()?.split(".")[0]
+        if (publicId) {
+          await cloudinary.uploader.destroy(`cover-images/${publicId}`)
+        }
+      }
+      const uploadedImg = await cloudinary.uploader.upload(coverImg, {
+        folder: "cover-images",
+      })
+      user.coverImg = uploadedImg.secure_url
+    }
+
+    user.fullName = fullName || user.fullName
+    user.username = username || user.username
+    user.bio = bio || user.bio
+    user.link = link || user.link
+    user.location = location || user.location
+
+    await user.save()
+    res.status(200).json({message: "User profile updated successfully!"})
+
+  } catch(error){
+    errorHandler(res, error)
+  }
+
+}
 
 
-export { getUserProfile, followUnfollowUser, getSuggestedUsers }
+
+export { getUserProfile, followUnfollowUser, getSuggestedUsers, updateUserProfile }
