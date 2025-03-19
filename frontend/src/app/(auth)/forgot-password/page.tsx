@@ -174,7 +174,6 @@ const ForgotPassword = () => {
               {isLoggingIn ? (
                 <div className="flex items-center justify-center gap-2">
                   <LoaderCircle className="animate-spin" />
-                  Loading
                 </div>
               ) : (
                 "Reset password"
@@ -246,7 +245,6 @@ const ForgotPassword = () => {
               {isLoggingIn ? (
                 <div className="flex items-center justify-center gap-2">
                   <LoaderCircle className="animate-spin" />
-                  Loading
                 </div>
               ) : (
                 "Continue"

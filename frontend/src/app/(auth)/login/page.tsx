@@ -75,7 +75,6 @@ const LogIn = () => {
               {isLoggingIn ? (
                 <div className="flex items-center justify-center gap-2">
                   <LoaderCircle className="animate-spin" />
-                  Loading
                 </div>
               ) : (
                 "Log in"

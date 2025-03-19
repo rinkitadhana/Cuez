@@ -213,7 +213,6 @@ const SignUp = () => {
               {isRegistering ? (
                 <div className="flex items-center justify-center gap-2">
                   <LoaderCircle className="animate-spin" />
-                  Loading
                 </div>
               ) : (
                 "Sign up"
