@@ -3,10 +3,11 @@ import dotenv from "dotenv"
 import connectDB from "./config/database"
 import authRoute from "./routes/auth-route"
 import userRoute from "./routes/user-route"
+import postRoute from "./routes/post-route"
 import cookieParser from "cookie-parser"
 import cors from "cors"
 dotenv.config()
-import {v2 as cloudinary} from "cloudinary"
+import { v2 as cloudinary } from "cloudinary"
 
 //define
 const app = express()
@@ -41,6 +42,7 @@ app.get("/", (req, res) => {
 //routes
 app.use("/api/auth", authRoute)
 app.use("/api/user", userRoute)
+app.use("/api/post", postRoute)
 
 //Listening
 app.listen(PORT, () => {
