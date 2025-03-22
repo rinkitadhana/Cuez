@@ -1,4 +1,5 @@
 import mongoose, { Document } from "mongoose"
+import { IPost } from "./post-model"
 
 interface IUser extends Document {
   fullName: string
@@ -11,6 +12,7 @@ interface IUser extends Document {
   coverImg: string
   bio: string
   link: string
+  likedPosts: IPost[]
   location: string
   createdAt: Date
   updatedAt: Date
@@ -82,6 +84,13 @@ const userSchema = new mongoose.Schema<IUser>(
       type: String,
       default: "Earth, Milky Way",
     },
+    likedPosts: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Post",
+        default: [],
+      },
+    ],
   },
   {
     timestamps: true,

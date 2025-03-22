@@ -5,6 +5,7 @@ import {
   createPost,
   deletePost,
   getAllPosts,
+  getLikedPosts,
   likeUnlikePost,
 } from "../controllers/post-controller"
 const router = express.Router()
@@ -14,5 +15,5 @@ router.delete("/delete-post/:id", protectRoute, deletePost)
 router.post("/like-post/:id", protectRoute, likeUnlikePost)
 router.post("/comment-post/:id", protectRoute, commentPost)
 router.get("/all-posts", getAllPosts)
-
+router.get("/liked-posts", protectRoute, getLikedPosts)
 export default router
