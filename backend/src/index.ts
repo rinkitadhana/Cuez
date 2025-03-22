@@ -4,6 +4,7 @@ import connectDB from "./config/database"
 import authRoute from "./routes/auth-route"
 import userRoute from "./routes/user-route"
 import postRoute from "./routes/post-route"
+import notificationRoute from "./routes/notification-route"
 import cookieParser from "cookie-parser"
 import cors from "cors"
 dotenv.config()
@@ -43,6 +44,7 @@ app.get("/", (req, res) => {
 app.use("/api/auth", authRoute)
 app.use("/api/user", userRoute)
 app.use("/api/post", postRoute)
+app.use("/api/notification", notificationRoute)
 
 //Listening
 app.listen(PORT, () => {
