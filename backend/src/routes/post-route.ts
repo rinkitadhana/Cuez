@@ -7,6 +7,8 @@ import {
   getAllPosts,
   getLikedPosts,
   likeUnlikePost,
+  getFollowingPosts,
+  getUserPosts,
 } from "../controllers/post-controller"
 const router = express.Router()
 
@@ -15,5 +17,7 @@ router.delete("/delete-post/:id", protectRoute, deletePost)
 router.post("/like-post/:id", protectRoute, likeUnlikePost)
 router.post("/comment-post/:id", protectRoute, commentPost)
 router.get("/all-posts", getAllPosts)
+router.get("/following-posts", protectRoute, getFollowingPosts)
 router.get("/liked-posts", protectRoute, getLikedPosts)
+router.get("/user-posts/:username", protectRoute, getUserPosts)
 export default router

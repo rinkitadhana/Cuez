@@ -169,6 +169,55 @@ const getLikedPosts = async (req: Request, res: Response): Promise<void> => {
   }
 }
 
+const getFollowingPosts = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const userId = req.user._id.toString()
+    const user = await User.findById(userId)
+    if (!user) {
+      res.status(404).json({ message: "User not found!" })
+      return
+    }
+    const followingPosts = await Post.find({ user: { $in: user.followings } })
+      .populate({
+        path: "user",
+        select: "-password",
+      })
+      .populate({
+        path: "comments.user",
+        select: "-password",
+      })
+    res.status(200).json(followingPosts)
+  } catch (error) {
+    errorHandler(res, error)
+  }
+}
+
+const getUserPosts = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { username } = req.params
+    const user = await User.findOne({ username })
+    if (!user) {
+      res.status(404).json({ message: "User not found!" })
+      return
+    }
+    const userPosts = await Post.find({ user: user._id })
+      .populate({
+        path: "user",
+        select: "-password",
+      })
+      .populate({
+        path: "comments.user",
+        select: "-password",
+      })
+    res.status(200).json(userPosts)
+  } catch (error) {
+    errorHandler(res, error)
+  }
+}
+
 export {
   createPost,
   deletePost,
@@ -176,4 +225,6 @@ export {
   likeUnlikePost,
   getAllPosts,
   getLikedPosts,
+  getFollowingPosts,
+  getUserPosts,
 }
