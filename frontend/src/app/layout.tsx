@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google"
 import "../styles/globals.css"
 import { TanstackProvider } from "@/components/providers/tanstack-provider"
 import Message from "@/components/Messages"
+import Navbar from "@/components/pageComponents/Navbar"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -59,7 +60,10 @@ export default function RootLayout({
       >
         <TanstackProvider>
           <Message />
-          {children}
+          <div className="flex  max-w-[1200px] mx-auto w-full">
+            <Navbar />
+            <div className="flex-1">{children}</div>
+          </div>
         </TanstackProvider>
       </body>
     </html>
