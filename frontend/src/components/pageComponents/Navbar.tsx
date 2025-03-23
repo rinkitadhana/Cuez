@@ -11,7 +11,6 @@ import { IoMdAdd } from "react-icons/io"
 import {
   IoBookmarks,
   IoBookmarksOutline,
-  IoChatboxOutline,
   IoFolderOpen,
   IoFolderOpenOutline,
   IoSettingsOutline,
