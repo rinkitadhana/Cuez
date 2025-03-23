@@ -1,10 +1,12 @@
-import React from "react"
+import MainWrapper from "@/layout/MainWrapper"
 
 const page = () => {
   return (
-    <div>
-      <h1>Projects | comming soon!</h1>
-    </div>
+    <MainWrapper>
+      <div>
+        <h1>Projects | comming soon!</h1>
+      </div>
+    </MainWrapper>
   )
 }
 

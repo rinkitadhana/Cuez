@@ -1,10 +1,13 @@
 import Header from "@/components/pageComponents/Header"
+import MainWrapper from "@/layout/MainWrapper"
 
 const page = () => {
   return (
-    <div>
-      <Header />
-    </div>
+    <MainWrapper>
+      <div>
+        <Header />
+      </div>
+    </MainWrapper>
   )
 }
 
