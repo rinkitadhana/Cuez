@@ -208,7 +208,7 @@ const Navbar = () => {
           Post
         </a>
       </div>
-      <div className="flex flex-col gap-2 py-2 px-2.5 border border-zinc-700 bg-zinc-800 rounded-xl ">
+      <div className="flex flex-col gap-2 ">
         <div className="flex items-center gap-2">
           <Image
             src="/img/icon/cuez-logo.png"
