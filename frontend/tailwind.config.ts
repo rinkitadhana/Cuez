@@ -5,6 +5,7 @@ export default {
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/layout/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     extend: {
@@ -12,6 +13,7 @@ export default {
         background: "var(--background)",
         foreground: "var(--foreground)",
         mainclr: "rgb(77 107 254)",
+        bgClr: "var(--background)",
       },
     },
   },

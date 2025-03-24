@@ -1,15 +1,17 @@
-import InfoBar from "@/components/pageComponents/InfoBar"
-import Navbar from "@/components/pageComponents/Navbar"
+import LeftSidebar from "./sidebars/LeftSidebar"
+import RightSidebar from "./sidebars/RightSidebar"
 
 const MainWrapper = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="flex max-w-[1200px] mx-auto w-full">
-      <Navbar />
-      <div className="flex-1">{children}</div>
-      <div className=" border">
-        <InfoBar />
+    <main className="flex w-[1200px] mx-auto h-screen gap-4">
+      <div className="w-[22%]">
+        <LeftSidebar />
       </div>
-    </div>
+      <div className="w-[55%] border-x border-zinc-700">{children}</div>
+      <div className="w-[22%]">
+        <RightSidebar />
+      </div>
+    </main>
   )
 }
 
