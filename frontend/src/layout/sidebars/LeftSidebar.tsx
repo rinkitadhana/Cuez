@@ -12,13 +12,12 @@ import { IoMdAdd } from "react-icons/io"
 import {
   IoBookmarks,
   IoBookmarksOutline,
-  IoCreateOutline,
   IoFolderOpen,
   IoFolderOpenOutline,
   IoSettingsOutline,
   IoSettingsSharp,
 } from "react-icons/io5"
-import { LuLogOut, LuSquarePen } from "react-icons/lu"
+import { LuLogOut } from "react-icons/lu"
 import { MdChatBubble, MdChatBubbleOutline } from "react-icons/md"
 import {
   RiHome2Fill,
