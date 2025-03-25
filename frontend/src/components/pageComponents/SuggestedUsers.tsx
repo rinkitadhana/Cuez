@@ -45,7 +45,7 @@ const SuggestedUsers = () => {
   }
 
   return (
-    <div className=" border-t border-zinc-700 py-4">
+    <div className=" border rounded-xl border-zinc-700 p-4">
       <h2 className="text-lg font-bold mb-4">Who to follow</h2>
       <div className="space-y-4">
         {suggestedUsers.map((user) => (
@@ -75,7 +75,7 @@ const SuggestedUsers = () => {
                 ${
                   user.isFollowing
                     ? "bg-zinc-700 text-white hover:bg-zinc-600 px-2"
-                    : "bg-white text-black hover:bg-white/75 px-4"
+                    : "bg-mainclr text-white hover:bg-mainclr/75 px-4"
                 }`}
             >
               {user.isFollowing ? (

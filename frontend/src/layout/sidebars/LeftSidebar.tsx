@@ -3,7 +3,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import React, { useState } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import { BiChat, BiSolidChat } from "react-icons/bi"
 import { BsBell, BsBellFill } from "react-icons/bs"
 import { FaRegUser, FaUser } from "react-icons/fa"
@@ -24,10 +24,23 @@ import {
   RiSearchFill,
   RiSearchLine,
 } from "react-icons/ri"
+import { SlOptions } from "react-icons/sl"
 
 const LeftSidebar = () => {
   const pathname = usePathname()
   const [isOpen, setIsOpen] = useState(false)
+  const menuRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setIsOpen(false)
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => document.removeEventListener("mousedown", handleClickOutside)
+  }, [])
 
   const links = [
     {
@@ -106,34 +119,46 @@ const LeftSidebar = () => {
 
   return (
     <div className="w-full flex flex-col justify-between py-4 select-none h-screen">
-      <div className="flex flex-col gap-4">
-        <div className="relative">
+      <div className="flex flex-col gap-3">
+        <div className="relative" ref={menuRef}>
           <div
             onClick={() => setIsOpen(!isOpen)}
-            className="cursor-pointer flex items-center gap-3 py-2 px-3 select-none group/pfp rounded-2xl hover:bg-zinc-800 transition-all duration-200"
+            className={` flex cursor-pointer items-center justify-between gap-2 w-full -ml-1  rounded-2xl group/pfp  transition-all duration-200 py-2 px-3 select-none      
+              ${isOpen ? "bg-zinc-800 ml-0" : "hover:ml-0 hover:bg-zinc-800"}`}
           >
-            <Image
-              src="/img/pfp/Gruz.jpeg"
-              alt="Profile picture"
-              width={40}
-              height={40}
-              className="rounded-full group-hover/pfp:rounded-xl transition-all duration-200"
-            />
-            <div className="opacity-0 group-hover/pfp:opacity-100 transition-all duration-200">
-              <h1 className="font-semibold leading-tight">Gruz</h1>
-              <p className="text-xs text-zinc-400">@damnGruz</p>
+            <div className="flex items-center gap-3  ">
+              <Image
+                src="/img/pfp/Gruz.jpeg"
+                alt="Profile picture"
+                width={40}
+                height={40}
+                className="rounded-xl"
+              />
+              <div
+                className={`opacity-0  transition-all duration-200 ${
+                  isOpen ? "opacity-100" : "group-hover/pfp:opacity-100"
+                }`}
+              >
+                <h1 className="font-semibold leading-tight">Gruz</h1>
+                <p className="text-xs text-zinc-400">@damnGruz</p>
+              </div>
             </div>
+            <SlOptions
+              className={`text-xl opacity-0 ${
+                isOpen ? "opacity-100" : "group-hover/pfp:opacity-95"
+              } transition-all duration-200`}
+            />
           </div>
 
           {isOpen && (
-            <div className="absolute top-16 left-0 w-full bg-zinc-800 cursor-pointer flex flex-col gap-1.5 p-2 select-none border rounded-2xl border-zinc-700 shadow-lg shadow-black/20">
-              <div className="font-medium flex items-center gap-2.5 px-4 py-2.5 rounded-xl hover:bg-blue-500/20 hover:text-blue-400 transition-colors duration-200">
-                <IoMdAdd className="text-xl" />
-                Add account
+            <div className="absolute top-16 left-0 w-full bg-zinc-800 cursor-pointer flex flex-col gap-1 p-2 select-none rounded-2xl">
+              <div className="font-semibold flex items-center gap-2 px-2.5 py-2.5 rounded-xl hover:bg-blue-500/20 hover:text-blue-400 transition-colors duration-200">
+                <IoMdAdd className=" text-xl" />
+                <p className="text-sm">Add account</p>
               </div>
-              <div className="font-medium flex items-center gap-2.5 px-4 py-2.5 rounded-xl hover:bg-red-500/20 hover:text-red-400 transition-colors duration-200">
-                <LuLogOut className="text-xl" />
-                Logout
+              <div className="font-semibold flex items-center gap-2.5 px-2.5 py-2.5 rounded-xl hover:bg-red-500/20 hover:text-red-400 transition-colors duration-200">
+                <LuLogOut className="" />
+                <p className="text-sm">Logout</p>
               </div>
             </div>
           )}
