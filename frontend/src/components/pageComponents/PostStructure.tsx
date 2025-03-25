@@ -42,14 +42,14 @@ const PostStructure = () => {
       </div>
       <div className="flex justify-between text-lg">
         <div className="flex gap-3 items-center">
-        <div className="p-1.5 hover:bg-zinc-700 rounded-lg" > <BiCommentDetail /> </div>
-        <div className="p-1.5 hover:bg-zinc-700 rounded-lg" > <HiArrowPathRoundedSquare /> </div>
-          <div className="p-1.5 hover:bg-zinc-700 rounded-lg"><BiUpvote /></div>
+        <div className="p-1.5 hover:bg-zinc-700 rounded-lg transition-all duration-200" > <BiCommentDetail /> </div>
+        <div className="p-1.5 hover:bg-zinc-700 rounded-lg transition-all duration-200" > <HiArrowPathRoundedSquare /> </div>
+          <div className="p-1.5 hover:bg-zinc-700 rounded-lg transition-all duration-200"><BiUpvote /></div>
           
         </div>
         <div className="flex gap-1 items-center">
-        <div className="p-1.5 hover:bg-zinc-700 rounded-lg"> <IoBookmarkOutline /> </div>
-        <div className="p-1.5 hover:bg-zinc-700 rounded-lg"> <RiShareBoxFill /> </div>
+        <div className="p-1.5 hover:bg-zinc-700 rounded-lg transition-all duration-200"> <IoBookmarkOutline /> </div>
+        <div className="p-1.5 hover:bg-zinc-700 rounded-lg transition-all duration-200"> <RiShareBoxFill /> </div>
         </div>
       </div>
     </section>
