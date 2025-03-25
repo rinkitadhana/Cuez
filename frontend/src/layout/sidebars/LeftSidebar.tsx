@@ -1,5 +1,6 @@
 "use client"
 
+import { SquarePen } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
@@ -7,6 +8,7 @@ import React, { useState } from "react"
 import { BiChat, BiSolidChat } from "react-icons/bi"
 import { BsBell, BsBellFill } from "react-icons/bs"
 import { FaRegUser, FaUser } from "react-icons/fa"
+import { FaRegPenToSquare } from "react-icons/fa6"
 import { IoMdAdd } from "react-icons/io"
 import {
   IoBookmarks,
@@ -16,7 +18,7 @@ import {
   IoSettingsOutline,
   IoSettingsSharp,
 } from "react-icons/io5"
-import { LuLogOut } from "react-icons/lu"
+import { LuLogOut, LuSquarePen } from "react-icons/lu"
 import { MdChatBubble, MdChatBubbleOutline } from "react-icons/md"
 import {
   RiHome2Fill,
@@ -29,160 +31,137 @@ const LeftSidebar = () => {
   const pathname = usePathname()
   const [isOpen, setIsOpen] = useState(false)
 
+  const links = [
+    {
+      href: "/home",
+      label: "Home",
+      icon: {
+        filled: <RiHome2Fill className="text-xl" />,
+        outline: <RiHome2Line className="text-xl" />,
+      },
+    },
+    {
+      href: "/search",
+      label: "Search",
+      icon: {
+        filled: <RiSearchFill className="text-xl" />,
+        outline: <RiSearchLine className="text-xl" />,
+      },
+    },
+    {
+      href: "/projects",
+      label: "Projects",
+      icon: {
+        filled: <IoFolderOpen className="text-xl" />,
+        outline: <IoFolderOpenOutline className="text-xl" />,
+      },
+    },
+    {
+      href: "/discussions",
+      label: "Discussions",
+      icon: {
+        filled: <BiSolidChat className="text-xl" />,
+        outline: <BiChat className="text-xl" />,
+      },
+    },
+    {
+      href: "/notifications",
+      label: "Notifications",
+      icon: {
+        filled: <BsBellFill className="text-xl" />,
+        outline: <BsBell className="text-xl" />,
+      },
+    },
+    {
+      href: "/chat",
+      label: "Chat",
+      icon: {
+        filled: <MdChatBubble className="text-xl" />,
+        outline: <MdChatBubbleOutline className="text-xl" />,
+      },
+    },
+    {
+      href: "/bookmarks",
+      label: "Bookmarks",
+      icon: {
+        filled: <IoBookmarks className="text-xl" />,
+        outline: <IoBookmarksOutline className="text-xl" />,
+      },
+    },
+    {
+      href: "/profile",
+      label: "Profile",
+      icon: {
+        filled: <FaUser className="text-xl" />,
+        outline: <FaRegUser className="text-xl" />,
+      },
+    },
+    {
+      href: "/settings",
+      label: "Settings",
+      icon: {
+        filled: <IoSettingsSharp className="text-xl" />,
+        outline: <IoSettingsOutline className="text-xl" />,
+      },
+    },
+  ]
+
   return (
-    <div className="w-full flex flex-col justify-between py-4 select-none h-screen sticky top-0">
-      <div className="flex flex-col gap-2">
-        <div
-          onClick={() => setIsOpen(!isOpen)}
-          className="cursor-pointer flex items-center gap-2 py-2 px-4 select-none border rounded-2xl border-zinc-700 hover:border-zinc-500 transition-colors duration-300"
-        >
-          <Image
-            src="/img/pfp/Gruz.jpeg"
-            alt="Profile picture"
-            width={30}
-            height={30}
-            className="rounded-full size-10"
-          />
-          <div>
-            <h1 className="font-semibold">Gruz</h1>
-            <p className="text-xs text-zinc-400">@damnGruz</p>
+    <div className="w-full flex flex-col justify-between py-4 select-none h-screen">
+      <div className="flex flex-col gap-4">
+        <div className="relative">
+          <div
+            onClick={() => setIsOpen(!isOpen)}
+            className="cursor-pointer flex items-center gap-3 py-2 px-3 select-none group/pfp rounded-2xl hover:bg-zinc-800 transition-all duration-200"
+          >
+            <Image
+              src="/img/pfp/Gruz.jpeg"
+              alt="Profile picture"
+              width={40}
+              height={40}
+              className="rounded-full group-hover/pfp:rounded-xl transition-all duration-200"
+            />
+            <div className="opacity-0 group-hover/pfp:opacity-100 transition-all duration-200">
+              <h1 className="font-semibold leading-tight">Gruz</h1>
+              <p className="text-xs text-zinc-400">@damnGruz</p>
+            </div>
           </div>
+
+          {isOpen && (
+            <div className="absolute top-16 left-0 w-full bg-zinc-800 cursor-pointer flex flex-col gap-1.5 p-2 select-none border rounded-2xl border-zinc-700 shadow-lg shadow-black/20">
+              <div className="font-medium flex items-center gap-2.5 px-4 py-2.5 rounded-xl hover:bg-blue-500/20 hover:text-blue-400 transition-colors duration-200">
+                <IoMdAdd className="text-xl" />
+                Add account
+              </div>
+              <div className="font-medium flex items-center gap-2.5 px-4 py-2.5 rounded-xl hover:bg-red-500/20 hover:text-red-400 transition-colors duration-200">
+                <LuLogOut className="text-xl" />
+                Logout
+              </div>
+            </div>
+          )}
         </div>
 
-        {isOpen && (
-          <div className="cursor-pointer flex flex-col gap-1 p-2 select-none border rounded-2xl border-zinc-700 hover:border-zinc-500 transition-colors duration-300">
-            <div className="font-medium flex items-center gap-2 px-4 py-2.5 rounded-xl hover:bg-blue-500/20 transition-colors duration-200">
-              <IoMdAdd className="text-xl" />
-              Add account
-            </div>
-            <div className="font-medium flex items-center gap-2 px-4 py-2.5 rounded-xl hover:bg-red-500/20 transition-colors duration-200">
-              <LuLogOut className="text-xl" />
-              Logout
-            </div>
-          </div>
-        )}
-        <nav className="flex flex-col gap-1 p-2 select-none border rounded-2xl border-zinc-700 hover:border-zinc-500 transition-colors duration-300">
-          <Link
-            href="/home"
-            className="nav-btn"
-            style={{ fontWeight: pathname === "/home" ? "600" : "normal" }}
-          >
-            {pathname === "/home" ? (
-              <RiHome2Fill className="text-xl" />
-            ) : (
-              <RiHome2Line className="text-xl" />
-            )}
-            Home
-          </Link>
-          <Link
-            href="/search"
-            className="nav-btn"
-            style={{ fontWeight: pathname === "/search" ? "600" : "normal" }}
-          >
-            {pathname === "/search" ? (
-              <RiSearchFill className="text-xl" />
-            ) : (
-              <RiSearchLine className="text-xl" />
-            )}
-            Search
-          </Link>
-
-          <Link
-            href="/projects"
-            className="nav-btn"
-            style={{ fontWeight: pathname === "/projects" ? "600" : "normal" }}
-          >
-            {pathname === "/projects" ? (
-              <IoFolderOpen className="text-xl" />
-            ) : (
-              <IoFolderOpenOutline className="text-xl" />
-            )}
-            Projects
-          </Link>
-
-          <Link
-            href="/discussions"
-            className="nav-btn"
-            style={{
-              fontWeight: pathname === "/discussions" ? "600" : "normal",
-            }}
-          >
-            {pathname === "/discussions" ? (
-              <BiSolidChat className="text-xl" />
-            ) : (
-              <BiChat className="text-xl" />
-            )}
-            Discussions
-          </Link>
-
-          <Link
-            href="/notifications"
-            className="nav-btn"
-            style={{
-              fontWeight: pathname === "/notifications" ? "600" : "normal",
-            }}
-          >
-            {pathname === "/notifications" ? (
-              <BsBellFill className="text-xl" />
-            ) : (
-              <BsBell className="text-xl" />
-            )}
-            Notifications
-          </Link>
-          <Link
-            href="/chat"
-            className="nav-btn"
-            style={{ fontWeight: pathname === "/chat" ? "600" : "normal" }}
-          >
-            {pathname === "/chat" ? (
-              <MdChatBubble className="text-xl" />
-            ) : (
-              <MdChatBubbleOutline className="text-xl" />
-            )}
-            Chat
-          </Link>
-          <Link
-            href="/bookmarks"
-            className="nav-btn"
-            style={{ fontWeight: pathname === "/bookmarks" ? "600" : "normal" }}
-          >
-            {pathname === "/bookmarks" ? (
-              <IoBookmarks className="text-xl" />
-            ) : (
-              <IoBookmarksOutline className="text-xl" />
-            )}
-            Bookmarks
-          </Link>
-          <Link
-            href="/profile"
-            className="nav-btn"
-            style={{ fontWeight: pathname === "/profile" ? "600" : "normal" }}
-          >
-            {pathname === "/profile" ? (
-              <FaUser className="text-xl" />
-            ) : (
-              <FaRegUser className="text-xl" />
-            )}
-            Profile
-          </Link>
-          <Link
-            href="/settings"
-            className="nav-btn"
-            style={{ fontWeight: pathname === "/settings" ? "600" : "normal" }}
-          >
-            {pathname === "/settings" ? (
-              <IoSettingsSharp className="text-xl" />
-            ) : (
-              <IoSettingsOutline className="text-xl" />
-            )}
-            Settings
-          </Link>
+        <nav className="flex flex-col gap-1 select-none">
+          {links.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="font-medium flex items-center gap-2 py-2.5 group/nav-link"
+              style={{ fontWeight: pathname === link.href ? "600" : "normal" }}
+            >
+              {pathname === link.href ? link.icon.filled : link.icon.outline}
+              <span className="group-hover/nav-link:ml-1.5 transition-all duration-200">
+                {link.label}
+              </span>
+            </Link>
+          ))}
         </nav>
         <Link
           href="/"
-          className="font-medium cursor-pointer flex items-center gap-2 px-4 py-2.5 rounded-full transition-all duration-200 bg-mainclr hover:bg-mainclr/80 text-white justify-center mt-6"
+          className="font-semibold w-fit cursor-pointer flex items-center gap-2 px-4 py-2 rounded-xl transition-all duration-200 bg-mainclr hover:bg-mainclr/80 text-white justify-center mt-2"
         >
-          Post
+          <LuSquarePen className="text-xl" />
+          Create a post
         </Link>
       </div>
       <div className="flex flex-col gap-2">
