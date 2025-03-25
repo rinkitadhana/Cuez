@@ -1,6 +1,5 @@
 "use client"
 
-import { SquarePen } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
@@ -8,7 +7,6 @@ import React, { useState } from "react"
 import { BiChat, BiSolidChat } from "react-icons/bi"
 import { BsBell, BsBellFill } from "react-icons/bs"
 import { FaRegUser, FaUser } from "react-icons/fa"
-import { FaRegPenToSquare } from "react-icons/fa6"
 import { IoMdAdd } from "react-icons/io"
 import {
   IoBookmarks,

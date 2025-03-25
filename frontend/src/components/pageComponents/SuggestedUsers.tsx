@@ -1,7 +1,7 @@
+import Image from "next/image"
 import { useState } from "react"
-import { FaCheck, FaUserCircle } from "react-icons/fa"
+import { FaUserCircle } from "react-icons/fa"
 import { IoMdCheckmark } from "react-icons/io"
-import { IoCheckmark } from "react-icons/io5"
 
 interface SuggestedUser {
   id: number
@@ -52,10 +52,12 @@ const SuggestedUsers = () => {
           <div key={user.id} className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               {user.profilePicture ? (
-                <img
+                <Image
                   src={user.profilePicture}
                   alt={user.name}
-                  className="w-10 h-10 rounded-full"
+                  width={40}
+                  height={40}
+                  className="rounded-full"
                 />
               ) : (
                 <FaUserCircle className="w-10 h-10 text-gray-400" />
