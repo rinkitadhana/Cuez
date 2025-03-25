@@ -1,5 +1,6 @@
 "use client"
 
+import { SquarePen } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
@@ -11,6 +12,7 @@ import { IoMdAdd } from "react-icons/io"
 import {
   IoBookmarks,
   IoBookmarksOutline,
+  IoCreateOutline,
   IoFolderOpen,
   IoFolderOpenOutline,
   IoSettingsOutline,
@@ -181,9 +183,9 @@ const LeftSidebar = () => {
         </nav>
         <Link
           href="/"
-          className="font-semibold w-fit cursor-pointer flex items-center gap-2 px-4 py-2 rounded-xl transition-all duration-200 bg-mainclr hover:bg-mainclr/80 text-white justify-center mt-2"
+          className="font-medium w-fit cursor-pointer flex items-center gap-2 px-4 py-2 rounded-xl transition-all duration-200 bg-mainclr hover:bg-mainclr/80 text-white justify-center mt-2"
         >
-          <LuSquarePen className="text-xl" />
+          <SquarePen size={20} />
           Create a post
         </Link>
       </div>
