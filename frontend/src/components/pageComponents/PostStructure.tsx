@@ -1,4 +1,8 @@
 import Image from "next/image"
+import { BiCommentDetail, BiUpvote } from "react-icons/bi"
+import { HiArrowPathRoundedSquare } from "react-icons/hi2"
+import { IoBookmarkOutline } from "react-icons/io5"
+import { RiShareBoxFill } from "react-icons/ri"
 import { SlOptions } from "react-icons/sl"
 
 const PostStructure = () => {
@@ -35,6 +39,18 @@ const PostStructure = () => {
         Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quam dolorem
         incidunt, vel sapiente maiores nemo nostrum quaerat aut unde ducimus
         dignissimos aspernatur.
+      </div>
+      <div className="flex justify-between text-lg">
+        <div className="flex gap-3 items-center">
+        <div className="p-1.5 hover:bg-zinc-700 rounded-lg" > <BiCommentDetail /> </div>
+        <div className="p-1.5 hover:bg-zinc-700 rounded-lg" > <HiArrowPathRoundedSquare /> </div>
+          <div className="p-1.5 hover:bg-zinc-700 rounded-lg"><BiUpvote /></div>
+          
+        </div>
+        <div className="flex gap-1 items-center">
+        <div className="p-1.5 hover:bg-zinc-700 rounded-lg"> <IoBookmarkOutline /> </div>
+        <div className="p-1.5 hover:bg-zinc-700 rounded-lg"> <RiShareBoxFill /> </div>
+        </div>
       </div>
     </section>
   )
