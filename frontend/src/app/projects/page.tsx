@@ -1,11 +1,10 @@
+import ComingSoon from "@/components/ComingSoon"
 import MainWrapper from "@/layout/MainWrapper"
 
 const page = () => {
   return (
     <MainWrapper>
-      <div>
-        <h1>Projects | comming soon!</h1>
-      </div>
+      <ComingSoon />
     </MainWrapper>
   )
 }

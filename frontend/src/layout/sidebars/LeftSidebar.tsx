@@ -153,11 +153,11 @@ const LeftSidebar = () => {
 
           {isOpen && (
             <div className="absolute top-16 left-0 w-full bg-zinc-800 cursor-pointer flex flex-col gap-1 p-2 select-none rounded-2xl">
-              <div className="font-semibold flex items-center gap-2 px-2.5 py-2.5 rounded-xl hover:bg-blue-500/20 hover:text-blue-400 transition-colors duration-200">
+              <div className="font-semibold flex items-center gap-2 px-2.5 py-2.5 rounded-xl hover:bg-zinc-500/20 transition-colors duration-200">
                 <IoMdAdd className=" text-xl" />
                 <p className="text-sm">Add account</p>
               </div>
-              <div className="font-semibold flex items-center gap-2.5 px-2.5 py-2.5 rounded-xl hover:bg-red-500/20 hover:text-red-400 transition-colors duration-200">
+              <div className="font-semibold flex items-center gap-2.5 px-2.5 py-2.5 rounded-xl hover:bg-zinc-500/20 transition-colors duration-200">
                 <LuLogOut className="" />
                 <p className="text-sm">Logout</p>
               </div>

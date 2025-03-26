@@ -1,6 +1,6 @@
 import Image from "next/image"
 import { useState } from "react"
-import { FaUserCircle } from "react-icons/fa"
+import { FaUser, FaUserCircle } from "react-icons/fa"
 import { IoMdCheckmark } from "react-icons/io"
 
 interface SuggestedUser {
@@ -57,10 +57,16 @@ const SuggestedUsers = () => {
                   alt={user.name}
                   width={40}
                   height={40}
-                  className="rounded-full"
+                  className="rounded-xl"
                 />
               ) : (
-                <FaUserCircle className="w-10 h-10 text-gray-400" />
+                <Image
+                  src="/img/pfp/user.jpg"
+                  alt="Default profile picture"
+                  width={40}
+                  height={40}
+                  className="rounded-xl object-cover size-10"
+                />
               )}
               <div>
                 <p className="font-semibold truncate">{user.name}</p>
