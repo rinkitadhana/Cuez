@@ -71,7 +71,7 @@ const SuggestedUsers = () => {
             </div>
             <button
               onClick={() => handleFollow(user.id)}
-              className={` py-1.5 rounded-xl text-sm font-semibold transition-colors
+              className={`select-none py-1.5 rounded-xl text-sm font-semibold transition-colors
                 ${
                   user.isFollowing
                     ? "bg-zinc-700 text-white hover:bg-zinc-600 px-2"

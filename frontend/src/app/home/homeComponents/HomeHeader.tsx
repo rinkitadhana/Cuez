@@ -7,7 +7,7 @@ const HomeHeader = () => {
   const [activeTab, setActiveTab] = useState("NEWEST")
 
   return (
-    <div className="flex w-full justify-between items-center border-b border-zinc-700 sticky top-0 bg-bgClr px-6">
+    <div className="flex w-full select-none justify-between items-center border-b border-zinc-700 sticky top-0 bg-bgClr px-6 z-10">
       <p className="font-semibold opacity-95">Scroll</p>
       <div className="flex items-center border border-zinc-700  rounded-xl my-2.5">
         <div
