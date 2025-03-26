@@ -182,7 +182,7 @@ const LeftSidebar = () => {
         </nav>
         <Link
           href="/"
-          className="font-medium w-fit cursor-pointer flex items-center gap-2 px-4 py-2 rounded-xl transition-all duration-200 bg-mainclr hover:bg-mainclr/80 text-white justify-center mt-2"
+          className="font-medium w-full cursor-pointer flex items-center gap-2 px-4 py-2 rounded-xl transition-all duration-200 bg-mainclr hover:bg-mainclr/80 text-white justify-center mt-2"
         >
           <SquarePen size={20} />
           Create a post

@@ -10,7 +10,7 @@ const MainWrapper = ({ children }: { children: React.ReactNode }) => {
       <div className="w-[53%] border-x border-zinc-700 overflow-y-auto scrollbar-hide">
         {children}
       </div>
-      <div className="w-[30%] h-full">
+      <div className="w-[30%] h-full overflow-y-auto scrollbar-hide">
         <RightSidebar />
       </div>
     </main>

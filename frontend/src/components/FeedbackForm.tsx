@@ -27,7 +27,10 @@ const FeedbackForm = () => {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+    <form
+      onSubmit={handleSubmit}
+      className="flex flex-col gap-5 border rounded-xl border-zinc-700 p-4"
+    >
       <div className="flex flex-col gap-1">
         <h2 className="text-lg font-bold">Feedback</h2>
         <p className="text-sm text-zinc-400">
