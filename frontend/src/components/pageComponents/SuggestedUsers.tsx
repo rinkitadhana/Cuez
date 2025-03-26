@@ -1,6 +1,5 @@
 import Image from "next/image"
 import { useState } from "react"
-import { FaUser, FaUserCircle } from "react-icons/fa"
 import { IoMdCheckmark } from "react-icons/io"
 
 interface SuggestedUser {

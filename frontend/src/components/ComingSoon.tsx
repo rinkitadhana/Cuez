@@ -1,7 +1,7 @@
 "use client"
 
 import Image from "next/image"
-import { Rocket, Sparkles, Clock } from "lucide-react"
+import { Rocket, Sparkles } from "lucide-react"
 import { useEffect, useState } from "react"
 
 const ComingSoon = () => {
@@ -65,7 +65,7 @@ const ComingSoon = () => {
           Coming Soon!
         </h1>
         <p className="text-zinc-400 max-w-md text-lg">
-          We're crafting something extraordinary. Get ready for an amazing
+          We&apos;re crafting something extraordinary. Get ready for an amazing
           experience!
         </p>
       </div>
