@@ -1,11 +1,12 @@
 import MainWrapper from "@/layout/MainWrapper"
+import Header from "./notificationComponent/Header"
+import NoNotification from "./notificationComponent/NoNotification"
 
 const page = () => {
   return (
     <MainWrapper>
-      <div>
-        <h1>Notifications | comming soon!</h1>
-      </div>
+      <Header />
+      <NoNotification />
     </MainWrapper>
   )
 }
