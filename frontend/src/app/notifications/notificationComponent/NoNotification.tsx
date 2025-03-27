@@ -9,7 +9,7 @@ const NoNotification = () => {
       </div>
       <h3 className="text-xl font-medium mb-2">No notifications yet</h3>
       <p className="text-sm text-zinc-500">
-        When you receive notifications, they'll appear here
+        When you receive notifications, they&apos;ll appear here
       </p>
     </div>
   )
