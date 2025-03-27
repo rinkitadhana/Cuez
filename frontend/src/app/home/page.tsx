@@ -9,7 +9,6 @@ const page = () => {
       <div className=" flex flex-col w-full">
         <HomeHeader />
         <div className="flex flex-col h-screen">
-          <CreatePost />
           <PostStructure />
           <PostStructure />
           <PostStructure />
