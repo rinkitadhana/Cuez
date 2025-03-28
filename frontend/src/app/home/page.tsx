@@ -1,7 +1,6 @@
 import MainWrapper from "@/layout/MainWrapper"
 import HomeHeader from "./homeComponents/HomeHeader"
 import PostStructure from "@/components/pageComponents/PostStructure"
-import CreatePost from "@/components/pageComponents/CreatePost"
 
 const page = () => {
   return (
