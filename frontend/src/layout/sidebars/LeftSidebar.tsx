@@ -1,5 +1,6 @@
 "use client"
 
+import CreatePost from "@/components/pageComponents/CreatePost"
 import { SquarePen } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
@@ -180,13 +181,7 @@ const LeftSidebar = () => {
             </Link>
           ))}
         </nav>
-        <Link
-          href="/"
-          className="font-medium w-full cursor-pointer flex items-center gap-2 px-4 py-2 rounded-xl transition-all duration-200 bg-mainclr hover:bg-mainclr/80 text-white justify-center mt-2"
-        >
-          <SquarePen size={20} />
-          Create a post
-        </Link>
+        <CreatePost />
       </div>
       <div className="flex flex-col gap-2">
         <div className="flex items-center gap-2">
