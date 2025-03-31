@@ -3,14 +3,20 @@ import { ImagePlus, SmilePlus, X } from "lucide-react"
 import Image from "next/image"
 import { useState, useRef, useEffect } from "react"
 import { MdOutlineVideoCameraBack } from "react-icons/md"
+import EmojiPicker from "emoji-picker-react"
+import { Theme, EmojiStyle } from "emoji-picker-react"
 
 const CreatePost = () => {
   const [postContent, setPostContent] = useState("")
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false)
+  const [showWarning, setShowWarning] = useState(false)
   const [selectedMedia, setSelectedMedia] = useState<
     Array<{ type: "image" | "video"; url: string }>
   >([])
   const modalRef = useRef<HTMLDivElement>(null)
+  const emojiPickerRef = useRef<HTMLDivElement>(null)
+  const warningRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -18,18 +24,34 @@ const CreatePost = () => {
         modalRef.current &&
         !modalRef.current.contains(event.target as Node)
       ) {
-        setIsModalOpen(false)
+        if (postContent.trim() || selectedMedia.length > 0) {
+          setShowWarning(true)
+        } else {
+          setIsModalOpen(false)
+        }
+      }
+      if (
+        emojiPickerRef.current &&
+        !emojiPickerRef.current.contains(event.target as Node)
+      ) {
+        setShowEmojiPicker(false)
+      }
+      if (
+        warningRef.current &&
+        !warningRef.current.contains(event.target as Node)
+      ) {
+        setShowWarning(false)
       }
     }
 
-    if (isModalOpen) {
+    if (isModalOpen || showEmojiPicker || showWarning) {
       document.addEventListener("mousedown", handleClickOutside)
     }
 
     return () => {
       document.removeEventListener("mousedown", handleClickOutside)
     }
-  }, [isModalOpen])
+  }, [isModalOpen, showEmojiPicker, showWarning, postContent, selectedMedia])
 
   const handleMediaSelect = (file: File, type: "image" | "video") => {
     if (selectedMedia.length >= 4) return
@@ -53,6 +75,21 @@ const CreatePost = () => {
     console.log("Post content:", postContent)
     setPostContent("")
     setIsModalOpen(false)
+  }
+
+  const onEmojiClick = (emojiObject: any) => {
+    setPostContent((prev) => prev + emojiObject.emoji)
+  }
+
+  const handleDiscard = () => {
+    setPostContent("")
+    setSelectedMedia([])
+    setIsModalOpen(false)
+    setShowWarning(false)
+  }
+
+  const handleCancel = () => {
+    setShowWarning(false)
   }
 
   return (
@@ -194,14 +231,66 @@ const CreatePost = () => {
                           }
                         />
                       </label>
-                      <div className="p-2 hover:bg-zinc-800 rounded-xl transition-all duration-200 cursor-pointer">
+                      <div
+                        ref={emojiPickerRef}
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          setShowEmojiPicker(!showEmojiPicker)
+                        }}
+                        className={`${
+                          showEmojiPicker ? "bg-zinc-800" : "hover:bg-zinc-800"
+                        } p-2  rounded-xl transition-all duration-200 cursor-pointer relative`}
+                      >
                         <SmilePlus size={20} />
+                        {showEmojiPicker && (
+                          <div
+                            className="absolute top-full left-0 mt-2 z-20"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <EmojiPicker
+                              onEmojiClick={onEmojiClick}
+                              theme={Theme.DARK}
+                              searchPlaceholder="Search emoji..."
+                              width={350}
+                              height={400}
+                              emojiStyle={EmojiStyle.NATIVE}
+                            />
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
                 </form>
               </div>
             </section>
+          </div>
+        </div>
+      )}
+
+      {showWarning && (
+        <div className="fixed inset-0 bg-bgClr/50 backdrop-blur-sm flex justify-center items-center z-[10000]">
+          <div
+            ref={warningRef}
+            className="bg-bgClr border border-zinc-700 w-full max-w-[400px] rounded-xl p-6"
+          >
+            <h2 className="text-xl font-semibold mb-4">Discard changes?</h2>
+            <p className="text-zinc-400 mb-6">
+              You have unsaved changes. Are you sure you want to discard them?
+            </p>
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={handleCancel}
+                className="px-4 py-2 rounded-xl font-semibold hover:bg-zinc-800 transition-all duration-200"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDiscard}
+                className="px-4 py-2 rounded-xl font-semibold bg-red-500 text-white hover:bg-red-600 transition-all duration-200"
+              >
+                Discard
+              </button>
+            </div>
           </div>
         </div>
       )}
