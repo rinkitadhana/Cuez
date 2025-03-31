@@ -1,5 +1,6 @@
 "use client"
 
+import BelowTip from "@/components/infoTips/BelowTip"
 import { Hash } from "lucide-react"
 import { useState } from "react"
 
@@ -41,10 +42,11 @@ const HomeHeader = () => {
           FOLLOWING
         </div>
       </div>
-
-      <div className="p-2 hover:bg-zinc-800 rounded-xl cursor-pointer opacity-95">
-        <Hash size={20} />
-      </div>
+      <BelowTip text="Feedbacks">
+        <div className="p-2 hover:bg-zinc-800 rounded-xl cursor-pointer opacity-95">
+          <Hash size={20} />
+        </div>
+      </BelowTip>
     </div>
   )
 }
