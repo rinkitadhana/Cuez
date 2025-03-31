@@ -1,5 +1,5 @@
 "use client"
-import { ImagePlus, SmilePlus, Video, X } from "lucide-react"
+import { ImagePlus, SmilePlus, X } from "lucide-react"
 import Image from "next/image"
 import { useState, useRef, useEffect } from "react"
 import { MdOutlineVideoCameraBack } from "react-icons/md"
