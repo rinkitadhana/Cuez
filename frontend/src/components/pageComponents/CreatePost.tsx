@@ -76,8 +76,7 @@ const CreatePost = () => {
     setPostContent("")
     setIsModalOpen(false)
   }
-
-  const onEmojiClick = (emojiObject: any) => {
+  const onEmojiClick = (emojiObject: { emoji: string }) => {
     setPostContent((prev) => prev + emojiObject.emoji)
   }
 
