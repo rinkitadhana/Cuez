@@ -1,6 +1,6 @@
 "use client"
 import Input from "@/components/Input"
-import { useLogin } from "@/hooks/useLogin"
+import { useLogin } from "@/hooks/useAuth"
 import Footer from "@/layout/Footer"
 import { Eye, EyeOff, LoaderCircle, LockKeyhole, UserRound } from "lucide-react"
 import Image from "next/image"
@@ -67,11 +67,7 @@ const LogIn = () => {
             />
           </div>
           <div className=" flex flex-col gap-4">
-            <button
-              disabled={isLoggingIn}
-              className="blue-btn"
-              type="submit"
-            >
+            <button disabled={isLoggingIn} className="blue-btn" type="submit">
               {isLoggingIn ? (
                 <div className="flex items-center justify-center gap-2">
                   <LoaderCircle className="animate-spin" />
