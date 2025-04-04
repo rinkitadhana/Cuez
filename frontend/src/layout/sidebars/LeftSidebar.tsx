@@ -9,6 +9,7 @@ import { BiChat, BiSolidChat } from "react-icons/bi"
 import { BsBell, BsBellFill } from "react-icons/bs"
 import { FaRegUser, FaUser } from "react-icons/fa"
 import { IoMdAdd } from "react-icons/io"
+import { useLogout, useGetMe } from "@/hooks/useAuth"
 import {
   IoBookmarks,
   IoBookmarksOutline,
@@ -31,6 +32,12 @@ const LeftSidebar = () => {
   const pathname = usePathname()
   const [isOpen, setIsOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
+  const { mutate: logout } = useLogout()
+  const { data: me } = useGetMe()
+
+  const handleLogout = () => {
+    logout()
+  }
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -129,7 +136,7 @@ const LeftSidebar = () => {
           >
             <div className="flex items-center gap-3  ">
               <Image
-                src="/img/pfp/Gruz.jpeg"
+                src={me?.user.profileImg || "/img/pfp/Gruz.jpeg"}
                 alt="Profile picture"
                 width={40}
                 height={40}
@@ -140,8 +147,10 @@ const LeftSidebar = () => {
                   isOpen ? "opacity-100" : "group-hover/pfp:opacity-100"
                 }`}
               >
-                <h1 className="font-semibold leading-tight">Gruz</h1>
-                <p className="text-xs text-zinc-400">@damnGruz</p>
+                <h1 className="font-semibold leading-tight">
+                  {me?.user.fullName}
+                </h1>
+                <p className="text-xs text-zinc-400">@{me?.user.username}</p>
               </div>
             </div>
             <SlOptions
@@ -153,14 +162,20 @@ const LeftSidebar = () => {
 
           {isOpen && (
             <div className="absolute top-16 left-0 w-full bg-zinc-800 cursor-pointer flex flex-col gap-1 p-2 select-none rounded-2xl">
-              <div className="font-semibold flex items-center gap-2 px-2.5 py-2.5 rounded-xl hover:bg-zinc-500/20 transition-colors duration-200">
+              <Link
+                href="/login"
+                className="font-semibold flex items-center gap-2 px-2.5 py-2.5 rounded-xl hover:bg-zinc-500/20 transition-colors duration-200"
+              >
                 <IoMdAdd className=" text-xl" />
                 <p className="text-sm">Add account</p>
-              </div>
-              <div className="font-semibold flex items-center gap-2.5 px-2.5 py-2.5 rounded-xl hover:bg-zinc-500/20 transition-colors duration-200">
+              </Link>
+              <button
+                onClick={handleLogout}
+                className="font-semibold flex items-center gap-2.5 px-2.5 py-2.5 rounded-xl hover:bg-zinc-500/20 transition-colors duration-200"
+              >
                 <LuLogOut className="" />
                 <p className="text-sm">Logout</p>
-              </div>
+              </button>
             </div>
           )}
         </div>

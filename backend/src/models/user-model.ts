@@ -22,6 +22,9 @@ const userSchema = new mongoose.Schema<IUser>(
   {
     fullName: {
       type: String,
+      default: function () {
+        return this.username
+      },
     },
     username: {
       type: String,
@@ -59,18 +62,22 @@ const userSchema = new mongoose.Schema<IUser>(
     ],
     followings: [
       {
-        type: mongoose.Schema.Types.ObjectId,
+        type: [mongoose.Schema.Types.ObjectId],
         ref: "User",
-        default: [],
+        default: [
+          new mongoose.Types.ObjectId("6613f51d8e9c5cc171d53710"),
+          new mongoose.Types.ObjectId("6613f5b78e9c5cc171d53722"),
+        ],
       },
     ],
     profileImg: {
       type: String,
-      default: "",
+      default:
+        "https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1095249842.jpg",
     },
     coverImg: {
       type: String,
-      default: "",
+      default: "https://flowbite.com/docs/images/examples/image-3@2x.jpg",
     },
     bio: {
       type: String,
