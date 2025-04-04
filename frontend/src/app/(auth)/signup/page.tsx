@@ -1,7 +1,6 @@
 "use client"
 import Input from "@/components/Input"
-import { useSendOtp } from "@/hooks/useSendOTP"
-import { useRegister } from "@/hooks/useSignup"
+import { useSendOtp, useRegister } from "@/hooks/useAuth"
 import Footer from "@/layout/Footer"
 import useMessageStore from "@/store/messageStore"
 import {
