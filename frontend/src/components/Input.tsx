@@ -2,6 +2,7 @@
 import React, { useState } from "react"
 
 interface InputProps {
+  name?: string
   text: string
   type: string
   value: string
@@ -12,6 +13,7 @@ interface InputProps {
   licon2?: React.ReactNode
 }
 const Input: React.FC<InputProps> = ({
+  name,
   text,
   type,
   value,
@@ -30,6 +32,7 @@ const Input: React.FC<InputProps> = ({
     >
       {ficon && <div className="text-zinc-500">{ficon}</div>}
       <input
+        name={name}
         type={show ? "text" : type}
         value={value}
         onChange={onChange}
