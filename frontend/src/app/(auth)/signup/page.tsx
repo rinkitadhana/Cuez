@@ -19,12 +19,8 @@ import { useEffect, useState } from "react"
 
 const SignUp = () => {
   const { setMessage } = useMessageStore()
-  const [username, setUsername] = useState<string>("")
-  const [email, setEmail] = useState<string>("")
-  const [password, setPassword] = useState<string>("")
   const [confirmPassword, setConfirmPassword] = useState<string>("")
   const [passwordsMatch, setPasswordsMatch] = useState<boolean>(true)
-  const [otp, setOtp] = useState<string>("")
   const [timer, setTimer] = useState<number>(0)
   const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(false)
   const [emailError, setEmailError] = useState<boolean>(false)
@@ -33,36 +29,57 @@ const SignUp = () => {
   const [otpError, setOtpError] = useState<boolean>(false)
   const { mutate: sendOtp } = useSendOtp()
   const { mutate: register, isPending: isRegistering } = useRegister()
+  const [formData, setFormData] = useState<{
+    email: string
+    username: string
+    password: string
+    otp: string
+  }>({
+    email: "",
+    username: "",
+    password: "",
+    otp: "",
+  })
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    })
+  }
 
   const handleSendOTP = () => {
-    if (email == "") {
+    if (formData.email == "") {
       setEmailError(true)
       setTimeout(() => {
         setEmailError(false)
       }, 5000)
     } else {
-      setEmailError(false)
       setIsButtonDisabled(true)
+      setEmailError(false)
       setTimer(30)
+      sendOtp(formData.email, {
+        onError: () => {
+          setIsButtonDisabled(false)
+        },
+      })
     }
-    sendOtp(email)
   }
 
   const handleSignup = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    if (username == "") {
+    if (formData.username == "") {
       setUsernameError(true)
       setTimeout(() => {
         setUsernameError(false)
       }, 5000)
     }
-    if (email == "") {
+    if (formData.email == "") {
       setEmailError(true)
       setTimeout(() => {
         setEmailError(false)
       }, 5000)
     }
-    if (password == "") {
+    if (formData.password == "") {
       setPasswordError(true)
       setTimeout(() => {
         setPasswordError(false)
@@ -74,7 +91,7 @@ const SignUp = () => {
         setPasswordError(false)
       }, 5000)
     }
-    if (otp == "") {
+    if (formData.otp == "") {
       setOtpError(true)
       setTimeout(() => {
         setOtpError(false)
@@ -84,12 +101,7 @@ const SignUp = () => {
       setMessage("Password doesn't match!", "error")
       return
     }
-    register({
-      email,
-      username,
-      password,
-      otp,
-    })
+    register(formData)
   }
 
   const formatTimer = (time: number): string => {
@@ -114,16 +126,16 @@ const SignUp = () => {
   }, [timer])
 
   useEffect(() => {
-    if (password) {
+    if (formData.password) {
       if (confirmPassword) {
-        setPasswordsMatch(password === confirmPassword)
+        setPasswordsMatch(formData.password === confirmPassword)
       } else {
         setPasswordsMatch(false)
       }
     } else {
       setPasswordsMatch(true)
     }
-  }, [password, confirmPassword])
+  }, [formData.password, confirmPassword])
 
   return (
     <section className="flex flex-col py-4 h-screen">
@@ -144,32 +156,36 @@ const SignUp = () => {
           </div>
           <div className=" flex flex-col gap-4">
             <Input
+              name="username"
               text="Username"
               type="text"
-              value={username}
+              value={formData.username}
               error={usernameError}
-              onChange={(e) => setUsername(e.target.value)}
+              onChange={handleChange}
               ficon={<UserRound strokeWidth={1.5} />}
             />
             <Input
+              name="email"
               text="Email address"
               type="email"
-              value={email}
+              value={formData.email}
               error={emailError}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={handleChange}
               ficon={<Mail strokeWidth={1.5} />}
             />
             <Input
+              name="password"
               text="Password"
               type="password"
-              value={password}
+              value={formData.password}
               error={passwordError}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={handleChange}
               ficon={<LockKeyhole strokeWidth={1.5} />}
               licon1={<Eye strokeWidth={1.5} />}
               licon2={<EyeOff strokeWidth={1.5} />}
             />
             <Input
+              name="confirmPassword"
               text="Confirm password"
               type="password"
               value={confirmPassword}
@@ -182,11 +198,12 @@ const SignUp = () => {
             <div className="flex items-center gap-3 w-full">
               <div className="flex-1">
                 <Input
+                  name="otp"
                   text="Code"
                   type="text"
-                  value={otp}
+                  value={formData.otp}
                   error={otpError}
-                  onChange={(e) => setOtp(e.target.value)}
+                  onChange={handleChange}
                   ficon={<Hash strokeWidth={1.5} />}
                 />
               </div>
@@ -205,11 +222,7 @@ const SignUp = () => {
             </div>
           </div>
           <div className=" flex flex-col gap-4">
-            <button
-              disabled={isRegistering}
-              type="submit"
-              className="blue-btn"
-            >
+            <button disabled={isRegistering} type="submit" className="blue-btn">
               {isRegistering ? (
                 <div className="flex items-center justify-center gap-2">
                   <LoaderCircle className="animate-spin" />
