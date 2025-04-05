@@ -237,7 +237,7 @@ const getMe = async (): Promise<GetMeResponse> => {
     {
       withCredentials: true,
     }
-  )
+  ) 
   return response.data
 }
 
@@ -245,5 +245,6 @@ export const useGetMe = () => {
   return useQuery<GetMeResponse, AxiosError>({
     queryKey: ["me"],
     queryFn: getMe,
+    retry: false,
   })
 }
