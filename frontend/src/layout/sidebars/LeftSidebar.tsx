@@ -147,10 +147,10 @@ const LeftSidebar = () => {
                   isOpen ? "opacity-100" : "group-hover/pfp:opacity-100"
                 }`}
               >
-                <h1 className="font-semibold text-sm">
+                <h1 className="font-semibold text-sm truncate">
                   {me?.user.fullName}
                 </h1>
-                <p className="text-xs text-zinc-400">@{me?.user.username}</p>
+                <p className="text-xs text-zinc-400 truncate">@{me?.user.username}</p>
               </div>
             </div>
             <SlOptions
