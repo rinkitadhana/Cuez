@@ -131,7 +131,7 @@ const LeftSidebar = () => {
         <div className="relative" ref={menuRef}>
           <div
             onClick={() => setIsOpen(!isOpen)}
-            className={` flex cursor-pointer items-center justify-between gap-2 w-full -ml-1  rounded-2xl group/pfp  transition-all duration-200 py-2 px-3 select-none      
+            className={` flex cursor-pointer items-center justify-between gap-2 w-full -ml-1  rounded-2xl group/pfp  transition-all duration-200 py-2 px-2 select-none      
               ${isOpen ? "bg-zinc-800 ml-0" : "hover:ml-0 hover:bg-zinc-800"}`}
           >
             <div className="flex items-center gap-3  ">
@@ -147,15 +147,15 @@ const LeftSidebar = () => {
                   isOpen ? "opacity-100" : "group-hover/pfp:opacity-100"
                 }`}
               >
-                <h1 className="font-semibold leading-tight">
+                <h1 className="font-semibold text-sm">
                   {me?.user.fullName}
                 </h1>
                 <p className="text-xs text-zinc-400">@{me?.user.username}</p>
               </div>
             </div>
             <SlOptions
-              className={`text-xl opacity-0 ${
-                isOpen ? "opacity-100" : "group-hover/pfp:opacity-95"
+              className={`opacity-0 ${
+                isOpen ? "opacity-80" : "group-hover/pfp:opacity-80"
               } transition-all duration-200`}
             />
           </div>
