@@ -6,6 +6,8 @@ export interface IPost extends Document {
   img: string
   likes: mongoose.Types.ObjectId[]
   comments: IComment[]
+  createdAt: Date
+  updatedAt: Date
 }
 export interface IComment extends Document {
   user: mongoose.Types.ObjectId
