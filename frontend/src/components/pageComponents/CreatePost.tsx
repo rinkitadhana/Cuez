@@ -5,6 +5,8 @@ import { useState, useRef, useEffect } from "react"
 import { MdOutlineVideoCameraBack } from "react-icons/md"
 import EmojiPicker from "emoji-picker-react"
 import { Theme, EmojiStyle } from "emoji-picker-react"
+import { useGetMe } from "@/hooks/useAuth"
+import { useCreatePost } from "@/hooks/usePost"
 
 const CreatePost = () => {
   const [postContent, setPostContent] = useState("")
@@ -12,11 +14,13 @@ const CreatePost = () => {
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
   const [showWarning, setShowWarning] = useState(false)
   const [selectedMedia, setSelectedMedia] = useState<
-    Array<{ type: "image" | "video"; url: string }>
+    Array<{ type: "image" | "video"; file: File; url: string }>
   >([])
   const modalRef = useRef<HTMLDivElement>(null)
   const emojiPickerRef = useRef<HTMLDivElement>(null)
   const warningRef = useRef<HTMLDivElement>(null)
+  const { data: me } = useGetMe()
+  const { mutate: post } = useCreatePost()
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -57,7 +61,7 @@ const CreatePost = () => {
     if (selectedMedia.length >= 4) return
 
     const url = URL.createObjectURL(file)
-    setSelectedMedia((prev) => [...prev, { type, url }])
+    setSelectedMedia((prev) => [...prev, { type, file, url }])
   }
 
   const removeMedia = (index: number) => {
@@ -71,11 +75,21 @@ const CreatePost = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    // Handle post submission here
-    console.log("Post content:", postContent)
+    const formData = new FormData()
+    formData.append("text", postContent)
+
+    selectedMedia.forEach((media, index) => {
+      if (media.type === "image") {
+        formData.append("images", media.file)
+      }
+    })
+
+    post(formData)
     setPostContent("")
+    setSelectedMedia([])
     setIsModalOpen(false)
   }
+
   const onEmojiClick = (emojiObject: { emoji: string }) => {
     setPostContent((prev) => prev + emojiObject.emoji)
   }
@@ -109,7 +123,7 @@ const CreatePost = () => {
             <section className="flex flex-col gap-4">
               <div className="flex justify-between items-center sticky top-0 bg-bgClr z-10 py-2">
                 <Image
-                  src="/img/pfp/Gruz.jpeg"
+                  src={me?.user.profileImg || "/img/pfp/default.webp"}
                   alt="profile"
                   width={32}
                   height={32}
@@ -117,6 +131,7 @@ const CreatePost = () => {
                 />
                 <div className="flex gap-2 items-center">
                   <button
+                    onClick={handleSubmit}
                     type="submit"
                     disabled={!postContent.trim()}
                     className="px-4 py-1 bg-mainclr text-white font-semibold rounded-xl hover:bg-mainclr/80 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
@@ -126,7 +141,7 @@ const CreatePost = () => {
                 </div>
               </div>
               <div className="flex-1">
-                <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+                <form className="flex flex-col gap-4">
                   <div className="max-h-[calc(100vh-250px)] overflow-y-auto">
                     <div>
                       <textarea

@@ -140,7 +140,7 @@ const getAllPosts = async (req: Request, res: Response): Promise<void> => {
       res.status(404).json({ message: "No posts found!" })
       return
     }
-    res.status(200).json(posts)
+    res.status(200).json({ message: "Got all posts successfully", posts })
   } catch (error) {
     errorHandler(res, error)
   }

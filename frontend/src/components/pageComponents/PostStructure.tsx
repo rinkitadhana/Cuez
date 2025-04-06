@@ -6,7 +6,23 @@ import { IoBookmarkOutline } from "react-icons/io5"
 import { RiShareBoxFill } from "react-icons/ri"
 import { SlOptions } from "react-icons/sl"
 import { useEffect, useRef, useState } from "react"
-const PostStructure = () => {
+
+interface Post {
+  _id: string
+  user: string
+  text: string
+  img?: string
+  likes: string[]
+  comments: string[]
+  createdAt: Date
+  updatedAt: Date
+}
+
+interface PostStructureProps {
+  post: Post
+}
+
+const PostStructure = ({ post }: PostStructureProps) => {
   const [isOpen, setIsOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
 
@@ -20,12 +36,27 @@ const PostStructure = () => {
     document.addEventListener("mousedown", handleClickOutside)
     return () => document.removeEventListener("mousedown", handleClickOutside)
   }, [])
+
+  // Format date to display time since post
+  const formatDate = (date: Date) => {
+    const now = new Date()
+    const postDate = new Date(date)
+    const diffInSeconds = Math.floor(
+      (now.getTime() - postDate.getTime()) / 1000
+    )
+
+    if (diffInSeconds < 60) return `${diffInSeconds}s`
+    if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}m`
+    if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}h`
+    return `${Math.floor(diffInSeconds / 86400)}d`
+  }
+
   return (
     <section className="flex relative flex-col gap-4 p-4 border-b border-zinc-700 hover:bg-zinc-900 transition-all duration-200 cursor-pointer">
       <div className="flex gap-2">
         <Image
           src="/img/pfp/Gruz.jpeg"
-          alt="logo"
+          alt="user avatar"
           width={32}
           height={32}
           className="rounded-lg size-10 select-none"
@@ -35,16 +66,16 @@ const PostStructure = () => {
             <div className="flex gap-2 items-center">
               <div className="flex flex-col -space-y-1">
                 <div className="flex gap-2 items-center">
-                  <h1 className="font-semibold">Gruz</h1>
+                  <h1 className="font-semibold">{post.user}</h1>
                   <div className="text-xs font-semibold text-blue-500 hover:underline cursor-pointer">
                     Follow
                   </div>
                 </div>
                 <div className="flex gap-1 items-center">
-                  <p className="text-sm text-zinc-400">@damnGruz</p>
+                  <p className="text-sm text-zinc-400">@{post.user}</p>
                   <div className="text-sm text-zinc-400">
                     <span> {" • "}</span>
-                    <span>2h</span>
+                    <span>{formatDate(post.createdAt)}</span>
                   </div>
                 </div>
               </div>
@@ -71,21 +102,32 @@ const PostStructure = () => {
             </div>
           </div>
           <div className="flex flex-col gap-4">
-            <div>
-              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quam
-              dolorem incidunt, vel sapiente maiores nemo nostrum quaerat aut
-              unde ducimus dignissimos aspernatur.
-            </div>
+            <div>{post.text}</div>
+            {post.img && (
+              <div className="mt-2">
+                <img
+                  src={post.img}
+                  alt="Post image"
+                  className="rounded-lg w-full"
+                />
+              </div>
+            )}
             <div className="flex justify-between text-lg select-none">
               <div className="flex gap-3 items-center">
-                <div className="p-1.5 hover:bg-blue-500/30 rounded-lg transition-all duration-200">
+                <div className="flex items-center gap-1 p-1.5 hover:bg-blue-500/30 rounded-lg transition-all duration-200">
                   <BiCommentDetail />
+                  {post.comments.length > 0 && (
+                    <span className="text-sm">{post.comments.length}</span>
+                  )}
                 </div>
                 <div className="p-1.5 hover:bg-green-500/30 rounded-lg transition-all duration-200">
                   <HiArrowPathRoundedSquare />
                 </div>
-                <div className="p-1.5 hover:bg-red-500/30 rounded-lg transition-all duration-200">
+                <div className="flex items-center gap-1 p-1.5 hover:bg-red-500/30 rounded-lg transition-all duration-200">
                   <BiUpvote />
+                  {post.likes.length > 0 && (
+                    <span className="text-sm">{post.likes.length}</span>
+                  )}
                 </div>
               </div>
               <div className="flex gap-1 items-center">
