@@ -237,7 +237,7 @@ const getMe = async (): Promise<GetMeResponse> => {
     {
       withCredentials: true,
     }
-  ) 
+  )
   return response.data
 }
 

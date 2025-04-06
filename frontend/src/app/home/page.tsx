@@ -1,21 +1,13 @@
 import MainWrapper from "@/layout/MainWrapper"
 import HomeHeader from "./homeComponents/HomeHeader"
-import PostStructure from "@/components/pageComponents/PostStructure"
+import GetPosts from "./homeComponents/GetPosts"
 
 const page = () => {
   return (
     <MainWrapper>
       <div className=" flex flex-col w-full">
         <HomeHeader />
-        <div className="flex flex-col h-screen">
-          <PostStructure />
-          <PostStructure />
-          <PostStructure />
-          <PostStructure />
-          <PostStructure />
-          <PostStructure />
-          <PostStructure />
-        </div>
+        <GetPosts/>
       </div>
     </MainWrapper>
   )

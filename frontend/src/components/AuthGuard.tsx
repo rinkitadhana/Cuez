@@ -1,17 +1,19 @@
 "use client"
+
 import { useGetMe } from "@/hooks/useAuth"
 import { useRouter } from "next/navigation"
 import { useEffect } from "react"
 import LoadingScreen from "./LoadingScreen"
 
-const AuthGaurd = ({ children }: { children: React.ReactNode }) => {
+const AuthGuard = ({ children }: { children: React.ReactNode }) => {
   const { data: user, isLoading } = useGetMe()
   const router = useRouter()
+
   useEffect(() => {
-    if (!user && !isLoading) {
+    if (!isLoading && !user) {
       router.push("/login")
     }
-  }, [user, isLoading, router])
+  }, [isLoading, user, router])
 
   if (isLoading || (!user && typeof user !== "undefined")) {
     return <LoadingScreen />
@@ -20,4 +22,4 @@ const AuthGaurd = ({ children }: { children: React.ReactNode }) => {
   return <>{children}</>
 }
 
-export default AuthGaurd
+export default AuthGuard
