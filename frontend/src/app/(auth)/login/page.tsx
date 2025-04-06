@@ -8,27 +8,39 @@ import Link from "next/link"
 import { useState } from "react"
 
 const LogIn = () => {
-  const [identifier, setIdentifier] = useState<string>("")
-  const [password, setPassword] = useState<string>("")
+  const [formData, setFormData] = useState<{
+    identifier: string
+    password: string
+  }>({
+    identifier: "",
+    password: "",
+  })
   const [identifierError, setIdentifierError] = useState<boolean>(false)
   const [passwordError, setPasswordError] = useState<boolean>(false)
   const { mutate: login, isPending: isLoggingIn } = useLogin()
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    })
+  }
+
   const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    if (identifier == "") {
+    if (formData.identifier == "") {
       setIdentifierError(true)
       setTimeout(() => {
         setIdentifierError(false)
       }, 5000)
     }
-    if (password == "") {
+    if (formData.password == "") {
       setPasswordError(true)
       setTimeout(() => {
         setPasswordError(false)
       }, 5000)
     }
-    login({ identifier, password })
+    login(formData)
   }
 
   return (
@@ -49,18 +61,20 @@ const LogIn = () => {
           <div className=" flex flex-col gap-4">
             <Input
               text="Username / email address"
+              name="identifier"
               type="text"
-              value={identifier}
+              value={formData.identifier}
               error={identifierError}
-              onChange={(e) => setIdentifier(e.target.value)}
+              onChange={handleChange}
               ficon={<UserRound strokeWidth={1.5} />}
             />
             <Input
               text="Password"
+              name="password"
               type="password"
-              value={password}
+              value={formData.password}
               error={passwordError}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={handleChange}
               ficon={<LockKeyhole strokeWidth={1.5} />}
               licon1={<Eye strokeWidth={1.5} />}
               licon2={<EyeOff strokeWidth={1.5} />}
