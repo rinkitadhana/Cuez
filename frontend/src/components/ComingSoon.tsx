@@ -2,38 +2,8 @@
 
 import Image from "next/image"
 import { Rocket, Sparkles } from "lucide-react"
-import { useEffect, useState } from "react"
 
 const ComingSoon = () => {
-  const [timeLeft, setTimeLeft] = useState({
-    days: 0,
-    hours: 0,
-    minutes: 0,
-    seconds: 0,
-  })
-
-  useEffect(() => {
-    // Set target date to 30 days from now
-    const targetDate = new Date()
-    targetDate.setDate(targetDate.getDate() + 30)
-
-    const timer = setInterval(() => {
-      const now = new Date().getTime()
-      const distance = targetDate.getTime() - now
-
-      setTimeLeft({
-        days: Math.floor(distance / (1000 * 60 * 60 * 24)),
-        hours: Math.floor(
-          (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-        ),
-        minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
-        seconds: Math.floor((distance % (1000 * 60)) / 1000),
-      })
-    }, 1000)
-
-    return () => clearInterval(timer)
-  }, [])
-
   return (
     <div className="flex flex-col items-center justify-center h-screen gap-8 p-8 text-center relative overflow-hidden">
       {/* Background decorative elements */}
@@ -70,41 +40,6 @@ const ComingSoon = () => {
         </p>
       </div>
 
-      {/* Countdown Timer */}
-      <div className="flex gap-6 mt-4 z-10">
-        <div className="flex flex-col items-center">
-          <div className="bg-mainclr/10 px-4 py-2 rounded-lg">
-            <span className="text-2xl font-bold text-mainclr">
-              {timeLeft.days}
-            </span>
-          </div>
-          <span className="text-sm text-zinc-500 mt-1">Days</span>
-        </div>
-        <div className="flex flex-col items-center">
-          <div className="bg-mainclr/10 px-4 py-2 rounded-lg">
-            <span className="text-2xl font-bold text-mainclr">
-              {timeLeft.hours}
-            </span>
-          </div>
-          <span className="text-sm text-zinc-500 mt-1">Hours</span>
-        </div>
-        <div className="flex flex-col items-center">
-          <div className="bg-mainclr/10 px-4 py-2 rounded-lg">
-            <span className="text-2xl font-bold text-mainclr">
-              {timeLeft.minutes}
-            </span>
-          </div>
-          <span className="text-sm text-zinc-500 mt-1">Minutes</span>
-        </div>
-        <div className="flex flex-col items-center">
-          <div className="bg-mainclr/10 px-4 py-2 rounded-lg">
-            <span className="text-2xl font-bold text-mainclr">
-              {timeLeft.seconds}
-            </span>
-          </div>
-          <span className="text-sm text-zinc-500 mt-1">Seconds</span>
-        </div>
-      </div>
       {/* Contact Section */}
       <div className="flex flex-col items-center mt-8 z-10">
         <h2 className="text-xl font-semibold text-zinc-200 mb-4">Contact Us</h2>
