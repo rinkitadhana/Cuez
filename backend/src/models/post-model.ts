@@ -1,17 +1,21 @@
-import mongoose from "mongoose"
+import mongoose, { Document } from "mongoose"
 
 export interface IPost extends Document {
   user: mongoose.Types.ObjectId
-  text: string
-  img: string
+  text?: string
+  img?: string
+  video?: string
   likes: mongoose.Types.ObjectId[]
   comments: IComment[]
   createdAt: Date
   updatedAt: Date
 }
+
 export interface IComment extends Document {
   user: mongoose.Types.ObjectId
-  text: string
+  text?: string
+  img?: string
+  video?: string
   createdAt: Date
   updatedAt: Date
 }
@@ -29,6 +33,9 @@ const postSchema = new mongoose.Schema<IPost>(
     img: {
       type: String,
     },
+    video: {
+      type: String,
+    },
     likes: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -37,15 +44,29 @@ const postSchema = new mongoose.Schema<IPost>(
     ],
     comments: [
       {
-        text: {
-          type: String,
-          required: true,
-        },
         user: {
           type: mongoose.Schema.Types.ObjectId,
           ref: "User",
           required: true,
         },
+        text: {
+          type: String,
+          required: true,
+        },
+        img: {
+          type: String,
+        },
+        video: {
+          type: String,
+        },
+        createdAt: {
+          type: Date,
+          default: Date.now,
+        },
+        updatedAt: {
+          type: Date,
+          default: Date.now,
+        }
       },
     ],
   },

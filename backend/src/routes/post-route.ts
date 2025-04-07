@@ -9,10 +9,12 @@ import {
   likeUnlikePost,
   getFollowingPosts,
   getUserPosts,
+  editPost,
 } from "../controllers/post-controller"
 const router = express.Router()
 
 router.post("/create-post", protectRoute, createPost)
+router.patch("/edit-post", protectRoute, editPost)
 router.delete("/delete-post/:id", protectRoute, deletePost)
 router.post("/like-post/:id", protectRoute, likeUnlikePost)
 router.post("/comment-post/:id", protectRoute, commentPost)

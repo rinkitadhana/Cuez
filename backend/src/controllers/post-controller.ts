@@ -7,59 +7,174 @@ import Notification from "../models/notification-model"
 
 const createPost = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { text, img } = req.body
+    const { text, img, video } = req.body
     const userId = req.user._id.toString()
     const user = await User.findById(userId)
     if (!user) {
       res.status(404).json({ message: "User not found!" })
       return
     }
-    if (!text && !img) {
-      res.status(400).json({ message: "Text or image is required!" })
+    if (!text && !img && !video) {
+      res.status(400).json({ message: "Text or Image or Video is required!" })
       return
     }
+
+    let postData: {
+      user: typeof user._id;
+      text?: string;
+      img?: string;
+      video?: string;
+    } = {
+      user: user._id,
+    }
+
     if (img) {
       const uploadedResponse = await cloudinary.uploader.upload(img, {
         folder: "posts",
+        resource_type: "image"
       })
-      const imgUrl = uploadedResponse.secure_url
-      const post = await Post.create({
-        user: user._id,
-        text,
-        img: imgUrl,
-      })
-      await post.save()
-      res.status(201).json({ message: "Post created successfully!" })
-    } else {
-      const post = await Post.create({
-        user: user._id,
-        text,
-      })
-      await post.save()
-      res.status(201).json({ message: "Post created successfully!" })
+      postData = { ...postData, img: uploadedResponse.secure_url }
     }
+
+    if (video) {
+      const uploadedResponse = await cloudinary.uploader.upload(video, {
+        folder: "posts",
+        resource_type: "video",
+      })
+      postData = { ...postData, video: uploadedResponse.secure_url }
+    }
+
+    if (text) {
+      postData = { ...postData, text }
+    }
+
+    const post = await Post.create(postData)
+    await post.save()
+
+    res.status(201).json({ message: "Post created successfully!" })
   } catch (error) {
     errorHandler(res, error)
   }
 }
 
-const deletePost = async (req: Request, res: Response): Promise<void> => {
+const editPost = async (req: Request, res: Response): Promise<void> => {
   try {
+    const { text, img, video } = req.body
     const post = await Post.findById(req.params.id)
+    const userId = req.user._id.toString()
+    const user = await User.findById(userId)
+
+    if (!user) {
+      res.status(404).json({ message: "User not found!" })
+      return
+    }
+
     if (!post) {
       res.status(404).json({ message: "Post not found!" })
       return
     }
-    if (post.user.toString() !== req.user._id.toString()) {
-      res
-        .status(403)
-        .json({ message: "You are not authorized to delete this post!" })
+
+    if (post.user.toString() !== userId) {
+      res.status(403).json({ message: "You are not authorized to edit this post!" })
       return
     }
+
+    if (!text && !img && !video) {
+      res.status(400).json({ message: "Text or Image or Video is required!" })
+      return
+    }
+
+    let updateData: {
+      text?: string
+      img?: string
+      video?: string
+    } = {}
+
+    if (img) {
+      if (post.img) {
+        const oldImageId = post.img.split("/").pop()?.split(".")[0]
+        if (oldImageId) {
+          await cloudinary.uploader.destroy(`posts/${oldImageId}`, {
+            resource_type: "image"
+          })
+        }
+      }
+      const uploadedResponse = await cloudinary.uploader.upload(img, {
+        folder: "posts",
+        resource_type: "image"
+      })
+      updateData.img = uploadedResponse.secure_url
+    }
+
+    if (video) {
+      if (post.video) {
+        const oldVideoId = post.video.split("/").pop()?.split(".")[0]
+        if (oldVideoId) {
+          await cloudinary.uploader.destroy(`posts/${oldVideoId}`, {
+            resource_type: "video"
+          })
+        }
+      }
+      const uploadedResponse = await cloudinary.uploader.upload(video, {
+        folder: "posts",
+        resource_type: "video"
+      })
+      updateData.video = uploadedResponse.secure_url
+    }
+
+    if (text) {
+      updateData.text = text
+    }
+
+    const updatedPost = await Post.findByIdAndUpdate(
+      req.params.id,
+      updateData,
+      { new: true }
+    )
+
+    res.status(200).json({ message: "Post updated successfully!", post: updatedPost })
+  } catch (error) {
+    errorHandler(res, error)
+  }
+}
+
+
+const deletePost = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const post = await Post.findById(req.params.id)
+    const userId = req.user._id.toString()
+    const user = await User.findById(userId)
+
+    if (!user) {
+      res.status(404).json({ message: "User not found!" })
+      return
+    }
+
+    if (!post) {
+      res.status(404).json({ message: "Post not found!" })
+      return
+    }
+
+    if (post.user.toString() !== userId) {
+      res.status(403).json({ message: "You are not authorized to delete this post!" })
+      return
+    }
+
     if (post.img) {
       const imageId = post.img.split("/").pop()?.split(".")[0]
       if (imageId) {
-        await cloudinary.uploader.destroy(`posts/${imageId}`)
+        await cloudinary.uploader.destroy(`posts/${imageId}`, {
+          resource_type: "image"
+        })
+      }
+    }
+
+    if (post.video) {
+      const videoId = post.video.split("/").pop()?.split(".")[0]
+      if (videoId) {
+        await cloudinary.uploader.destroy(`posts/${videoId}`, {
+          resource_type: "video"
+        })
       }
     }
     await Post.findByIdAndDelete(req.params.id)
@@ -71,22 +186,52 @@ const deletePost = async (req: Request, res: Response): Promise<void> => {
 
 const commentPost = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { text } = req.body
+    const { text, img, video } = req.body
     const post = await Post.findById(req.params.id)
     const userId = req.user._id.toString()
-    if (!text) {
-      res.status(400).json({ message: "Comment text is required!" })
+    const user = await User.findById(userId)
+    if (!user) {
+      res.status(404).json({ message: "User not found!" })
+      return
+    }
+    if (!text && !img && !video) {
+      res.status(400).json({ message: "Comment is required!" })
       return
     }
     if (!post) {
       res.status(404).json({ message: "Post not found!" })
       return
     }
-    const comment = {
-      text,
-      user: userId,
+    
+    let commentData: {
+      user: typeof user._id;
+      text?: string;
+      img?: string;
+      video?: string;
+    } = {
+      user: user._id,
     }
-    post.comments.push(comment as IComment)
+
+    if (img) {
+      const uploadedResponse = await cloudinary.uploader.upload(img, {
+        folder: "comments",
+        resource_type: "image"
+      })
+      commentData = { ...commentData, img: uploadedResponse.secure_url }
+    }
+
+    if (video) {
+      const uploadedResponse = await cloudinary.uploader.upload(video, {
+        folder: "comments",
+        resource_type: "video",
+      })
+      commentData = { ...commentData, video: uploadedResponse.secure_url }
+    }
+
+    if (text) {
+      commentData = { ...commentData, text }
+    }
+    post.comments.push(commentData as IComment)
     await post.save()
     res.status(200).json({ message: "Comment added successfully!" })
   } catch (error) {
@@ -227,4 +372,5 @@ export {
   getLikedPosts,
   getFollowingPosts,
   getUserPosts,
+  editPost
 }
