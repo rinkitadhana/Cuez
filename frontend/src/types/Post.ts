@@ -1,8 +1,10 @@
 import { z } from "zod"
 import { commentSchema } from "./Comment"
+import { userSchema } from "./User"
+
 export const postSchema = z.object({
   _id: z.string(),
-  user: z.string(),
+  user: userSchema,
   text: z.string().optional(),
   img: z.string().optional(),
   video: z.string().optional(),

@@ -1,8 +1,8 @@
 import { z } from "zod"
-
+import { userSchema } from "./User"
 export const commentSchema = z.object({
   _id: z.string(),
-  user: z.string(),
+  user: userSchema,
   text: z.string().optional(),
   img: z.string().optional(),
   video: z.string().optional(),
