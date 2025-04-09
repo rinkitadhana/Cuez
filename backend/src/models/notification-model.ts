@@ -31,7 +31,7 @@ const notificationSchema = new mongoose.Schema<INotification>(
       default: false,
     },
   },
-  { timestamps: true, collection: "notifications-data" }
+  { timestamps: true, collection: "notification-data" }
 )
 
 const Notification = mongoose.model<INotification>(
