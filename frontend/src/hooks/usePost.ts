@@ -3,21 +3,11 @@ import { useMutation, useQuery } from "@tanstack/react-query"
 import axios, { AxiosError } from "axios"
 import useFeedTypeStore from "@/store/FeedTypeStore"
 import useMessageStore from "@/store/messageStore"
-
-interface Post {
-  _id: string
-  user: string
-  text: string
-  img: string
-  likes: string[]
-  comments: string[]
-  createdAt: Date
-  updatedAt: Date
-}
+import { postSchema } from "../types/Post"
 
 interface GetPostsResponse {
   message: string
-  posts: Post[]
+  posts: typeof postSchema
 }
 
 const getPosts = async (feedType: string): Promise<GetPostsResponse> => {
@@ -52,17 +42,18 @@ export const useGetPosts = () => {
   })
 }
 
-interface CreatePostRequest {
-  text?: string
-  img?: string
-  images?: string[]
-}
 interface CreatePostResponse {
   message: string
 }
 
+interface CreatePostData {
+  text?: string
+  img?: string
+  video?: string
+}
+
 const createPost = async (
-  postData: FormData | CreatePostRequest
+  postData: CreatePostData
 ): Promise<CreatePostResponse> => {
   const { data } = await axios.post<CreatePostResponse>(
     config.backendUrl + "/post/create-post",
@@ -70,10 +61,7 @@ const createPost = async (
     {
       withCredentials: true,
       headers: {
-        "Content-Type":
-          postData instanceof FormData
-            ? "multipart/form-data"
-            : "application/json",
+        "Content-Type": "application/json",
       },
     }
   )
@@ -82,11 +70,7 @@ const createPost = async (
 
 export const useCreatePost = () => {
   const { setMessage } = useMessageStore()
-  return useMutation<
-    CreatePostResponse,
-    AxiosError,
-    FormData | CreatePostRequest
-  >({
+  return useMutation<CreatePostResponse, AxiosError, CreatePostData>({
     mutationFn: createPost,
     onSuccess: (data: CreatePostResponse) => {
       setMessage(data.message, "success")
