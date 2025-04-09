@@ -66,11 +66,11 @@ const postSchema = new mongoose.Schema<IPost>(
         updatedAt: {
           type: Date,
           default: Date.now,
-        }
+        },
       },
     ],
   },
-  { timestamps: true, collection: "posts" }
+  { timestamps: true, collection: "post-data" }
 )
 
 const Post = mongoose.model<IPost>("Post", postSchema)
