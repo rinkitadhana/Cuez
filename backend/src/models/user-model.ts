@@ -101,7 +101,7 @@ const userSchema = new mongoose.Schema<IUser>(
   },
   {
     timestamps: true,
-    collection: "users-data",
+    collection: "user-data",
   }
 )
 
