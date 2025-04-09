@@ -3,11 +3,11 @@ import { useMutation, useQuery } from "@tanstack/react-query"
 import axios, { AxiosError } from "axios"
 import useFeedTypeStore from "@/store/FeedTypeStore"
 import useMessageStore from "@/store/messageStore"
-import { postSchema } from "../types/Post"
+import { Post, postSchema } from "../types/Post"
 
 interface GetPostsResponse {
   message: string
-  posts: typeof postSchema
+  posts: Post[]
 }
 
 const getPosts = async (feedType: string): Promise<GetPostsResponse> => {
