@@ -261,10 +261,12 @@ const CreatePost = () => {
                       <div className="relative w-full">
                         <div className="relative">
                           {formData.img ? (
-                            <img
+                            <Image
                               src={formData.img}
                               alt="Selected image"
                               className="rounded-lg w-full"
+                              width={1000}
+                              height={1000}
                             />
                           ) : (
                             <video
