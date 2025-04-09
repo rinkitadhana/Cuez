@@ -1,9 +1,8 @@
-// src/types/comment.ts
 import { z } from "zod"
 
 export const commentSchema = z.object({
   _id: z.string(),
-  user: z.string(), // or a nested object if you populate
+  user: z.string(),
   text: z.string().optional(),
   img: z.string().optional(),
   video: z.string().optional(),

@@ -1,4 +1,3 @@
-// src/types/user.ts
 import { z } from "zod"
 import { postSchema } from "./Post"
 
