@@ -169,3 +169,40 @@ export const useEditPost = () => {
     },
   })
 }
+
+interface LikeUnlikePostResponse {
+  message: string
+}
+
+const likeUnlikePost = async (
+  postId: string
+): Promise<LikeUnlikePostResponse> => {
+  const { data } = await axios.post<LikeUnlikePostResponse>(
+    config.backendUrl + `/post/like-post/${postId}`,
+    {},
+    {
+      withCredentials: true,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  )
+  return data
+}
+
+export const useLikeUnlikePost = () => {
+  const { setMessage } = useMessageStore()
+  const queryClient = useQueryClient()
+  return useMutation<LikeUnlikePostResponse, AxiosError, string>({
+    mutationFn: likeUnlikePost,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["posts"] })
+    },
+    onError: (error: AxiosError) => {
+      const message =
+        (error.response?.data as LikeUnlikePostResponse)?.message ||
+        "Like/Unlike Post failed!"
+      setMessage(message, "error")
+    },
+  })
+}

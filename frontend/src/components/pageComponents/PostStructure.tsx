@@ -8,7 +8,7 @@ import { SlOptions } from "react-icons/sl"
 import { useEffect, useRef, useState } from "react"
 import { Post } from "@/types/Post"
 import { useGetMe } from "@/hooks/useAuth"
-import { useDeletePost } from "@/hooks/usePost"
+import { useDeletePost, useLikeUnlikePost } from "@/hooks/usePost"
 import { Loader2 } from "lucide-react"
 interface PostStructureProps {
   post: Post
@@ -22,6 +22,9 @@ const PostStructure = ({ post }: PostStructureProps) => {
   const postRef = useRef<HTMLElement>(null)
   const { data: authUser } = useGetMe()
   const { mutate: deletePost, isPending } = useDeletePost()
+  const { mutate: likeUnlikePost, isPending: isLikeUnlikePending } =
+    useLikeUnlikePost()
+
   const isOwner = authUser?.user._id === post.user._id
 
   useEffect(() => {
@@ -58,6 +61,9 @@ const PostStructure = ({ post }: PostStructureProps) => {
         setShowWarning(false)
       },
     })
+  }
+  const handleLikeUnlikePost = () => {
+    likeUnlikePost(post._id)
   }
 
   const formatDate = (date: Date) => {
@@ -164,27 +170,37 @@ const PostStructure = ({ post }: PostStructureProps) => {
             )}
             <div className="flex justify-between text-lg select-none">
               <div className="flex gap-3 items-center">
-                <div className="flex items-center gap-1 p-1.5 hover:bg-blue-500/30 rounded-lg transition-all duration-200">
-                  <BiCommentDetail />
-                  {post?.comments.length > 0 && (
-                    <span className="text-sm">{post?.comments.length}</span>
-                  )}
+                <div className="flex items-center gap-1">
+                  <div className="flex items-center gap-1 p-1.5 hover:bg-blue-500/40 group/comment rounded-lg transition-all duration-200">
+                    <BiCommentDetail className="group-hover/comment:scale-[85%] transition-all duration-300" />
+                  </div>
+                  <span className="text-sm">{post?.comments.length}</span>
                 </div>
-                <div className="p-1.5 hover:bg-green-500/30 rounded-lg transition-all duration-200">
-                  <HiArrowPathRoundedSquare />
+                <div className="flex items-center gap-1">
+                  <div className="p-1.5 hover:bg-green-500/40 rounded-lg transition-all group/repost  duration-200">
+                    <HiArrowPathRoundedSquare className="group-hover/repost:rotate-180 transition-all duration-300" />
+                  </div>
+                  <span className="text-sm">{post?.comments.length}</span>
                 </div>
-                <div className="flex items-center gap-1 p-1.5 hover:bg-red-500/30 rounded-lg transition-all duration-200">
-                  <BiUpvote />
-                  {post?.likes.length > 0 && (
-                    <span className="text-sm">{post?.likes.length}</span>
-                  )}
+                <div className="flex items-center gap-1">
+                  <div
+                    onClick={handleLikeUnlikePost}
+                    className="flex items-center gap-1 p-1.5 hover:bg-pink-500/40 group/like rounded-lg transition-all duration-200"
+                  >
+                    {isLikeUnlikePending ? (
+                      <Loader2 className="animate-spin size-4" />
+                    ) : (
+                      <BiUpvote className="group-hover/like:-translate-y-0.5 transition-all duration-300" />
+                    )}
+                  </div>
+                  <span className="text-sm">{post?.likes.length}</span>
                 </div>
               </div>
               <div className="flex gap-1 items-center">
-                <div className="p-1.5 hover:bg-blue-500/30 rounded-lg transition-all duration-200">
+                <div className="p-1.5 hover:bg-blue-500/40 rounded-lg transition-all duration-200">
                   <IoBookmarkOutline />
                 </div>
-                <div className="p-1.5 hover:bg-green-500/30 rounded-lg transition-all duration-200">
+                <div className="p-1.5 hover:bg-green-500/40 rounded-lg transition-all duration-200">
                   <RiShareBoxFill />
                 </div>
               </div>
