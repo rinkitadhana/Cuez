@@ -3,7 +3,6 @@ import User, { IUser } from "../models/user-model"
 import { Request, Response } from "express"
 import { v2 as cloudinary } from "cloudinary"
 
-
 const getUserProfile = async (req: Request, res: Response): Promise<void> => {
   try {
     const { username } = req.params
@@ -50,53 +49,66 @@ const followUnfollowUser = async (
   }
 }
 
- const getSuggestedUsers = async (req: Request, res: Response): Promise<void> => {
-	try {
-		const userId = req.user._id;
+const getSuggestedUsers = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const userId = req.user._id
 
-		const usersFollowedByMe = await User.findById(userId).select("followings");
+    const usersFollowedByMe = await User.findById(userId).select("followings")
 
-		if (!usersFollowedByMe) {
-			res.status(404).json({ message: "User not found" });
-			return;
-		}
+    if (!usersFollowedByMe) {
+      res.status(404).json({ message: "User not found" })
+      return
+    }
 
-		const users = await User.aggregate([
-			{
-				$match: {
-					_id: { $ne: userId },
-				},
-			},
-			{ $sample: { size: 10 } },
-		]);
+    const users = await User.aggregate([
+      {
+        $match: {
+          _id: { $ne: userId },
+        },
+      },
+      { $sample: { size: 10 } },
+    ])
 
-		const filteredUsers = users.filter((user) => !usersFollowedByMe.followings.includes(user._id));
-		const suggestedUsers = filteredUsers.slice(0, 4);
+    const filteredUsers = users.filter(
+      (user) => !usersFollowedByMe.followings.includes(user._id)
+    )
+    const suggestedUsers = filteredUsers.slice(0, 4)
 
-		suggestedUsers.forEach((user) => (user.password = null));
+    suggestedUsers.forEach((user) => (user.password = null))
 
-		res.status(200).json({suggestedUsers, message: "Suggested users fetched successfully!"});
-	} catch (error) {
-		errorHandler(res, error)
+    res
+      .status(200)
+      .json({
+        users: suggestedUsers,
+        message: "Suggested users fetched successfully!",
+      })
+  } catch (error) {
+    errorHandler(res, error)
   }
 }
 
-const updateUserProfile = async (req: Request, res: Response): Promise<void> => {
-  try{
-    const { fullName, username, bio, link, location} = req.body
+const updateUserProfile = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const { fullName, username, bio, link, location } = req.body
     const { profileImg, coverImg } = req.body
 
     const userId = req.user._id
 
     const user = await User.findById(userId)
 
-    if(!user){
-      res.status(404).json({message: "User not found!"})
+    if (!user) {
+      res.status(404).json({ message: "User not found!" })
       return
     }
 
-    if(profileImg){
-      if(user.profileImg){
+    if (profileImg) {
+      if (user.profileImg) {
         const publicId = user.profileImg.split("/").pop()?.split(".")[0]
         if (publicId) {
           await cloudinary.uploader.destroy(`profile-images/${publicId}`)
@@ -107,8 +119,8 @@ const updateUserProfile = async (req: Request, res: Response): Promise<void> => 
       })
       user.profileImg = uploadedImg.secure_url
     }
-    if(coverImg){
-      if(user.coverImg){
+    if (coverImg) {
+      if (user.coverImg) {
         const publicId = user.coverImg.split("/").pop()?.split(".")[0]
         if (publicId) {
           await cloudinary.uploader.destroy(`cover-images/${publicId}`)
@@ -127,14 +139,35 @@ const updateUserProfile = async (req: Request, res: Response): Promise<void> => 
     user.location = location || user.location
 
     await user.save()
-    res.status(200).json({message: "User profile updated successfully!"})
-
-  } catch(error){
+    res.status(200).json({ message: "User profile updated successfully!" })
+  } catch (error) {
     errorHandler(res, error)
   }
-
 }
 
+const isFollowing = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { id } = req.params
+    const currentUser = await User.findById(req.user._id)
+    const userToCheck = await User.findById(id)
 
+    if (!currentUser || !userToCheck) {
+      res.status(404).json({ message: "User not found!" })
+      return
+    }
+    const isFollowing = currentUser.followings.includes(id as unknown as IUser)
+    res
+      .status(200)
+      .json({ isFollowing, message: "User is following check successful!" })
+  } catch (error) {
+    errorHandler(res, error)
+  }
+}
 
-export { getUserProfile, followUnfollowUser, getSuggestedUsers, updateUserProfile }
+export {
+  getUserProfile,
+  followUnfollowUser,
+  getSuggestedUsers,
+  updateUserProfile,
+  isFollowing,
+}
