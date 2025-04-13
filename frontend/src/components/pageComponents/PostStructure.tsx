@@ -12,11 +12,13 @@ import { useDeletePost, useIsLiked, useLikeUnlikePost } from "@/hooks/usePost"
 import { Loader2, X } from "lucide-react"
 import config from "@/config/config"
 import useMessageStore from "@/store/messageStore"
+import { useRouter } from "next/navigation"
 interface PostStructureProps {
   post: Post
 }
 
 const PostStructure = ({ post }: PostStructureProps) => {
+  const router = useRouter()
   const [isOpen, setIsOpen] = useState(false)
   const [isImageModalOpen, setIsImageModalOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
@@ -107,6 +109,7 @@ const PostStructure = ({ post }: PostStructureProps) => {
 
   return (
     <section
+      onClick={() => router.push(`/post/${post._id}`)}
       ref={postRef}
       className="flex relative flex-col gap-4 p-4 border-b border-zinc-700 hover:bg-zinc-900 transition-all duration-200 cursor-pointer"
     >
@@ -139,7 +142,7 @@ const PostStructure = ({ post }: PostStructureProps) => {
             </div>
             <div className="select-none" ref={menuRef}>
               {isOwner && (
-                <div
+                <button
                   onClick={(e) => {
                     e.stopPropagation()
                     setIsOpen(!isOpen)
@@ -149,7 +152,7 @@ const PostStructure = ({ post }: PostStructureProps) => {
                   }`}
                 >
                   <SlOptions />
-                </div>
+                </button>
               )}
               {isOpen && (
                 <div className="absolute flex flex-col items-start gap-0.5 top-14 right-5 bg-zinc-900 z-10 border border-zinc-700 p-2 w-32 rounded-lg">
@@ -201,19 +204,19 @@ const PostStructure = ({ post }: PostStructureProps) => {
             <div className="flex justify-between text-lg select-none">
               <div className="flex gap-3 items-center">
                 <div className="flex items-center gap-1">
-                  <div className="flex items-center gap-1 p-1.5 hover:bg-blue-500/30 group/comment rounded-lg transition-all duration-200">
+                  <button className="flex items-center gap-1 p-1.5 hover:bg-blue-500/30 group/comment rounded-lg transition-all duration-200">
                     <BiCommentDetail className="group-hover/comment:scale-[85%] transition-all duration-300" />
-                  </div>
+                  </button>
                   <span className="text-sm">{post?.comments.length}</span>
                 </div>
                 <div className="flex items-center gap-1">
-                  <div className="p-1.5 hover:bg-green-500/30 rounded-lg transition-all group/repost  duration-200">
+                  <button className="p-1.5 hover:bg-green-500/30 rounded-lg transition-all group/repost  duration-200">
                     <HiArrowPathRoundedSquare className="group-hover/repost:rotate-180 transition-all duration-300" />
-                  </div>
+                  </button>
                   <span className="text-sm">{post?.comments.length}</span>
                 </div>
                 <div className="flex items-center gap-1">
-                  <div
+                  <button
                     onClick={handleLikeUnlikePost}
                     className="flex items-center gap-1 p-1.5 hover:bg-pink-500/30 group/like rounded-lg transition-all duration-200"
                   >
@@ -224,20 +227,20 @@ const PostStructure = ({ post }: PostStructureProps) => {
                     ) : (
                       <BiUpvote className="group-hover/like:-translate-y-0.5 transition-all duration-300" />
                     )}
-                  </div>
+                  </button>
                   <span className="text-sm">{post?.likes.length}</span>
                 </div>
               </div>
               <div className="flex gap-1 items-center">
-                <div className="p-1.5 hover:bg-blue-500/30 rounded-lg transition-all duration-200">
+                <button className="p-1.5 hover:bg-blue-500/30 rounded-lg transition-all duration-200">
                   <IoBookmarkOutline />
-                </div>
-                <div
+                </button>
+                <button
                   onClick={handleShare}
                   className="p-1.5 hover:bg-green-500/30 rounded-lg transition-all duration-200"
                 >
                   <RiShareBoxFill />
-                </div>
+                </button>
               </div>
             </div>
           </div>
