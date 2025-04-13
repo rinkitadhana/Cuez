@@ -20,14 +20,14 @@ const Message: React.FC = () => {
 
   return (
     <div className="fixed left-5 bottom-5 flex justify-start items-center w-full select-none">
-      <div className="w-fit px-5 py-3 text-white text-center font-medium rounded-full z-[2147483647] flex items-center gap-2 bg-zinc-800 ">
+      <div className="w-fit px-3 py-2 text-white text-center text-sm font-medium rounded-full z-[2147483647] flex items-center gap-2 bg-zinc-800 ">
         {type === "success" ? (
           <span className="text-green-500">
-            <CircleCheck />
+            <CircleCheck size={18} />
           </span>
         ) : (
           <span className="text-red-500">
-            <CircleAlert />
+            <CircleAlert size={18} />
           </span>
         )}
         {message}
