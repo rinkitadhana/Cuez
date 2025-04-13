@@ -10,6 +10,8 @@ import { Post } from "@/types/Post"
 import { useGetMe } from "@/hooks/useAuth"
 import { useDeletePost, useIsLiked, useLikeUnlikePost } from "@/hooks/usePost"
 import { Loader2, X } from "lucide-react"
+import config from "@/config/config"
+import useMessageStore from "@/store/messageStore"
 interface PostStructureProps {
   post: Post
 }
@@ -66,6 +68,29 @@ const PostStructure = ({ post }: PostStructureProps) => {
   }
   const handleLikeUnlikePost = () => {
     likeUnlikePost(post._id)
+  }
+
+  const handleShare = async () => {
+    const shareData = {
+      title: "Check out this post",
+      text: "Here's something interesting!",
+      url: `${config.frontendUrl}/post/${post._id}`,
+    }
+
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData)
+        console.log("Post shared successfully!")
+      } else {
+        await navigator.clipboard.writeText(shareData.url)
+        useMessageStore.setState({
+          message: "Link copied to clipboard!",
+          type: "success",
+        })
+      }
+    } catch (error) {
+      console.error("Error sharing:", error)
+    }
   }
 
   const formatDate = (date: Date) => {
@@ -207,7 +232,10 @@ const PostStructure = ({ post }: PostStructureProps) => {
                 <div className="p-1.5 hover:bg-blue-500/30 rounded-lg transition-all duration-200">
                   <IoBookmarkOutline />
                 </div>
-                <div className="p-1.5 hover:bg-green-500/30 rounded-lg transition-all duration-200">
+                <div
+                  onClick={handleShare}
+                  className="p-1.5 hover:bg-green-500/30 rounded-lg transition-all duration-200"
+                >
                   <RiShareBoxFill />
                 </div>
               </div>
