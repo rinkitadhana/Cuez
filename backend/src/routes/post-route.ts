@@ -11,6 +11,7 @@ import {
   getUserPosts,
   editPost,
   isLiked,
+  getPostById,
 } from "../controllers/post-controller"
 const router = express.Router()
 
@@ -24,4 +25,5 @@ router.get("/all-posts", getAllPosts)
 router.get("/following-posts", protectRoute, getFollowingPosts)
 router.get("/liked-posts", protectRoute, getLikedPosts)
 router.get("/user-posts/:username", protectRoute, getUserPosts)
+router.get("/post/:id", getPostById)
 export default router

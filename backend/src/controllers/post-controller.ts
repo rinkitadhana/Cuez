@@ -390,6 +390,27 @@ const isLiked = async (req: Request, res: Response) => {
   }
 }
 
+const getPostById = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const post = await Post.findById(req.params.id)
+      .populate({
+        path: "user",
+        select: "-password",
+      })
+      .populate({
+        path: "comments.user",
+        select: "-password",
+      })
+    if (!post) {
+      res.status(404).json({ message: "Post not found" })
+      return
+    }
+    res.status(200).json({ message: "Post found", post })
+  } catch (error) {
+    errorHandler(res, error)
+  }
+}
+
 export {
   createPost,
   deletePost,
@@ -401,4 +422,5 @@ export {
   getUserPosts,
   editPost,
   isLiked,
+  getPostById,
 }

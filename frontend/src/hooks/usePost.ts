@@ -227,3 +227,23 @@ export const useIsLiked = (postId: string) => {
     queryFn: () => isLiked(postId),
   })
 }
+
+interface GetPostByIdResponse {
+  message: string
+  post: Post
+}
+
+const getPostById = async (postId: string): Promise<GetPostByIdResponse> => {
+  const { data } = await axios.get<GetPostByIdResponse>(
+    config.backendUrl + `/post/post/${postId}`,
+    { withCredentials: true }
+  )
+  return data
+}
+
+export const useGetPostById = (postId: string) => {
+  return useQuery<GetPostByIdResponse, AxiosError>({
+    queryKey: ["post", postId],
+    queryFn: () => getPostById(postId),
+  })
+}
