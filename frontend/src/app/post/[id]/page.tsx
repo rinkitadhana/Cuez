@@ -68,6 +68,7 @@ const PostPage = () => {
       onSuccess: () => {
         setIsOpen(false)
         setShowWarning(false)
+        router.back()
       },
       onError: () => {
         setShowWarning(false)
