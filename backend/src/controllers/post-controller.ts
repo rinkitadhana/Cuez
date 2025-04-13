@@ -20,10 +20,10 @@ const createPost = async (req: Request, res: Response): Promise<void> => {
     }
 
     let postData: {
-      user: typeof user._id;
-      text?: string;
-      img?: string;
-      video?: string;
+      user: typeof user._id
+      text?: string
+      img?: string
+      video?: string
     } = {
       user: user._id,
     }
@@ -31,7 +31,7 @@ const createPost = async (req: Request, res: Response): Promise<void> => {
     if (img) {
       const uploadedResponse = await cloudinary.uploader.upload(img, {
         folder: "posts",
-        resource_type: "image"
+        resource_type: "image",
       })
       postData = { ...postData, img: uploadedResponse.secure_url }
     }
@@ -75,7 +75,9 @@ const editPost = async (req: Request, res: Response): Promise<void> => {
     }
 
     if (post.user.toString() !== userId) {
-      res.status(403).json({ message: "You are not authorized to edit this post!" })
+      res
+        .status(403)
+        .json({ message: "You are not authorized to edit this post!" })
       return
     }
 
@@ -95,13 +97,13 @@ const editPost = async (req: Request, res: Response): Promise<void> => {
         const oldImageId = post.img.split("/").pop()?.split(".")[0]
         if (oldImageId) {
           await cloudinary.uploader.destroy(`posts/${oldImageId}`, {
-            resource_type: "image"
+            resource_type: "image",
           })
         }
       }
       const uploadedResponse = await cloudinary.uploader.upload(img, {
         folder: "posts",
-        resource_type: "image"
+        resource_type: "image",
       })
       updateData.img = uploadedResponse.secure_url
     }
@@ -111,13 +113,13 @@ const editPost = async (req: Request, res: Response): Promise<void> => {
         const oldVideoId = post.video.split("/").pop()?.split(".")[0]
         if (oldVideoId) {
           await cloudinary.uploader.destroy(`posts/${oldVideoId}`, {
-            resource_type: "video"
+            resource_type: "video",
           })
         }
       }
       const uploadedResponse = await cloudinary.uploader.upload(video, {
         folder: "posts",
-        resource_type: "video"
+        resource_type: "video",
       })
       updateData.video = uploadedResponse.secure_url
     }
@@ -132,12 +134,13 @@ const editPost = async (req: Request, res: Response): Promise<void> => {
       { new: true }
     )
 
-    res.status(200).json({ message: "Post updated successfully!", post: updatedPost })
+    res
+      .status(200)
+      .json({ message: "Post updated successfully!", post: updatedPost })
   } catch (error) {
     errorHandler(res, error)
   }
 }
-
 
 const deletePost = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -156,7 +159,9 @@ const deletePost = async (req: Request, res: Response): Promise<void> => {
     }
 
     if (post.user.toString() !== userId) {
-      res.status(403).json({ message: "You are not authorized to delete this post!" })
+      res
+        .status(403)
+        .json({ message: "You are not authorized to delete this post!" })
       return
     }
 
@@ -164,7 +169,7 @@ const deletePost = async (req: Request, res: Response): Promise<void> => {
       const imageId = post.img.split("/").pop()?.split(".")[0]
       if (imageId) {
         await cloudinary.uploader.destroy(`posts/${imageId}`, {
-          resource_type: "image"
+          resource_type: "image",
         })
       }
     }
@@ -173,7 +178,7 @@ const deletePost = async (req: Request, res: Response): Promise<void> => {
       const videoId = post.video.split("/").pop()?.split(".")[0]
       if (videoId) {
         await cloudinary.uploader.destroy(`posts/${videoId}`, {
-          resource_type: "video"
+          resource_type: "video",
         })
       }
     }
@@ -202,12 +207,12 @@ const commentPost = async (req: Request, res: Response): Promise<void> => {
       res.status(404).json({ message: "Post not found!" })
       return
     }
-    
+
     let commentData: {
-      user: typeof user._id;
-      text?: string;
-      img?: string;
-      video?: string;
+      user: typeof user._id
+      text?: string
+      img?: string
+      video?: string
     } = {
       user: user._id,
     }
@@ -215,7 +220,7 @@ const commentPost = async (req: Request, res: Response): Promise<void> => {
     if (img) {
       const uploadedResponse = await cloudinary.uploader.upload(img, {
         folder: "comments",
-        resource_type: "image"
+        resource_type: "image",
       })
       commentData = { ...commentData, img: uploadedResponse.secure_url }
     }
@@ -252,6 +257,12 @@ const likeUnlikePost = async (req: Request, res: Response): Promise<void> => {
       await Post.updateOne({ _id: req.params.id }, { $pull: { likes: userId } })
       await User.updateOne({ _id: userId }, { $pull: { likedPosts: post._id } })
       res.status(200).json({ message: "Post unliked successfully!" })
+      await Notification.deleteMany({
+        from: userId,
+        to: post.user.toString(),
+        type: "like",
+      })
+      return
     } else {
       await Post.updateOne({ _id: req.params.id }, { $push: { likes: userId } })
       await User.updateOne({ _id: userId }, { $push: { likedPosts: post._id } })
@@ -363,6 +374,22 @@ const getUserPosts = async (req: Request, res: Response): Promise<void> => {
   }
 }
 
+const isLiked = async (req: Request, res: Response) => {
+  try {
+    const post = await Post.findById(req.params.id)
+    const userId = req.user.id
+
+    if (!post) {
+      res.status(404).json({ message: "Post not found" })
+      return
+    }
+    const liked = post.likes.includes(userId)
+    res.status(200).json({ liked })
+  } catch (error) {
+    errorHandler(res, error)
+  }
+}
+
 export {
   createPost,
   deletePost,
@@ -372,5 +399,6 @@ export {
   getLikedPosts,
   getFollowingPosts,
   getUserPosts,
-  editPost
+  editPost,
+  isLiked,
 }

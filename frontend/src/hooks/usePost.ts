@@ -195,8 +195,9 @@ export const useLikeUnlikePost = () => {
   const queryClient = useQueryClient()
   return useMutation<LikeUnlikePostResponse, AxiosError, string>({
     mutationFn: likeUnlikePost,
-    onSuccess: () => {
+    onSuccess: (_, postId) => {
       queryClient.invalidateQueries({ queryKey: ["posts"] })
+      queryClient.invalidateQueries({ queryKey: ["is-liked", postId] })
     },
     onError: (error: AxiosError) => {
       const message =
@@ -204,5 +205,25 @@ export const useLikeUnlikePost = () => {
         "Like/Unlike Post failed!"
       setMessage(message, "error")
     },
+  })
+}
+
+interface IsLikedResponse {
+  message: string
+  liked: boolean
+}
+
+const isLiked = async (postId: string): Promise<IsLikedResponse> => {
+  const { data } = await axios.get<IsLikedResponse>(
+    config.backendUrl + `/post/is-liked/${postId}`,
+    { withCredentials: true }
+  )
+  return data
+}
+
+export const useIsLiked = (postId: string) => {
+  return useQuery<IsLikedResponse, AxiosError>({
+    queryKey: ["is-liked", postId],
+    queryFn: () => isLiked(postId),
   })
 }

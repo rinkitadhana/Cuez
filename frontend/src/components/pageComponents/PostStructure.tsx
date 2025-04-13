@@ -1,6 +1,6 @@
 "use client"
 import Image from "next/image"
-import { BiCommentDetail, BiUpvote } from "react-icons/bi"
+import { BiCommentDetail, BiSolidUpvote, BiUpvote } from "react-icons/bi"
 import { HiArrowPathRoundedSquare } from "react-icons/hi2"
 import { IoBookmarkOutline } from "react-icons/io5"
 import { RiShareBoxFill } from "react-icons/ri"
@@ -8,7 +8,7 @@ import { SlOptions } from "react-icons/sl"
 import { useEffect, useRef, useState } from "react"
 import { Post } from "@/types/Post"
 import { useGetMe } from "@/hooks/useAuth"
-import { useDeletePost, useLikeUnlikePost } from "@/hooks/usePost"
+import { useDeletePost, useIsLiked, useLikeUnlikePost } from "@/hooks/usePost"
 import { Loader2, X } from "lucide-react"
 interface PostStructureProps {
   post: Post
@@ -25,6 +25,7 @@ const PostStructure = ({ post }: PostStructureProps) => {
   const { mutate: deletePost, isPending } = useDeletePost()
   const { mutate: likeUnlikePost, isPending: isLikeUnlikePending } =
     useLikeUnlikePost()
+  const { data: isLiked, isPending: isLikedPending } = useIsLiked(post._id)
 
   const isOwner = authUser?.user._id === post.user._id
 
@@ -175,13 +176,13 @@ const PostStructure = ({ post }: PostStructureProps) => {
             <div className="flex justify-between text-lg select-none">
               <div className="flex gap-3 items-center">
                 <div className="flex items-center gap-1">
-                  <div className="flex items-center gap-1 p-1.5 hover:bg-blue-500/40 group/comment rounded-lg transition-all duration-200">
+                  <div className="flex items-center gap-1 p-1.5 hover:bg-blue-500/30 group/comment rounded-lg transition-all duration-200">
                     <BiCommentDetail className="group-hover/comment:scale-[85%] transition-all duration-300" />
                   </div>
                   <span className="text-sm">{post?.comments.length}</span>
                 </div>
                 <div className="flex items-center gap-1">
-                  <div className="p-1.5 hover:bg-green-500/40 rounded-lg transition-all group/repost  duration-200">
+                  <div className="p-1.5 hover:bg-green-500/30 rounded-lg transition-all group/repost  duration-200">
                     <HiArrowPathRoundedSquare className="group-hover/repost:rotate-180 transition-all duration-300" />
                   </div>
                   <span className="text-sm">{post?.comments.length}</span>
@@ -189,10 +190,12 @@ const PostStructure = ({ post }: PostStructureProps) => {
                 <div className="flex items-center gap-1">
                   <div
                     onClick={handleLikeUnlikePost}
-                    className="flex items-center gap-1 p-1.5 hover:bg-pink-500/40 group/like rounded-lg transition-all duration-200"
+                    className="flex items-center gap-1 p-1.5 hover:bg-pink-500/30 group/like rounded-lg transition-all duration-200"
                   >
-                    {isLikeUnlikePending ? (
-                      <Loader2 className="animate-spin size-4" />
+                    {isLikeUnlikePending || isLikedPending ? (
+                      <Loader2 className="animate-spin size-[18px]" />
+                    ) : isLiked?.liked ? (
+                      <BiSolidUpvote className="group-hover/like:-translate-y-0.5 text-pink-500 transition-all duration-300" />
                     ) : (
                       <BiUpvote className="group-hover/like:-translate-y-0.5 transition-all duration-300" />
                     )}
@@ -201,10 +204,10 @@ const PostStructure = ({ post }: PostStructureProps) => {
                 </div>
               </div>
               <div className="flex gap-1 items-center">
-                <div className="p-1.5 hover:bg-blue-500/40 rounded-lg transition-all duration-200">
+                <div className="p-1.5 hover:bg-blue-500/30 rounded-lg transition-all duration-200">
                   <IoBookmarkOutline />
                 </div>
-                <div className="p-1.5 hover:bg-green-500/40 rounded-lg transition-all duration-200">
+                <div className="p-1.5 hover:bg-green-500/30 rounded-lg transition-all duration-200">
                   <RiShareBoxFill />
                 </div>
               </div>
