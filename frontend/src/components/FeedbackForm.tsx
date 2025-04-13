@@ -13,15 +13,12 @@ const FeedbackForm = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    // Basic validation
     if (!title.trim() && !description.trim()) {
       setError(true)
       setTimeout(() => setError(false), 5000)
       return
     }
     setIsSubmitting(true)
-    // TODO: Add your feedback submission logic here
-    // For now, we'll just simulate an API call
     await new Promise((resolve) => setTimeout(resolve, 1000))
     setIsSubmitting(false)
   }
