@@ -9,13 +9,14 @@ import { useEffect, useRef, useState } from "react"
 import { Post } from "@/types/Post"
 import { useGetMe } from "@/hooks/useAuth"
 import { useDeletePost, useLikeUnlikePost } from "@/hooks/usePost"
-import { Loader2 } from "lucide-react"
+import { Loader2, X } from "lucide-react"
 interface PostStructureProps {
   post: Post
 }
 
 const PostStructure = ({ post }: PostStructureProps) => {
   const [isOpen, setIsOpen] = useState(false)
+  const [isImageModalOpen, setIsImageModalOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
   const [showWarning, setShowWarning] = useState(false)
   const warningRef = useRef<HTMLDivElement>(null)
@@ -149,7 +150,10 @@ const PostStructure = ({ post }: PostStructureProps) => {
           <div className="flex flex-col gap-4 w-full">
             <div>{post?.text}</div>
             {post?.img && (
-              <div>
+              <div
+                onClick={() => setIsImageModalOpen(true)}
+                className="cursor-pointer"
+              >
                 <Image
                   src={post?.img}
                   alt="Post image"
@@ -245,6 +249,23 @@ const PostStructure = ({ post }: PostStructureProps) => {
               </button>
             </div>
           </div>
+        </div>
+      )}
+      {isImageModalOpen && (
+        <div className="fixed inset-0 bg-bgClr/50 backdrop-blur-sm flex justify-center items-center z-[10000]">
+          <Image
+            src={post?.img || ""}
+            alt="Post image"
+            width={1920}
+            height={1080}
+            className="rounded-lg max-w-full max-h-full object-contain"
+          />
+          <button
+            onClick={() => setIsImageModalOpen(false)}
+            className="absolute top-4 right-4 text-white hover:bg-zinc-700/50 rounded-xl p-2 transition-all duration-200"
+          >
+            <X />
+          </button>
         </div>
       )}
     </section>
