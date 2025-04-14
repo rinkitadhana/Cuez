@@ -146,21 +146,24 @@ const CreateComment = () => {
   const toggleEmojiPicker = (e: React.MouseEvent) => {
     e.stopPropagation()
 
-    if (!showEmojiPicker) {
-      if (emojiButtonRef.current) {
-        const rect = emojiButtonRef.current.getBoundingClientRect()
-        const spaceBelow = window.innerHeight - rect.bottom
-        const spaceNeeded = 400
+    if (showEmojiPicker) {
+      setShowEmojiPicker(false)
+      return
+    }
 
-        if (spaceBelow < spaceNeeded) {
-          setEmojiPosition("top")
-        } else {
-          setEmojiPosition("bottom")
-        }
+    if (emojiButtonRef.current) {
+      const rect = emojiButtonRef.current.getBoundingClientRect()
+      const spaceBelow = window.innerHeight - rect.bottom
+      const spaceNeeded = 400
+
+      if (spaceBelow < spaceNeeded) {
+        setEmojiPosition("top")
+      } else {
+        setEmojiPosition("bottom")
       }
     }
 
-    setShowEmojiPicker(!showEmojiPicker)
+    setShowEmojiPicker(true)
   }
 
   return (
@@ -222,9 +225,9 @@ const CreateComment = () => {
           disabled={hasMedia}
           className={`p-1.5 ${
             hasMedia
-              ? "opacity-50 cursor-not-allowed"
-              : "hover:bg-zinc-700 bg-zinc-800 border border-zinc-700"
-          } rounded-xl transition-all duration-200`}
+              ? "opacity-50 bg-zinc-700 cursor-not-allowed"
+              : "hover:bg-zinc-700 bg-zinc-800 "
+          } rounded-xl transition-all duration-200 border border-zinc-700`}
         >
           <input
             id="imageInput"
@@ -241,9 +244,9 @@ const CreateComment = () => {
           disabled={hasMedia}
           className={`p-1.5 ${
             hasMedia
-              ? "opacity-50 cursor-not-allowed"
-              : "hover:bg-zinc-700 bg-zinc-800 border border-zinc-700"
-          } rounded-xl transition-all duration-200`}
+              ? "opacity-50 bg-zinc-700 cursor-not-allowed"
+              : "hover:bg-zinc-700 bg-zinc-800 "
+          } rounded-xl transition-all duration-200 border border-zinc-700`}
         >
           <input
             id="videoInput"
@@ -263,10 +266,8 @@ const CreateComment = () => {
             ref={emojiButtonRef}
             onClick={toggleEmojiPicker}
             className={`p-1.5 ${
-              showEmojiPicker
-                ? "bg-zinc-800"
-                : "hover:bg-zinc-700 bg-zinc-800 border border-zinc-700"
-            } rounded-xl transition-all duration-200`}
+              showEmojiPicker ? "bg-zinc-700" : "hover:bg-zinc-700 bg-zinc-800 "
+            } rounded-xl transition-all duration-200 border border-zinc-700`}
           >
             <SmilePlus size={18} />
           </button>
