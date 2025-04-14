@@ -1,21 +1,30 @@
-import { ArrowUpFromDot, ImagePlus, SmilePlus, X } from "lucide-react"
+import { ArrowUpFromDot, ImagePlus, Loader2, SmilePlus, X } from "lucide-react"
 import React, { useState, useRef, useEffect } from "react"
 import Image from "next/image"
 import { useGetMe } from "@/hooks/useAuth"
 import { MdOutlineVideoCameraBack } from "react-icons/md"
 import EmojiPickerPortal from "./EmojiPickerPortal"
+import { useCommentPost } from "@/hooks/usePost"
+import { useParams } from "next/navigation"
+import useMessageStore from "@/store/messageStore"
 
 const CreateComment = () => {
   const { data: authUser } = useGetMe()
+  const { mutate: commentPost, isPending: isCommentPostPending } =
+    useCommentPost()
+  const { setMessage } = useMessageStore()
   const [formData, setFormData] = useState<{
     text?: string
     img?: string
     video?: string
+    user: string
   }>({
     text: "",
     img: "",
     video: "",
+    user: authUser?.user._id || "",
   })
+  const { id: postId } = useParams()
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
   const [emojiPosition, setEmojiPosition] = useState<"top" | "bottom">("bottom")
   const [selectedFiles, setSelectedFiles] = useState<{
@@ -54,6 +63,44 @@ const CreateComment = () => {
       reader.onload = () => resolve(reader.result as string)
       reader.onerror = (error) => reject(error)
     })
+  }
+
+  const handleCommentPost = async () => {
+    if (!formData.text && !formData.img && !formData.video) {
+      setMessage("Please add some content to your comment", "error")
+      return
+    }
+
+    try {
+      if (selectedFiles.imageFile) {
+        const base64Image = await convertFileToBase64(selectedFiles.imageFile)
+        formData.img = base64Image
+      }
+      if (selectedFiles.videoFile) {
+        const base64Video = await convertFileToBase64(selectedFiles.videoFile)
+        formData.video = base64Video
+      }
+
+      commentPost(
+        { postId: postId as string, commentData: formData },
+        {
+          onSuccess: () => {
+            setFormData((prev) => ({
+              ...prev,
+              text: "",
+              img: "",
+              video: "",
+            }))
+            setSelectedFiles({})
+            if (textareaRef.current) {
+              textareaRef.current.style.height = "auto"
+            }
+          },
+        }
+      )
+    } catch (error) {
+      setMessage("Failed to upload media", "error")
+    }
   }
 
   const onEmojiClick = (emojiObject: { emoji: string }) => {
@@ -123,7 +170,7 @@ const CreateComment = () => {
         alt="user avatar"
         width={32}
         height={32}
-        className="rounded-xl size-[34px] select-none"
+        className="rounded-xl size-9 select-none"
       />
       <div className="flex-1">
         <textarea
@@ -231,8 +278,24 @@ const CreateComment = () => {
             position={emojiPosition}
           />
         </div>
-        <button className="p-1.5 bg-mainclr w-fit h-fit hover:bg-mainclr/80 rounded-xl transition-all duration-200">
-          <ArrowUpFromDot size={20} />
+        <button
+          onClick={handleCommentPost}
+          disabled={
+            isCommentPostPending ||
+            (!formData.text && !formData.img && !formData.video)
+          }
+          className={`p-1.5 ${
+            isCommentPostPending ||
+            (!formData.text && !formData.img && !formData.video)
+              ? "opacity-50 bg-zinc-800 cursor-not-allowed"
+              : "bg-mainclr hover:bg-mainclr/80"
+          } rounded-xl transition-all duration-200`}
+        >
+          {isCommentPostPending ? (
+            <Loader2 size={20} className="animate-spin" />
+          ) : (
+            <ArrowUpFromDot size={20} />
+          )}
         </button>
       </div>
     </div>
