@@ -220,7 +220,10 @@ const PostStructure = ({ post }: PostStructureProps) => {
                 onClick={(e) => e.stopPropagation()}
                 className="flex gap-3 items-center"
               >
-                <div className="flex items-center gap-1">
+                <div
+                  onClick={() => router.push(`/post/${post._id}?focus=comment`)}
+                  className="flex items-center gap-1"
+                >
                   <button className="flex items-center gap-1 p-1.5 hover:bg-blue-500/30 group/comment rounded-lg transition-all duration-200">
                     <BiCommentDetail className="group-hover/comment:scale-[85%] transition-all duration-300" />
                   </button>

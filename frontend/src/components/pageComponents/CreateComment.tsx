@@ -177,6 +177,7 @@ const CreateComment = () => {
       />
       <div className="flex-1">
         <textarea
+          id="commentInput"
           ref={textareaRef}
           value={formData.text}
           onChange={(e) => {

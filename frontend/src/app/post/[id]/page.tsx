@@ -16,7 +16,7 @@ import {
 import { Loader2, X } from "lucide-react"
 import config from "@/config/config"
 import useMessageStore from "@/store/messageStore"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { useParams } from "next/navigation"
 import MainWrapper from "@/layout/MainWrapper"
 import Header from "../postComponents/Header"
@@ -28,6 +28,7 @@ import CommentSkeleton from "@/components/skeletons/CommentSkeleton"
 
 const PostPage = () => {
   const { id } = useParams()
+  const searchParams = useSearchParams()
   const { data: post, isPending: isPostPending } = useGetPostById(id as string)
   const router = useRouter()
   const [isOpen, setIsOpen] = useState(false)
@@ -57,6 +58,17 @@ const PostPage = () => {
     document.addEventListener("mousedown", handleClickOutside)
     return () => document.removeEventListener("mousedown", handleClickOutside)
   }, [showWarning])
+
+  useEffect(() => {
+    if (searchParams.get("focus") === "comment") {
+      const commentInput = document.querySelector(
+        "#commentInput"
+      ) as HTMLInputElement
+      if (commentInput) {
+        commentInput.focus()
+      }
+    }
+  }, [searchParams])
 
   const handleDeletePost = () => {
     if (!post?.post._id) return
