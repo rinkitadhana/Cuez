@@ -127,9 +127,11 @@ const PostStructure = ({ post }: PostStructureProps) => {
               <div className="flex flex-col -space-y-1">
                 <div className="flex gap-2 items-center">
                   <h1 className="font-semibold">{post.user.fullName}</h1>
-                  <div className="text-xs font-semibold text-blue-500 hover:underline cursor-pointer">
-                    Follow
-                  </div>
+                  {!isOwner && (
+                    <div className="text-xs font-semibold text-blue-500 hover:underline cursor-pointer">
+                      Follow
+                    </div>
+                  )}
                 </div>
                 <div className="flex gap-1 items-center">
                   <p className="text-sm text-zinc-400">@{post.user.username}</p>
@@ -213,7 +215,7 @@ const PostStructure = ({ post }: PostStructureProps) => {
                   <button className="p-1.5 hover:bg-green-500/30 rounded-lg transition-all group/repost  duration-200">
                     <HiArrowPathRoundedSquare className="group-hover/repost:rotate-180 transition-all duration-300" />
                   </button>
-                  <span className="text-sm">{post?.comments.length}</span>
+                  <span className="text-sm">0</span>
                 </div>
                 <div className="flex items-center gap-1">
                   <button
