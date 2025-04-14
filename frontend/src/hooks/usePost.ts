@@ -197,6 +197,7 @@ export const useLikeUnlikePost = () => {
     mutationFn: likeUnlikePost,
     onSuccess: (_, postId) => {
       queryClient.invalidateQueries({ queryKey: ["posts"] })
+      queryClient.invalidateQueries({ queryKey: ["post", postId] })
       queryClient.invalidateQueries({ queryKey: ["is-liked", postId] })
     },
     onError: (error: AxiosError) => {
@@ -245,5 +246,49 @@ export const useGetPostById = (postId: string) => {
   return useQuery<GetPostByIdResponse, AxiosError>({
     queryKey: ["post", postId],
     queryFn: () => getPostById(postId),
+  })
+}
+
+interface CreateCommentData {
+  text?: string
+  img?: string
+  video?: string
+  user: string
+}
+interface CommentPostResponse {
+  message: string
+}
+
+const commentPost = async (
+  postId: string,
+  commentData: CreateCommentData
+): Promise<CommentPostResponse> => {
+  const { data } = await axios.post<CommentPostResponse>(
+    config.backendUrl + `/post/comment-post/${postId}`,
+    commentData,
+    { withCredentials: true }
+  )
+  return data
+}
+
+export const useCommentPost = () => {
+  const { setMessage } = useMessageStore()
+  const queryClient = useQueryClient()
+  return useMutation<
+    CommentPostResponse,
+    AxiosError,
+    { postId: string; commentData: CreateCommentData }
+  >({
+    mutationFn: ({ postId, commentData }) => commentPost(postId, commentData),
+    onSuccess: (data: CommentPostResponse, { postId }) => {
+      setMessage(data.message, "success")
+      queryClient.invalidateQueries({ queryKey: ["post", postId] })
+    },
+    onError: (error: AxiosError) => {
+      const message =
+        (error.response?.data as CommentPostResponse)?.message ||
+        "Comment Post failed!"
+      setMessage(message, "error")
+    },
   })
 }
