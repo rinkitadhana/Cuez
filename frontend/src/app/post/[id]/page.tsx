@@ -23,6 +23,8 @@ import Header from "../postComponents/Header"
 import NoPost from "@/components/pageComponents/NoPost"
 import CreateComment from "@/components/pageComponents/CreateComment"
 import GetComments from "@/components/pageComponents/GetComments"
+import PostSkeleton from "@/components/skeletons/PostSkeleton"
+import CommentSkeleton from "@/components/skeletons/CommentSkeleton"
 
 const PostPage = () => {
   const { id } = useParams()
@@ -108,7 +110,15 @@ const PostPage = () => {
   }
 
   if (isPostPending) {
-    return <div>Loading...</div>
+    return (
+      <MainWrapper>
+        <Header />
+        <PostSkeleton />
+        <CommentSkeleton />
+        <CommentSkeleton />
+        <CommentSkeleton />
+      </MainWrapper>
+    )
   }
 
   const isOwner = authUser?.user._id === post?.post.user._id
