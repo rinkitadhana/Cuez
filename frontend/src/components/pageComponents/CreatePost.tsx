@@ -291,13 +291,13 @@ const CreatePost = () => {
                   </div>
 
                   <div className="flex items-center justify-between sticky bottom-0 bg-bgClr z-10 py-2">
-                    <div className="flex gap-3 text-zinc-100">
+                    <div className="flex gap-2.5 text-zinc-100">
                       <label
-                        className={`p-2 ${
+                        className={`p-1.5 ${
                           hasMedia
-                            ? "opacity-50 cursor-not-allowed"
-                            : "hover:bg-zinc-800 cursor-pointer"
-                        } rounded-xl transition-all duration-200`}
+                            ? " bg-zinc-700 cursor-not-allowed"
+                            : "hover:bg-zinc-700 bg-zinc-800 "
+                        } rounded-xl transition-all duration-200 border border-zinc-700  cursor-pointer`}
                       >
                         <input
                           type="file"
@@ -312,11 +312,11 @@ const CreatePost = () => {
                         />
                       </label>
                       <label
-                        className={`p-2 ${
+                        className={`p-1.5 ${
                           hasMedia
-                            ? "opacity-50 cursor-not-allowed"
-                            : "hover:bg-zinc-800 cursor-pointer"
-                        } rounded-xl transition-all duration-200`}
+                            ? " bg-zinc-700 cursor-not-allowed"
+                            : "hover:bg-zinc-700 bg-zinc-800 "
+                        } rounded-xl transition-all duration-200 border border-zinc-700  cursor-pointer`}
                       >
                         <input
                           type="file"
@@ -334,8 +334,10 @@ const CreatePost = () => {
                         ref={emojiPickerRef}
                         onClick={toggleEmojiPicker}
                         className={`${
-                          showEmojiPicker ? "bg-zinc-800" : "hover:bg-zinc-800"
-                        } p-2 rounded-xl transition-all duration-200 cursor-pointer relative`}
+                          showEmojiPicker
+                            ? "bg-zinc-700 cursor-not-allowed"
+                            : "hover:bg-zinc-700 bg-zinc-800 "
+                        } p-1.5 rounded-xl transition-all duration-200 border border-zinc-700  cursor-pointer`}
                       >
                         <SmilePlus size={20} />
                         {showEmojiPicker && (

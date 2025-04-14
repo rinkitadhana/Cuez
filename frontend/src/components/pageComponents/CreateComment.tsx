@@ -266,8 +266,10 @@ const CreateComment = () => {
             ref={emojiButtonRef}
             onClick={toggleEmojiPicker}
             className={`p-1.5 ${
-              showEmojiPicker ? "bg-zinc-700" : "hover:bg-zinc-700 bg-zinc-800 "
-            } rounded-xl transition-all duration-200 border border-zinc-700`}
+              showEmojiPicker
+                ? "bg-zinc-700 "
+                : "hover:bg-zinc-700 bg-zinc-800  "
+            } rounded-xl transition-all duration-200 border border-zinc-700 cursor-pointer`}
           >
             <SmilePlus size={18} />
           </button>
