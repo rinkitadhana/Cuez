@@ -22,6 +22,7 @@ import MainWrapper from "@/layout/MainWrapper"
 import Header from "../postComponents/Header"
 import NoPost from "@/components/pageComponents/NoPost"
 import CreateComment from "@/components/pageComponents/CreateComment"
+import GetComments from "@/components/pageComponents/GetComments"
 
 const PostPage = () => {
   const { id } = useParams()
@@ -134,9 +135,11 @@ const PostPage = () => {
                         <h1 className="font-semibold">
                           {post.post.user.fullName}
                         </h1>
-                        <div className="text-xs font-semibold text-blue-500 hover:underline cursor-pointer">
-                          Follow
-                        </div>
+                        {!isOwner && (
+                          <div className="text-xs font-semibold text-blue-500 hover:underline cursor-pointer">
+                            Follow
+                          </div>
+                        )}
                       </div>
                       <div className="flex gap-1 items-center">
                         <p className="text-sm text-zinc-400">
@@ -223,9 +226,7 @@ const PostPage = () => {
                         <button className="p-1.5 hover:bg-green-500/30 rounded-lg transition-all group/repost  duration-200">
                           <HiArrowPathRoundedSquare className="group-hover/repost:rotate-180 transition-all duration-300" />
                         </button>
-                        <span className="text-sm">
-                          {post.post.comments.length}
-                        </span>
+                        <span className="text-sm">0</span>
                       </div>
                       <div className="flex items-center gap-1">
                         <button
@@ -262,6 +263,7 @@ const PostPage = () => {
             </div>
           </div>
           <CreateComment />
+          <GetComments />
 
           {showWarning && (
             <div className="fixed inset-0 bg-bgClr/50 backdrop-blur-sm flex justify-center items-center z-[10000]">
