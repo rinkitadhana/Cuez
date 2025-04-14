@@ -150,7 +150,9 @@ const LeftSidebar = () => {
                 <h1 className="font-semibold text-sm truncate">
                   {me?.user.fullName}
                 </h1>
-                <p className="text-xs text-zinc-400 truncate">@{me?.user.username}</p>
+                <p className="text-xs text-zinc-400 truncate">
+                  @{me?.user.username}
+                </p>
               </div>
             </div>
             <SlOptions
@@ -163,7 +165,7 @@ const LeftSidebar = () => {
           {isOpen && (
             <div className="absolute top-16 left-0 w-full bg-zinc-800 cursor-pointer flex flex-col gap-1 p-2 select-none rounded-2xl">
               <Link
-                href="/login"
+                href="/"
                 className="font-semibold flex items-center gap-2 px-2.5 py-2.5 rounded-xl hover:bg-zinc-500/20 transition-colors duration-200"
               >
                 <IoMdAdd className=" text-xl" />
