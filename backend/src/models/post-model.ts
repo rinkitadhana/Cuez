@@ -51,7 +51,6 @@ const postSchema = new mongoose.Schema<IPost>(
         },
         text: {
           type: String,
-          required: true,
         },
         img: {
           type: String,
