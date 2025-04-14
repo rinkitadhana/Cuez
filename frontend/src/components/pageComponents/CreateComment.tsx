@@ -164,7 +164,7 @@ const CreateComment = () => {
   }
 
   return (
-    <div className="flex items-start gap-4 p-4 border-y border-zinc-700 w-full">
+    <div className="flex items-start gap-4 p-4 border-y bg-zinc-900 border-zinc-700 w-full">
       <Image
         src={authUser?.user.profileImg || ""}
         alt="user avatar"
