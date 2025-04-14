@@ -115,6 +115,7 @@ const PostStructure = ({ post }: PostStructureProps) => {
     >
       <div className="flex gap-2 w-full">
         <Image
+          onClick={(e) => e.stopPropagation()}
           src={post.user.profileImg}
           alt="user avatar"
           width={32}
@@ -123,7 +124,10 @@ const PostStructure = ({ post }: PostStructureProps) => {
         />
         <div className="flex flex-col gap-1 w-full">
           <div className="flex items-center justify-between">
-            <div className="flex gap-2 items-center">
+            <div
+              onClick={(e) => e.stopPropagation()}
+              className="flex gap-2 items-center"
+            >
               <div className="flex flex-col -space-y-1">
                 <div className="flex gap-2 items-center">
                   <h1 className="font-semibold">{post.user.fullName}</h1>
@@ -182,7 +186,10 @@ const PostStructure = ({ post }: PostStructureProps) => {
             <div>{post?.text}</div>
             {post?.img && (
               <div
-                onClick={() => setIsImageModalOpen(true)}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  setIsImageModalOpen(true)
+                }}
                 className="cursor-pointer"
               >
                 <Image
@@ -195,7 +202,12 @@ const PostStructure = ({ post }: PostStructureProps) => {
               </div>
             )}
             {post?.video && (
-              <div>
+              <div
+                onClick={(e) => {
+                  e.stopPropagation()
+                }}
+                className="cursor-pointer"
+              >
                 <video
                   src={post?.video}
                   controls
@@ -204,7 +216,10 @@ const PostStructure = ({ post }: PostStructureProps) => {
               </div>
             )}
             <div className="flex justify-between text-lg select-none">
-              <div className="flex gap-3 items-center">
+              <div
+                onClick={(e) => e.stopPropagation()}
+                className="flex gap-3 items-center"
+              >
                 <div className="flex items-center gap-1">
                   <button className="flex items-center gap-1 p-1.5 hover:bg-blue-500/30 group/comment rounded-lg transition-all duration-200">
                     <BiCommentDetail className="group-hover/comment:scale-[85%] transition-all duration-300" />
@@ -233,7 +248,10 @@ const PostStructure = ({ post }: PostStructureProps) => {
                   <span className="text-sm">{post?.likes.length}</span>
                 </div>
               </div>
-              <div className="flex gap-1 items-center">
+              <div
+                onClick={(e) => e.stopPropagation()}
+                className="flex gap-1 items-center"
+              >
                 <button className="p-1.5 hover:bg-blue-500/30 rounded-lg transition-all duration-200">
                   <IoBookmarkOutline />
                 </button>
@@ -297,7 +315,10 @@ const PostStructure = ({ post }: PostStructureProps) => {
             className="rounded-lg max-w-full max-h-full object-contain"
           />
           <button
-            onClick={() => setIsImageModalOpen(false)}
+            onClick={(e) => {
+              e.stopPropagation()
+              setIsImageModalOpen(false)
+            }}
             className="absolute top-4 right-4 text-white hover:bg-zinc-700/50 rounded-xl p-2 transition-all duration-200"
           >
             <X />
