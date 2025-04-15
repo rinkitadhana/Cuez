@@ -309,7 +309,10 @@ const PostStructure = ({ post }: PostStructureProps) => {
         </div>
       )}
       {isImageModalOpen && (
-        <div className="fixed inset-0 bg-bgClr/50 backdrop-blur-sm flex justify-center items-center z-[10000]">
+        <div
+          onClick={(e) => e.stopPropagation()}
+          className="fixed inset-0 bg-bgClr/50 backdrop-blur-sm flex justify-center items-center z-[10000]"
+        >
           <Image
             src={post?.img || ""}
             alt="Post image"
