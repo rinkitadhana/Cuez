@@ -11,7 +11,7 @@ const getUserProfile = async (req: Request, res: Response): Promise<void> => {
       res.status(404).json({ message: "User not found!" })
       return
     }
-    res.status(200).json(user)
+    res.status(200).json({ message: "User profile fetched successfully!", user })
   } catch (error) {
     errorHandler(res, error)
   }

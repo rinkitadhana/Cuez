@@ -78,3 +78,23 @@ export const useIsFollowing = (userId: string) => {
     queryFn: () => isFollowing(userId),
   })
 }
+
+interface UserProfileResponse {
+  message: string
+  user: User
+}
+
+const getUserProfile = async (username: string): Promise<UserProfileResponse> => {
+  const response = await axios.get<UserProfileResponse>(
+    config.backendUrl + `/user/profile/${username}`,
+    { withCredentials: true }
+  )
+  return response.data
+}
+
+export const useGetUserProfile = (username: string) => {
+  return useQuery<UserProfileResponse, AxiosError>({
+    queryKey: ["user-profile", username],
+    queryFn: () => getUserProfile(username),
+  })
+}

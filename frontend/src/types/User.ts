@@ -14,6 +14,8 @@ export const userSchema = z.lazy(() =>
     location: z.string(),
     createdAt: z.string(),
     updatedAt: z.string(),
+    followers: z.array(z.string()),
+    followings: z.array(z.string()),
   })
 )
 

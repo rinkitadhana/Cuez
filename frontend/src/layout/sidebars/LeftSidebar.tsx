@@ -108,7 +108,7 @@ const LeftSidebar = () => {
       },
     },
     {
-      href: "/profile",
+      href: `/${me?.user.username}`,
       label: "Profile",
       icon: {
         filled: <FaUser className="text-xl" />,
