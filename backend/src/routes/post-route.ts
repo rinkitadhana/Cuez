@@ -23,7 +23,7 @@ router.get("/is-liked/:id", protectRoute, isLiked)
 router.post("/comment-post/:id", protectRoute, commentPost)
 router.get("/all-posts", getAllPosts)
 router.get("/following-posts", protectRoute, getFollowingPosts)
-router.get("/liked-posts", protectRoute, getLikedPosts)
+router.get("/liked-posts/:username", protectRoute, getLikedPosts)
 router.get("/user-posts/:username", protectRoute, getUserPosts)
 router.get("/post/:id", getPostById)
 export default router

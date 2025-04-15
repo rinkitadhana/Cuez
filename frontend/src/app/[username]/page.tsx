@@ -11,8 +11,11 @@ import {
 import { useParams } from "next/navigation"
 import { useGetMe } from "@/hooks/useAuth"
 import GetUserPost from "./profileComponent/GetUserPost"
+import GetLikedPost from "./profileComponent/GetLikedPost"
+import { useState } from "react"
 const page = () => {
   const { username } = useParams()
+  const [response, setResponse] = useState<string>("user-posts")
   const { data, isLoading, isError } = useGetUserProfile(username as string)
   const { data: authUser } = useGetMe()
   const { mutate: followUnfollowUser, isPending: isFollowUnfollowPending } =
@@ -114,17 +117,28 @@ const page = () => {
             </div>
           </div>
         </div>
-        <div className="flex items-center justify-center mt-4  py-2 bg-zinc-800/40 border-b border-zinc-700">
+        <div className="flex items-center justify-center mt-4  py-2.5 bg-zinc-800/20 border-y border-zinc-700">
           <div className="flex border items-center rounded-xl w-fit border-zinc-700 select-none">
-            <div className="px-4 py-1 font-medium bg-bgClr border-r border-zinc-700 hover:bg-zinc-800 rounded-l-xl cursor-pointer transition-all duration-200">
+            <button
+              onClick={() => setResponse("user-posts")}
+              className={`${
+                response === "user-posts" && "bg-zinc-800"
+              } px-4 py-1 font-medium bg-bgClr border-r border-zinc-700 text-sm hover:bg-zinc-800 rounded-l-xl cursor-pointer transition-all duration-200`}
+            >
               Posts
-            </div>
-            <div className="px-4 py-1 font-medium bg-bgClr hover:bg-zinc-800 rounded-r-xl cursor-pointer transition-all duration-200">
+            </button>
+            <button
+              onClick={() => setResponse("liked-posts")}
+              className={`${
+                response === "liked-posts" && "bg-zinc-800"
+              } px-4 py-1 font-medium bg-bgClr hover:bg-zinc-800 text-sm rounded-r-xl cursor-pointer transition-all duration-200`}
+            >
               Likes
-            </div>
+            </button>
           </div>
         </div>
-        <GetUserPost />
+        {response === "user-posts" && <GetUserPost />}
+        {response === "liked-posts" && <GetLikedPost />}
       </div>
     </MainWrapper>
   )

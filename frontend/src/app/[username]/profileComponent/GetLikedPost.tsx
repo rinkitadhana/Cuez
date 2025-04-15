@@ -1,16 +1,15 @@
-import PostStructure from "@/components/pageComponents/PostStructure"
-import { useGetUserPosts } from "@/hooks/usePost"
-import { Post } from "@/types/Post"
 import { useParams } from "next/navigation"
-import React from "react"
+import { useGetLikedPosts } from "@/hooks/usePost"
 import PostSkeleton from "@/components/skeletons/PostSkeleton"
+import { Post } from "@/types/Post"
+import PostStructure from "@/components/pageComponents/PostStructure"
 import NoPosts from "@/components/pageComponents/NoPosts"
-const GetUserPost = () => {
-  const { username } = useParams()
-  const { data, isLoading, error } = useGetUserPosts(username as string)
 
+const GetLikedPost = () => {
+  const { username } = useParams()
+  const { data, isLoading, error } = useGetLikedPosts(username as string)
   return (
-    <>
+    <div>
       {isLoading && (
         <>
           <PostSkeleton />
@@ -21,19 +20,19 @@ const GetUserPost = () => {
       {error && <div>{error.message}</div>}
       {data && (
         <>
-          {data?.userPosts.length === 0 ? (
+          {data?.likedPosts.length === 0 ? (
             <NoPosts />
           ) : (
             <div>
-              {data?.userPosts.map((post: Post) => (
+              {data?.likedPosts.map((post: Post) => (
                 <PostStructure key={post._id} post={post} />
               ))}
             </div>
           )}
         </>
       )}
-    </>
+    </div>
   )
 }
 
-export default GetUserPost
+export default GetLikedPost

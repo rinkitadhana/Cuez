@@ -304,13 +304,14 @@ const getAllPosts = async (req: Request, res: Response): Promise<void> => {
 
 const getLikedPosts = async (req: Request, res: Response): Promise<void> => {
   try {
-    const userId = req.user._id.toString()
-    const user = await User.findById(userId)
+    const { username } = req.params
+    const user = await User.findOne({ username })
     if (!user) {
       res.status(404).json({ message: "User not found!" })
       return
     }
     const likedPosts = await Post.find({ _id: { $in: user.likedPosts } })
+      .sort({ createdAt: -1 })
       .populate({
         path: "user",
         select: "-password",
@@ -319,7 +320,9 @@ const getLikedPosts = async (req: Request, res: Response): Promise<void> => {
         path: "comments.user",
         select: "-password",
       })
-    res.status(200).json(likedPosts)
+    res
+      .status(200)
+      .json({ message: "Liked posts fetched successfully!", likedPosts })
   } catch (error) {
     errorHandler(res, error)
   }
