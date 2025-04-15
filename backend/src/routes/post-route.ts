@@ -12,6 +12,7 @@ import {
   editPost,
   isLiked,
   getPostById,
+  getTrendingPosts,
 } from "../controllers/post-controller"
 const router = express.Router()
 
@@ -23,6 +24,7 @@ router.get("/is-liked/:id", protectRoute, isLiked)
 router.post("/comment-post/:id", protectRoute, commentPost)
 router.get("/all-posts", getAllPosts)
 router.get("/following-posts", protectRoute, getFollowingPosts)
+router.get("/trending-posts", getTrendingPosts)
 router.get("/liked-posts/:username", protectRoute, getLikedPosts)
 router.get("/user-posts/:username", protectRoute, getUserPosts)
 router.get("/post/:id", getPostById)

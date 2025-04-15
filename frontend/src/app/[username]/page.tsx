@@ -117,7 +117,7 @@ const page = () => {
             </div>
           </div>
         </div>
-        <div className="flex items-center justify-center mt-4  py-2.5 bg-zinc-800/20 border-y border-zinc-700">
+        <div className="flex items-center justify-center mt-3  py-2.5 border-b border-zinc-700">
           <div className="flex border items-center rounded-xl w-fit border-zinc-700 select-none">
             <button
               onClick={() => setResponse("user-posts")}

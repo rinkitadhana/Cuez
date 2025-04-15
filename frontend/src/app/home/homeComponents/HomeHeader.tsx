@@ -19,9 +19,7 @@ const HomeHeader = () => {
         <div
           onClick={() => setActiveTab("All")}
           className={`flex flex-1 justify-center items-center text-xs rounded-l-xl font-semibold px-3 py-2 cursor-pointer transition-colors duration-200 ${
-            activeTab === "All"
-              ? "text-blue-500"
-              : "text-zinc-400 hover:bg-zinc-800"
+            activeTab === "All" ? "bg-zinc-800" : "hover:bg-zinc-800"
           }`}
         >
           Newest
@@ -29,9 +27,7 @@ const HomeHeader = () => {
         <div
           onClick={() => setActiveTab("Trending")}
           className={`flex flex-1 justify-center items-center text-xs border-x border-zinc-700 font-semibold px-3 py-2 cursor-pointer transition-colors duration-200 ${
-            activeTab === "Trending"
-              ? "text-blue-500"
-              : "text-zinc-400 hover:bg-zinc-800"
+            activeTab === "Trending" ? "bg-zinc-800" : "hover:bg-zinc-800"
           }`}
         >
           Trending
@@ -39,9 +35,7 @@ const HomeHeader = () => {
         <div
           onClick={() => setActiveTab("Following")}
           className={`flex flex-1 justify-center items-center text-xs rounded-r-xl font-semibold px-3 py-2 cursor-pointer transition-colors duration-200 ${
-            activeTab === "Following"
-              ? "text-blue-500"
-              : "text-zinc-400 hover:bg-zinc-800"
+            activeTab === "Following" ? "bg-zinc-800" : "hover:bg-zinc-800"
           }`}
         >
           Following

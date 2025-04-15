@@ -340,6 +340,7 @@ const getFollowingPosts = async (
       return
     }
     const followingPosts = await Post.find({ user: { $in: user.followings } })
+      .sort({ createdAt: -1 })
       .populate({
         path: "user",
         select: "-password",
@@ -348,7 +349,53 @@ const getFollowingPosts = async (
         path: "comments.user",
         select: "-password",
       })
-    res.status(200).json(followingPosts)
+    if (followingPosts.length === 0) {
+      res
+        .status(200)
+        .json({ message: "No posts from following users!", posts: [] })
+      return
+    }
+    res.status(200).json({
+      message: "Following posts fetched successfully!",
+      posts: followingPosts,
+    })
+  } catch (error) {
+    errorHandler(res, error)
+  }
+}
+const getTrendingPosts = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const trendingPosts = await Post.aggregate([
+      {
+        $addFields: {
+          likesCount: { $size: "$likes" },
+        },
+      },
+      {
+        $sort: { likesCount: -1 },
+      },
+    ]).exec()
+
+    const populatedPosts = await Post.populate(trendingPosts, [
+      {
+        path: "user",
+        select: "-password",
+      },
+      {
+        path: "comments.user",
+        select: "-password",
+      },
+    ])
+
+    if (populatedPosts.length === 0) {
+      res.status(200).json({ message: "No posts found!", posts: [] })
+      return
+    }
+
+    res.status(200).json({
+      message: "Trending posts fetched successfully!",
+      posts: populatedPosts,
+    })
   } catch (error) {
     errorHandler(res, error)
   }
@@ -429,4 +476,5 @@ export {
   editPost,
   isLiked,
   getPostById,
+  getTrendingPosts,
 }

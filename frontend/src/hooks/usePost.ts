@@ -25,7 +25,8 @@ const getPosts = async (feedType: string): Promise<GetPostsResponse> => {
   }
   try {
     const response = await axios.get<GetPostsResponse>(
-      config.backendUrl + getPostEndPoint()
+      config.backendUrl + getPostEndPoint(),
+      { withCredentials: true }
     )
     return response.data
   } catch (error) {
