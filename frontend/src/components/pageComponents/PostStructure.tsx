@@ -310,16 +310,19 @@ const PostStructure = ({ post }: PostStructureProps) => {
       )}
       {isImageModalOpen && (
         <div
-          onClick={(e) => e.stopPropagation()}
+          onClick={(e) => {
+            e.stopPropagation()
+            setIsImageModalOpen(false)
+          }}
           className="fixed inset-0 bg-bgClr/50 backdrop-blur-sm flex justify-center items-center z-[10000]"
         >
-          <Image
-            src={post?.img || ""}
-            alt="Post image"
-            width={1920}
-            height={1080}
-            className="rounded-lg max-w-full max-h-full object-contain"
-          />
+          <div className="w-[600px]  max-w-[25vw] border rounded-lg overflow-hidden">
+            <Image
+              src={post?.img || ""}
+              alt="Post image"
+              className="rounded-lg w-full h-full object-contain"
+            />
+          </div>
           <button
             onClick={(e) => {
               e.stopPropagation()

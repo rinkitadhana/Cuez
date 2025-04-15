@@ -2,7 +2,7 @@
 import MainWrapper from "@/layout/MainWrapper"
 import Header from "./profileComponent/Header"
 import Image from "next/image"
-import { Calendar, Link, Loader2, MapPin } from "lucide-react"
+import { Calendar, Link, Loader2, MapPin, X } from "lucide-react"
 import {
   useFollowUnfollowUser,
   useGetUserProfile,
@@ -16,6 +16,7 @@ import { useState } from "react"
 const page = () => {
   const { username } = useParams()
   const [response, setResponse] = useState<string>("user-posts")
+  const [isImageModalOpen, setIsImageModalOpen] = useState(false)
   const { data, isLoading, isError } = useGetUserProfile(username as string)
   const { data: authUser } = useGetMe()
   const { mutate: followUnfollowUser, isPending: isFollowUnfollowPending } =
@@ -46,10 +47,11 @@ const page = () => {
           />
           <Image
             src={user?.profileImg || ""}
-            className="absolute -bottom-[60px] left-5 size-[120px] rounded-xl"
+            className="absolute -bottom-[60px] left-5 size-[120px] rounded-xl cursor-pointer"
             alt="profile"
             width={1000}
             height={1000}
+            onClick={() => setIsImageModalOpen(true)}
           />
           {!owner && (
             <>
@@ -140,6 +142,33 @@ const page = () => {
         {response === "user-posts" && <GetUserPost />}
         {response === "liked-posts" && <GetLikedPost />}
       </div>
+
+      {isImageModalOpen && (
+        <div
+          onClick={(e) => {
+            e.stopPropagation()
+            setIsImageModalOpen(false)
+          }}
+          className="fixed inset-0 bg-bgClr/50 backdrop-blur-sm flex justify-center items-center z-[10000]"
+        >
+          <Image
+            src={user?.profileImg || ""}
+            alt="Profile image"
+            width={1920}
+            height={1080}
+            className="rounded-lg max-w-full max-h-full object-contain"
+          />
+          <button
+            onClick={(e) => {
+              e.stopPropagation()
+              setIsImageModalOpen(false)
+            }}
+            className="absolute top-4 right-4 text-white hover:bg-zinc-700/50 rounded-xl p-2 transition-all duration-200"
+          >
+            <X />
+          </button>
+        </div>
+      )}
     </MainWrapper>
   )
 }
