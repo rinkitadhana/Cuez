@@ -360,6 +360,7 @@ const getUserPosts = async (req: Request, res: Response): Promise<void> => {
       return
     }
     const userPosts = await Post.find({ user: user._id })
+      .sort({ createdAt: -1 })
       .populate({
         path: "user",
         select: "-password",
@@ -368,7 +369,9 @@ const getUserPosts = async (req: Request, res: Response): Promise<void> => {
         path: "comments.user",
         select: "-password",
       })
-    res.status(200).json(userPosts)
+    res
+      .status(200)
+      .json({ message: "User posts fetched successfully!", userPosts })
   } catch (error) {
     errorHandler(res, error)
   }

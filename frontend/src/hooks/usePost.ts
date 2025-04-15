@@ -76,6 +76,7 @@ export const useCreatePost = () => {
     onSuccess: (data: CreatePostResponse) => {
       setMessage(data.message, "success")
       queryClient.invalidateQueries({ queryKey: ["posts"] })
+      queryClient.invalidateQueries({ queryKey: ["user-posts"] })
     },
     onError: (error: AxiosError) => {
       const message =
@@ -111,6 +112,7 @@ export const useDeletePost = () => {
     onSuccess: (data: DeletePostResponse) => {
       setMessage(data.message, "success")
       queryClient.invalidateQueries({ queryKey: ["posts"] })
+      queryClient.invalidateQueries({ queryKey: ["user-posts"] })
     },
     onError: (error: AxiosError) => {
       const message =
@@ -160,6 +162,7 @@ export const useEditPost = () => {
     onSuccess: (data: EditPostResponse) => {
       setMessage(data.message, "success")
       queryClient.invalidateQueries({ queryKey: ["posts"] })
+      queryClient.invalidateQueries({ queryKey: ["user-posts"] })
     },
     onError: (error: AxiosError) => {
       const message =
@@ -199,6 +202,7 @@ export const useLikeUnlikePost = () => {
       queryClient.invalidateQueries({ queryKey: ["posts"] })
       queryClient.invalidateQueries({ queryKey: ["post", postId] })
       queryClient.invalidateQueries({ queryKey: ["is-liked", postId] })
+      queryClient.invalidateQueries({ queryKey: ["user-posts"] })
     },
     onError: (error: AxiosError) => {
       const message =
@@ -283,6 +287,7 @@ export const useCommentPost = () => {
     onSuccess: (data: CommentPostResponse, { postId }) => {
       setMessage(data.message, "success")
       queryClient.invalidateQueries({ queryKey: ["post", postId] })
+      queryClient.invalidateQueries({ queryKey: ["user-posts"] })
     },
     onError: (error: AxiosError) => {
       const message =
@@ -290,5 +295,27 @@ export const useCommentPost = () => {
         "Comment Post failed!"
       setMessage(message, "error")
     },
+  })
+}
+
+interface GetUserPostsResponse {
+  message: string
+  userPosts: Post[]
+}
+
+const getUserPosts = async (
+  username: string
+): Promise<GetUserPostsResponse> => {
+  const { data } = await axios.get<GetUserPostsResponse>(
+    config.backendUrl + `/post/user-posts/${username}`,
+    { withCredentials: true }
+  )
+  return data
+}
+
+export const useGetUserPosts = (username: string) => {
+  return useQuery<GetUserPostsResponse, AxiosError>({
+    queryKey: ["user-posts", username],
+    queryFn: () => getUserPosts(username),
   })
 }

@@ -1,6 +1,6 @@
 import useMessageStore from "@/store/messageStore"
 import config from "../config/config"
-import { useMutation, useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import axios, { AxiosError } from "axios"
 import { User } from "@/types/User"
 
@@ -45,10 +45,15 @@ const followUnfollowUser = async (
 
 export const useFollowUnfollowUser = () => {
   const { setMessage } = useMessageStore()
+  const queryClient = useQueryClient()
   return useMutation<FollowUnfollowUserResponse, AxiosError, string>({
     mutationFn: followUnfollowUser,
     onSuccess: (data: FollowUnfollowUserResponse) => {
       setMessage(data.message, "success")
+      queryClient.invalidateQueries({ queryKey: ["is-following"] })
+      queryClient.invalidateQueries({ queryKey: ["user-profile"] })
+      queryClient.invalidateQueries({ queryKey: ["suggested-users"] })
+      queryClient.invalidateQueries({ queryKey: ["posts"] })
     },
     onError: (error: AxiosError) => {
       const message =
@@ -84,7 +89,9 @@ interface UserProfileResponse {
   user: User
 }
 
-const getUserProfile = async (username: string): Promise<UserProfileResponse> => {
+const getUserProfile = async (
+  username: string
+): Promise<UserProfileResponse> => {
   const response = await axios.get<UserProfileResponse>(
     config.backendUrl + `/user/profile/${username}`,
     { withCredentials: true }
