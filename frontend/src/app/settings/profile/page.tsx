@@ -1,21 +1,10 @@
 "use client"
 
-import { useState, useRef, FormEvent, ChangeEvent, useEffect } from "react"
+import { useState, useRef, ChangeEvent, useEffect } from "react"
 import { useGetMe } from "@/hooks/useAuth"
 import { useRouter } from "next/navigation"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
 import Image from "next/image"
-import Input from "@/components/Input"
-import axios from "axios"
-import config from "@/config/config"
-import {
-  ArrowLeft,
-  Camera,
-  Link as LinkIcon,
-  Loader2,
-  MapPin,
-  User,
-} from "lucide-react"
+import { ArrowLeft, Camera, Loader2 } from "lucide-react"
 import MainWrapper from "@/layout/MainWrapper"
 import { useUpdateUserProfile } from "@/hooks/useUser"
 

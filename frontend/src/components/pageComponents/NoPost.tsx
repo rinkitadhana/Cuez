@@ -11,7 +11,8 @@ const NoPost = () => {
       </div>
       <h3 className="text-xl font-medium mb-2">No post found</h3>
       <p className="text-sm text-zinc-500">
-        The post you're looking for might have been deleted or doesn't exist
+        The post you&apos;re looking for might have been deleted or doesn&apos;t
+        exist
       </p>
     </div>
   )

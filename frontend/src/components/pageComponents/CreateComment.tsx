@@ -99,7 +99,7 @@ const CreateComment = () => {
         }
       )
     } catch (error) {
-      setMessage("Failed to upload media", "error")
+      setMessage(`Failed to upload media ${error}`, "error")
     }
   }
 

@@ -11,8 +11,8 @@ const NoPosts = () => {
       </div>
       <h3 className="text-xl font-medium mb-2">No Posts Available</h3>
       <p className="text-sm text-zinc-500">
-        There's nothing to see here at the moment, but great content is just
-        around the corner!
+        There&apos;s nothing to see here at the moment, but great content is
+        just around the corner!
       </p>
     </div>
   )
