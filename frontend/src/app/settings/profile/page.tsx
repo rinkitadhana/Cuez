@@ -115,7 +115,7 @@ const ProfilePage = () => {
           <div className="flex items-center gap-3">
             <button
               onClick={() => router.back()}
-              className="p-2 hover:bg-zinc-800 rounded-xl w-fit cursor-pointer opacity-95"
+              className="p-2 select-none hover:bg-zinc-800 rounded-xl w-fit cursor-pointer opacity-95"
             >
               <ArrowLeft size={20} />
             </button>
@@ -124,17 +124,17 @@ const ProfilePage = () => {
           <button
             onClick={updateProfile}
             disabled={isUpdating}
-            className="px-4 py-1 bg-mainclr hover:bg-mainclr/80 disabled:bg-mainclr/50 disabled:cursor-not-allowed rounded-xl font-semibold transition-colors duration-200"
+            className="px-4 py-1 select-none bg-mainclr hover:bg-mainclr/80 disabled:bg-mainclr/50 disabled:cursor-not-allowed rounded-xl font-semibold transition-colors duration-200"
           >
             {isUpdating ? (
-              <Loader2 className="animate-spin" size={16} />
+              <Loader2 className="animate-spin" size={24} />
             ) : (
               "Save"
             )}
           </button>
         </div>
 
-        <div className="relative mb-[80px]">
+        <div className="relative mb-[80px] select-none">
           <div className="relative h-[200px] w-full">
             <Image
               src={
@@ -191,78 +191,83 @@ const ProfilePage = () => {
           </div>
         </div>
 
-        <form className="flex flex-col px-6 pt-20 pb-10 space-y-6">
+        <form className="flex flex-col px-6 pt-4  space-y-6">
           <div className="space-y-6">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Input
-                name="fullName"
-                text="Full Name"
-                type="text"
-                value={formData.fullName}
-                onChange={handleChange}
-                ficon={<User strokeWidth={1.5} />}
-              />
-
-              <Input
-                name="username"
-                text="Username"
-                type="text"
-                value={formData.username}
-                onChange={handleChange}
-                ficon={<User strokeWidth={1.5} />}
-              />
+              <div className="flex flex-col gap-1.5">
+                <label className=" text-sm font-medium">Full Name</label>
+                <div className="flex flex-row border rounded-xl gap-3 py-2 px-4 border-zinc-500 focus-within:border-mainclr transition-colors duration-200">
+                  <input
+                    name="fullName"
+                    type="text"
+                    value={formData.fullName}
+                    onChange={handleChange}
+                    className="w-full placeholder:text-zinc-500 bg-transparent outline-none placeholder:select-none"
+                    placeholder="Enter your full name"
+                  />
+                </div>
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <label className=" text-sm font-medium">Username</label>
+                <div className="flex flex-row border rounded-xl gap-3 py-2 px-4 border-zinc-500 focus-within:border-mainclr transition-colors duration-200">
+                  <input
+                    name="username"
+                    type="text"
+                    value={formData.username}
+                    onChange={handleChange}
+                    className="w-full placeholder:text-zinc-500 bg-transparent outline-none placeholder:select-none"
+                    placeholder="Enter your username"
+                  />
+                </div>
+              </div>
             </div>
-            <div className="flex flex-col border rounded-[10px] gap-3 py-3 px-4 border-zinc-500 focus-within:border-mainclr transition-colors duration-200 hover:border-zinc-400">
-              <label className="text-zinc-400 text-sm font-medium">Bio</label>
-              <textarea
-                name="bio"
-                value={formData.bio}
-                onChange={handleChange}
-                rows={4}
-                className="w-full placeholder:text-zinc-500 bg-transparent outline-none placeholder:select-none resize-none"
-                placeholder="Tell us about yourself"
-              />
+            <div className="flex flex-col gap-1.5">
+              <label className="text-sm font-medium">Bio</label>
+              <div className="flex flex-row border rounded-xl gap-3 py-2 px-4 border-zinc-500 focus-within:border-mainclr transition-colors duration-200">
+                <textarea
+                  name="bio"
+                  value={formData.bio}
+                  onChange={handleChange}
+                  className="w-full placeholder:text-zinc-500 bg-transparent outline-none placeholder:select-none resize-none min-h-[60px]"
+                  placeholder="Tell us about yourself"
+                  rows={1}
+                  onInput={(e) => {
+                    e.currentTarget.style.height = "auto"
+                    e.currentTarget.style.height =
+                      e.currentTarget.scrollHeight + "px"
+                  }}
+                />
+              </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="flex flex-row border rounded-[10px] gap-3 py-3 px-4 border-zinc-500 focus-within:border-mainclr transition-colors duration-200 hover:border-zinc-400">
-                <div className="text-zinc-500">
-                  <MapPin strokeWidth={1.5} />
+              <div className="flex flex-col gap-1.5">
+                <label className="text-sm font-medium">Location</label>
+                <div className="flex flex-row border rounded-xl gap-3 py-2 px-4 border-zinc-500 focus-within:border-mainclr transition-colors duration-200">
+                  <input
+                    name="location"
+                    type="text"
+                    value={formData.location}
+                    onChange={handleChange}
+                    className="w-full placeholder:text-zinc-500 bg-transparent outline-none placeholder:select-none"
+                    placeholder="Enter your location"
+                  />
                 </div>
-                <input
-                  name="location"
-                  type="text"
-                  value={formData.location}
-                  onChange={handleChange}
-                  className="w-full placeholder:text-zinc-500 bg-transparent outline-none placeholder:select-none"
-                  placeholder="Location"
-                />
               </div>
 
-              <div className="flex flex-row border rounded-[10px] gap-3 py-3 px-4 border-zinc-500 focus-within:border-mainclr transition-colors duration-200 hover:border-zinc-400">
-                <div className="text-zinc-500">
-                  <LinkIcon strokeWidth={1.5} />
+              <div className="flex flex-col gap-1.5">
+                <label className="text-sm font-medium">Website</label>
+                <div className="flex flex-row border rounded-xl gap-3 py-2 px-4 border-zinc-500 focus-within:border-mainclr transition-colors duration-200">
+                  <input
+                    name="link"
+                    type="text"
+                    value={formData.link}
+                    onChange={handleChange}
+                    className="w-full placeholder:text-zinc-500 bg-transparent outline-none placeholder:select-none"
+                    placeholder="Enter your website"
+                  />
                 </div>
-                <input
-                  name="link"
-                  type="text"
-                  value={formData.link}
-                  onChange={handleChange}
-                  className="w-full placeholder:text-zinc-500 bg-transparent outline-none placeholder:select-none"
-                  placeholder="Website"
-                />
               </div>
-            </div>
-
-            <div className="pt-4 md:hidden">
-              <button
-                type="button"
-                onClick={updateProfile}
-                disabled={isUpdating}
-                className="w-full py-2.5 bg-mainclr hover:bg-mainclr/90 disabled:bg-mainclr/50 disabled:cursor-not-allowed rounded-full font-medium transition-colors duration-200"
-              >
-                {isUpdating ? "Saving..." : "Save Changes"}
-              </button>
             </div>
           </div>
         </form>
