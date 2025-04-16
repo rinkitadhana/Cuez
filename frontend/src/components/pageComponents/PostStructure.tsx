@@ -316,13 +316,13 @@ const PostStructure = ({ post }: PostStructureProps) => {
           }}
           className="fixed inset-0 bg-bgClr/50 backdrop-blur-sm flex justify-center items-center z-[10000]"
         >
-          <div className="w-[600px]  max-w-[25vw] border rounded-lg overflow-hidden">
             <Image
               src={post?.img || ""}
               alt="Post image"
+              width={1920}
+              height={1080}
               className="rounded-lg w-full h-full object-contain"
             />
-          </div>
           <button
             onClick={(e) => {
               e.stopPropagation()
