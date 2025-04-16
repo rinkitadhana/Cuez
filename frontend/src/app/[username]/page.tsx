@@ -34,6 +34,16 @@ const page = () => {
   const handleFollowUnfollow = () => {
     followUnfollowUser(user?._id || "")
   }
+  const formatLink = (link: string) => {
+    if (link.startsWith("https://")) {
+      return link.slice(8)
+    }
+    if (link.startsWith("http://")) {
+      return link.slice(7)
+    }
+    return link
+  }
+
   return (
     <MainWrapper>
       <div>
@@ -105,12 +115,12 @@ const page = () => {
                   <div className="flex gap-1 items-center">
                     <Link size={14} />{" "}
                     <a
-                      href={user?.link || ""}
+                      href={`https://${formatLink(user?.link || "")}`}
                       target="_blank"
                       className="text-blue-500 hover:underline"
                       rel="noopener noreferrer"
                     >
-                      {user?.link || ""}
+                      {formatLink(user?.link || "")}
                     </a>
                   </div>
                 )}
