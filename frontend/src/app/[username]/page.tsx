@@ -55,7 +55,7 @@ const page = () => {
               />
               <Image
                 src={user?.profileImg || ""}
-                className="absolute -bottom-[60px] left-5 size-[120px] rounded-xl cursor-pointer hover:brightness-90 transition-all duration-200"
+                className="absolute -bottom-[60px] left-5 size-[120px] rounded-xl border-4 border-bgClr cursor-pointer hover:brightness-90 transition-all duration-200"
                 alt="profile"
                 width={1000}
                 height={1000}
@@ -164,7 +164,7 @@ const page = () => {
           }}
           className="fixed inset-0 bg-bgClr/80 backdrop-blur-sm flex justify-center items-center z-[10000]"
         >
-          <div className="w-full max-w-[400px] border h-fit rounded-xl flex justify-center items-center">
+          <div className="w-full max-w-[400px] h-fit rounded-xl flex justify-center items-center">
             <Image
               src={user?.profileImg || ""}
               alt="Profile image"
