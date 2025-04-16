@@ -1,10 +1,16 @@
 "use client"
+import { useGetMe } from "@/hooks/useAuth"
+import { useGetUserProfile } from "@/hooks/useUser"
 import { ArrowLeft, PencilLine } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-
+import { useParams } from "next/navigation"
 const Header = () => {
   const router = useRouter()
+  const { username } = useParams()
+  const { data: authUser } = useGetMe()
+  const { data: user } = useGetUserProfile(username as string)
+  const owner = authUser?.user._id === user?.user._id
 
   const handleBack = () => {
     router.back()
@@ -21,13 +27,15 @@ const Header = () => {
         </button>
         <h1 className="font-semibold">Profile</h1>
       </div>
-      <Link
-        href="/settings/profile"
-        className="flex items-center gap-1 rounded-xl bg-zinc-800 hover:bg-zinc-700/70 transition-colors duration-200 px-3 py-1.5 border font-semibold text-sm border-zinc-700"
-      >
-        <PencilLine size={16} />
-        Edit Profile
-      </Link>
+      {owner && (
+        <Link
+          href="/settings/profile"
+          className="flex items-center gap-1 rounded-xl bg-zinc-800 hover:bg-zinc-700/70 transition-colors duration-200 px-3 py-1.5 border font-semibold text-sm border-zinc-700"
+        >
+          <PencilLine size={16} />
+          Edit Profile
+        </Link>
+      )}
     </div>
   )
 }
