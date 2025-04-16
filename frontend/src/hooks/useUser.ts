@@ -105,3 +105,55 @@ export const useGetUserProfile = (username: string) => {
     queryFn: () => getUserProfile(username),
   })
 }
+
+interface UpdateUserProfileResponse {
+  message: string
+}
+
+interface UpdateUserProfileData {
+  fullName?: string
+  username?: string
+  bio?: string
+  link?: string
+  location?: string
+  profileImg?: string
+  coverImg?: string
+}
+
+const updateUserProfile = async (
+  profileData: UpdateUserProfileData
+): Promise<UpdateUserProfileResponse> => {
+  const response = await axios.patch<UpdateUserProfileResponse>(
+    config.backendUrl + `/user/update-profile`,
+    profileData,
+    {
+      withCredentials: true,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  )
+  return response.data
+}
+
+export const useUpdateUserProfile = () => {
+  const { setMessage } = useMessageStore()
+  const queryClient = useQueryClient()
+  return useMutation<
+    UpdateUserProfileResponse,
+    AxiosError,
+    UpdateUserProfileData
+  >({
+    mutationFn: updateUserProfile,
+    onSuccess: (data: UpdateUserProfileResponse) => {
+      setMessage(data.message, "success")
+      queryClient.invalidateQueries({ queryKey: ["user-profile"] })
+    },
+    onError: (error: AxiosError) => {
+      const message =
+        (error.response?.data as UpdateUserProfileResponse)?.message ||
+        "Failed to update profile"
+      setMessage(message, "error")
+    },
+  })
+}
