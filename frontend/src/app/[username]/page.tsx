@@ -17,6 +17,7 @@ const page = () => {
   const { username } = useParams()
   const [response, setResponse] = useState<string>("user-posts")
   const [isImageModalOpen, setIsImageModalOpen] = useState(false)
+  const [isCoverImageModalOpen, setIsCoverImageModalOpen] = useState(false)
   const { data, isLoading, isError } = useGetUserProfile(username as string)
   const { data: authUser } = useGetMe()
   const { mutate: followUnfollowUser, isPending: isFollowUnfollowPending } =
@@ -44,6 +45,7 @@ const page = () => {
             alt="profile"
             width={1000}
             height={1000}
+            onClick={() => setIsCoverImageModalOpen(true)}
           />
           <Image
             src={user?.profileImg || ""}
@@ -149,19 +151,49 @@ const page = () => {
             e.stopPropagation()
             setIsImageModalOpen(false)
           }}
-          className="fixed inset-0 bg-bgClr/50 backdrop-blur-sm flex justify-center items-center z-[10000]"
+          className="fixed inset-0 bg-bgClr/80 backdrop-blur-sm flex justify-center items-center z-[10000]"
         >
-          <Image
-            src={user?.profileImg || ""}
-            alt="Profile image"
-            width={1920}
-            height={1080}
-            className="rounded-lg max-w-full max-h-full object-contain"
-          />
+          <div className="w-full max-w-[400px] border h-fit rounded-xl flex justify-center items-center">
+            <Image
+              src={user?.profileImg || ""}
+              alt="Profile image"
+              width={1920}
+              height={1080}
+              className="rounded-xl max-w-full max-h-full object-contain"
+            />
+          </div>
           <button
             onClick={(e) => {
               e.stopPropagation()
               setIsImageModalOpen(false)
+            }}
+            className="absolute top-4 right-4 text-white hover:bg-zinc-700/50 rounded-xl p-2 transition-all duration-200"
+          >
+            <X />
+          </button>
+        </div>
+      )}
+      {isCoverImageModalOpen && (
+        <div
+          onClick={(e) => {
+            e.stopPropagation()
+            setIsCoverImageModalOpen(false)
+          }}
+          className="fixed inset-0 bg-bgClr/80 backdrop-blur-sm flex justify-center items-center z-[10000]"
+        >
+          <div className="w-[95%] h-[600px] rounded-xl flex justify-center items-center">
+            <Image
+              src={user?.coverImg || ""}
+              alt="Cover image"
+              width={1920}
+              height={1080}
+              className="rounded-xl max-w-full max-h-full object-cover"
+            />
+          </div>
+          <button
+            onClick={(e) => {
+              e.stopPropagation()
+              setIsCoverImageModalOpen(false)
             }}
             className="absolute top-4 right-4 text-white hover:bg-zinc-700/50 rounded-xl p-2 transition-all duration-200"
           >
