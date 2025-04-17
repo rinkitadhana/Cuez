@@ -140,7 +140,7 @@ const editPost = async (
   postId: string,
   postData: EditPostData
 ): Promise<EditPostResponse> => {
-  const { data } = await axios.put<EditPostResponse>(
+  const { data } = await axios.patch<EditPostResponse>(
     config.backendUrl + `/post/edit-post/${postId}`,
     postData,
     {

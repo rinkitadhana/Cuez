@@ -13,6 +13,7 @@ import { Loader2, X } from "lucide-react"
 import config from "@/config/config"
 import useMessageStore from "@/store/messageStore"
 import { useRouter } from "next/navigation"
+import EditPost from "./EditPost"
 interface PostStructureProps {
   post: Post
 }
@@ -161,13 +162,13 @@ const PostStructure = ({ post }: PostStructureProps) => {
                 </button>
               )}
               {isOpen && (
-                <div className="absolute flex flex-col items-start gap-0.5 top-14 right-5 bg-zinc-900 z-10 border border-zinc-700 p-2 w-32 rounded-lg">
-                  <button
-                    onClick={(e) => e.stopPropagation()}
-                    className="py-1 px-3 text-left hover:bg-zinc-700 rounded-lg transition-all duration-200 w-full"
-                  >
-                    Edit
-                  </button>
+                <div
+                  onClick={(e) => {
+                    e.stopPropagation()
+                  }}
+                  className="absolute flex flex-col items-start gap-0.5 top-14 right-5 bg-zinc-900 z-10 border border-zinc-700 p-2 w-32 rounded-lg"
+                >
+                  <EditPost post={post} />
                   <button
                     onClick={(e) => {
                       e.stopPropagation()
@@ -316,13 +317,13 @@ const PostStructure = ({ post }: PostStructureProps) => {
           }}
           className="fixed inset-0 bg-bgClr/50 backdrop-blur-sm flex justify-center items-center z-[10000]"
         >
-            <Image
-              src={post?.img || ""}
-              alt="Post image"
-              width={1920}
-              height={1080}
-              className="rounded-lg w-full h-full object-contain"
-            />
+          <Image
+            src={post?.img || ""}
+            alt="Post image"
+            width={1920}
+            height={1080}
+            className="rounded-lg w-full h-full object-contain"
+          />
           <button
             onClick={(e) => {
               e.stopPropagation()

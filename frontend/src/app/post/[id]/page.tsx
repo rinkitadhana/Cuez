@@ -25,6 +25,7 @@ import CreateComment from "@/components/pageComponents/CreateComment"
 import GetComments from "@/components/pageComponents/GetComments"
 import PostSkeleton from "@/components/skeletons/PostSkeleton"
 import CommentSkeleton from "@/components/skeletons/CommentSkeleton"
+import EditPost from "@/components/pageComponents/EditPost"
 
 const PostPage = () => {
   const { id } = useParams()
@@ -41,6 +42,8 @@ const PostPage = () => {
   const { mutate: likeUnlikePost, isPending: isLikeUnlikePending } =
     useLikeUnlikePost()
   const { data: isLiked, isPending: isLikedPending } = useIsLiked(id as string)
+  const isUpdated =
+    post?.post?.updatedAt && post?.post?.updatedAt !== post?.post?.createdAt
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -132,7 +135,16 @@ const PostPage = () => {
       </MainWrapper>
     )
   }
-
+  const formatDateTime = (date: Date) => {
+    const options: Intl.DateTimeFormatOptions = {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    }
+    return new Date(date).toLocaleString("en-US", options)
+  }
   const isOwner = authUser?.user._id === post?.post.user._id
 
   return (
@@ -189,12 +201,7 @@ const PostPage = () => {
                     )}
                     {isOpen && (
                       <div className="absolute flex flex-col items-start gap-0.5 top-14 right-5 bg-zinc-900 z-10 border border-zinc-700 p-2 w-32 rounded-lg">
-                        <button
-                          onClick={(e) => e.stopPropagation()}
-                          className="py-1 px-3 text-left hover:bg-zinc-700 rounded-lg transition-all duration-200 w-full"
-                        >
-                          Edit
-                        </button>
+                        <EditPost post={post.post} />
                         <button
                           onClick={(e) => {
                             e.stopPropagation()
@@ -234,6 +241,15 @@ const PostPage = () => {
                       />
                     </div>
                   )}
+                  <div className="text-sm text-zinc-400">
+                    {isUpdated
+                      ? `Updated on ${formatDateTime(
+                          new Date(post.post.updatedAt)
+                        )}`
+                      : `Posted on ${formatDateTime(
+                          new Date(post.post.createdAt)
+                        )}`}
+                  </div>
                   <div className="flex justify-between text-lg select-none">
                     <div className="flex gap-3 items-center">
                       <div className="flex items-center gap-1">

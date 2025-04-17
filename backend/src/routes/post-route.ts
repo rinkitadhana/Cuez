@@ -17,7 +17,7 @@ import {
 const router = express.Router()
 
 router.post("/create-post", protectRoute, createPost)
-router.patch("/edit-post", protectRoute, editPost)
+router.patch("/edit-post/:id", protectRoute, editPost)
 router.delete("/delete-post/:id", protectRoute, deletePost)
 router.post("/like-post/:id", protectRoute, likeUnlikePost)
 router.get("/is-liked/:id", protectRoute, isLiked)
