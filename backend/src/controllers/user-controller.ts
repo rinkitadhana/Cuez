@@ -107,6 +107,16 @@ const updateUserProfile = async (
       return
     }
 
+    const isUsernameTaken = await User.findOne({ 
+      username,
+      _id: { $ne: userId }
+    })
+
+    if (isUsernameTaken) {
+      res.status(400).json({ message: "Username is already taken!" })
+      return
+    }
+
     if (profileImg) {
       if (user.profileImg) {
         const publicId = user.profileImg.split("/").pop()?.split(".")[0]
