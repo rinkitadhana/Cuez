@@ -134,7 +134,7 @@ const LeftSidebar = () => {
             className={` flex cursor-pointer items-center justify-between gap-2 w-full -ml-1  rounded-2xl group/pfp  transition-all duration-200 py-2 px-2 select-none      
               ${isOpen ? "bg-zinc-800 ml-0" : "hover:ml-0 hover:bg-zinc-800"}`}
           >
-            <div className="flex items-center gap-3  ">
+            <div className="flex items-center gap-2">
               <Image
                 src={me?.user.profileImg || "/img/pfp/Gruz.jpeg"}
                 alt="Profile picture"
@@ -155,7 +155,7 @@ const LeftSidebar = () => {
                 </p>
               </div>
             </div>
-            <div className="px-2">
+            <div className="px-1">
             <SlOptions
               className={`opacity-0  ${
                 isOpen ? "opacity-80" : "group-hover/pfp:opacity-80"
