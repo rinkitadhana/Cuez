@@ -138,9 +138,9 @@ const LeftSidebar = () => {
               <Image
                 src={me?.user.profileImg || "/img/pfp/Gruz.jpeg"}
                 alt="Profile picture"
-                width={40}
-                height={40}
-                className="rounded-xl"
+                width={36}
+                height={36}
+                className="rounded-xl size-9 object-cover"
               />
               <div
                 className={`opacity-0  transition-all duration-200 ${

@@ -54,7 +54,7 @@ const page = () => {
           <NoUser />
         ) : (
           <>
-            <div className="rounded-xl relative mb-[60px]">
+            <div className="rounded-xl relative mb-[60px] select-none">
               <Image
                 src={user?.coverImg || ""}
                 className="w-full h-[200px] object-cover cursor-pointer hover:brightness-90 transition-all duration-200"
@@ -65,7 +65,7 @@ const page = () => {
               />
               <Image
                 src={user?.profileImg || ""}
-                className="absolute -bottom-[60px] left-5 size-[120px] rounded-xl border-4 border-bgClr cursor-pointer hover:brightness-90 transition-all duration-200"
+                className="absolute -bottom-[60px] left-5 size-[120px] object-cover rounded-xl border-4 border-bgClr cursor-pointer hover:brightness-90 transition-all duration-200"
                 alt="profile"
                 width={1000}
                 height={1000}
@@ -174,13 +174,13 @@ const page = () => {
           }}
           className="fixed inset-0 bg-bgClr/80 backdrop-blur-sm flex justify-center items-center z-[10000]"
         >
-          <div className="w-full max-w-[400px] h-fit rounded-xl flex justify-center items-center">
+          <div className="rounded-xl flex justify-center items-center">
             <Image
               src={user?.profileImg || ""}
               alt="Profile image"
               width={1920}
               height={1080}
-              className="rounded-xl max-w-full max-h-full object-contain"
+              className="rounded-xl  w-[400px] h-[400px] object-cover"
             />
           </div>
           <button

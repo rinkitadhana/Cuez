@@ -30,7 +30,7 @@ const Header = () => {
       {owner && (
         <Link
           href="/settings/profile"
-          className="flex items-center gap-1 rounded-xl bg-zinc-800 hover:bg-zinc-700/70 transition-colors duration-200 px-3 py-1.5 border font-semibold text-sm border-zinc-700"
+          className="flex select-none items-center gap-1 rounded-xl bg-zinc-800 hover:bg-zinc-700/70 transition-colors duration-200 px-3 py-1.5 border font-semibold text-sm border-zinc-700"
         >
           <PencilLine size={16} />
           Edit Profile
