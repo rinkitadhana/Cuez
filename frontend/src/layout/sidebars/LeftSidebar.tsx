@@ -155,11 +155,14 @@ const LeftSidebar = () => {
                 </p>
               </div>
             </div>
+            <div className="px-2">
             <SlOptions
-              className={`opacity-0 ${
+              className={`opacity-0  ${
                 isOpen ? "opacity-80" : "group-hover/pfp:opacity-80"
               } transition-all duration-200`}
             />
+            </div>
+           
           </div>
 
           {isOpen && (
