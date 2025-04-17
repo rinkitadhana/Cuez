@@ -84,6 +84,11 @@ const PostPage = () => {
     })
   }
 
+  const userProfile = () => {
+    if (!post?.post.user._id) return
+    router.push(`/${post?.post.user.username}`)
+  }
+
   const handleLikeUnlikePost = () => {
     if (!post?.post._id) return
     likeUnlikePost(post.post._id)
@@ -155,18 +160,22 @@ const PostPage = () => {
           <div className="flex relative flex-col gap-4 p-4">
             <div className="flex gap-2 w-full">
               <Image
+                onClick={userProfile}
                 src={post.post.user.profileImg}
                 alt="user avatar"
                 width={32}
                 height={32}
-                className="rounded-lg size-10 select-none"
+                className="rounded-lg size-10 select-none cursor-pointer hover:brightness-90 transition-all duration-200"
               />
               <div className="flex flex-col gap-1 w-full">
                 <div className="flex items-center justify-between">
                   <div className="flex gap-2 items-center">
                     <div className="flex flex-col -space-y-1">
                       <div className="flex gap-2 items-center">
-                        <h1 className="font-semibold">
+                        <h1
+                          onClick={userProfile}
+                          className="font-semibold hover:underline cursor-pointer"
+                        >
                           {post.post.user.fullName}
                         </h1>
                         {!isOwner && (

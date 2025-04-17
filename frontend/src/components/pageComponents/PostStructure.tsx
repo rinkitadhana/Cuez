@@ -72,6 +72,10 @@ const PostStructure = ({ post }: PostStructureProps) => {
   const handleLikeUnlikePost = () => {
     likeUnlikePost(post._id)
   }
+  const userProfile = () => {
+    if (!post?.user._id) return
+    router.push(`/${post?.user.username}`)
+  }
 
   const handleShare = async () => {
     const shareData = {
@@ -116,12 +120,15 @@ const PostStructure = ({ post }: PostStructureProps) => {
     >
       <div className="flex gap-2 w-full">
         <Image
-          onClick={(e) => e.stopPropagation()}
+          onClick={(e) => {
+            e.stopPropagation()
+            userProfile()
+          }}
           src={post.user.profileImg}
           alt="user avatar"
           width={32}
           height={32}
-          className="rounded-lg size-10 select-none"
+          className="rounded-lg size-10 select-none cursor-pointer hover:brightness-90 transition-all duration-200"
         />
         <div className="flex flex-col gap-1 w-full">
           <div className="flex items-center justify-between">
@@ -131,7 +138,12 @@ const PostStructure = ({ post }: PostStructureProps) => {
             >
               <div className="flex flex-col -space-y-1">
                 <div className="flex gap-2 items-center">
-                  <h1 className="font-semibold">{post.user.fullName}</h1>
+                  <h1
+                    onClick={userProfile}
+                    className="font-semibold hover:underline cursor-pointer"
+                  >
+                    {post.user.fullName}
+                  </h1>
                   {!isOwner && (
                     <div className="text-xs font-semibold text-blue-500 hover:underline cursor-pointer">
                       Follow
