@@ -49,8 +49,7 @@ const PostPage = () => {
   const { mutate: followUnfollowUser, isPending: isFollowUnfollowPending } =
     useFollowUnfollowUser()
   const { data: isLiked, isPending: isLikedPending } = useIsLiked(id as string)
-  const isUpdated =
-    post?.post?.updatedAt && post?.post?.updatedAt !== post?.post?.createdAt
+  const isUpdated = post?.post.editedAt !== post?.post.createdAt
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -170,8 +169,10 @@ const PostPage = () => {
                 onClick={userProfile}
                 src={post.post.user.profileImg}
                 alt="user avatar"
-                width={32}
-                height={32}
+                width={48}
+                height={48}
+                quality={100}
+                priority
                 className="rounded-lg size-10 select-none cursor-pointer hover:brightness-90 transition-all duration-200"
               />
               <div className="flex flex-col gap-1 w-full">
@@ -278,8 +279,8 @@ const PostPage = () => {
                   )}
                   <div className="text-sm text-zinc-400">
                     {isUpdated
-                      ? `Updated on ${formatDateTime(
-                          new Date(post.post.updatedAt)
+                      ? `Edited on ${formatDateTime(
+                          new Date(post.post.editedAt || "")
                         )}`
                       : `Posted on ${formatDateTime(
                           new Date(post.post.createdAt)

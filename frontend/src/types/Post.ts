@@ -12,6 +12,7 @@ export const postSchema = z.object({
   comments: z.array(commentSchema),
   createdAt: z.string(),
   updatedAt: z.string(),
+  editedAt: z.string().optional(),
 })
 
 export type Post = z.infer<typeof postSchema>

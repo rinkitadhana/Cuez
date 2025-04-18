@@ -90,6 +90,7 @@ const editPost = async (req: Request, res: Response): Promise<void> => {
       text?: string
       img?: string
       video?: string
+      editedAt?: Date
     } = {}
 
     if (img) {
@@ -106,6 +107,7 @@ const editPost = async (req: Request, res: Response): Promise<void> => {
         resource_type: "image",
       })
       updateData.img = uploadedResponse.secure_url
+      updateData.editedAt = new Date()
     }
 
     if (video) {
@@ -122,10 +124,12 @@ const editPost = async (req: Request, res: Response): Promise<void> => {
         resource_type: "video",
       })
       updateData.video = uploadedResponse.secure_url
+      updateData.editedAt = new Date()
     }
 
     if (text) {
       updateData.text = text
+      updateData.editedAt = new Date()
     }
 
     const updatedPost = await Post.findByIdAndUpdate(

@@ -162,11 +162,12 @@ export const useEditPost = () => {
     { postId: string; postData: EditPostData }
   >({
     mutationFn: ({ postId, postData }) => editPost(postId, postData),
-    onSuccess: (data: EditPostResponse) => {
+    onSuccess: (data: EditPostResponse, variables) => {
       setMessage(data.message, "success")
       queryClient.invalidateQueries({ queryKey: ["posts"] })
       queryClient.invalidateQueries({ queryKey: ["user-posts"] })
       queryClient.invalidateQueries({ queryKey: ["liked-posts"] })
+      queryClient.invalidateQueries({ queryKey: ["post", variables.postId] })
     },
     onError: (error: AxiosError) => {
       const message =

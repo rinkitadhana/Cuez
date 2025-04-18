@@ -5,6 +5,7 @@ export interface IPost extends Document {
   text?: string
   img?: string
   video?: string
+  editedAt?: Date
   likes: mongoose.Types.ObjectId[]
   comments: IComment[]
   createdAt: Date
@@ -42,6 +43,18 @@ const postSchema = new mongoose.Schema<IPost>(
         ref: "User",
       },
     ],
+    editedAt: {
+      type: Date,
+      default: Date.now,
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now,
+    },
+    updatedAt: {
+      type: Date,
+      default: Date.now,
+    },
     comments: [
       {
         user: {
