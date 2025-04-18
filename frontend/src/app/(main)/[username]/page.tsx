@@ -178,9 +178,10 @@ const page = () => {
             <Image
               src={user?.profileImg || ""}
               alt="Profile image"
-              width={1920}
-              height={1080}
-              className="rounded-xl  w-[400px] h-[400px] object-cover"
+              width={800}
+              height={800}
+              quality={100}
+              className="rounded-xl w-[400px] h-[400px] object-cover"
             />
           </div>
           <button
