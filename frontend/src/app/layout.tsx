@@ -3,7 +3,6 @@ import { Geist, Geist_Mono } from "next/font/google"
 import "../styles/globals.css"
 import { TanstackProvider } from "@/components/providers/tanstack-provider"
 import Message from "@/components/Messages"
-import AuthGuard from "@/components/AuthGuard"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -60,7 +59,7 @@ export default function RootLayout({
       >
         <TanstackProvider>
           <Message />
-          <AuthGuard>{children}</AuthGuard>
+          {children}
         </TanstackProvider>
       </body>
     </html>
