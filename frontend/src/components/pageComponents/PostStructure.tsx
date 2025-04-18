@@ -14,6 +14,7 @@ import config from "@/config/config"
 import useMessageStore from "@/store/messageStore"
 import { useRouter } from "next/navigation"
 import EditPost from "./EditPost"
+import { useFollowUnfollowUser, useIsFollowing } from "@/hooks/useUser"
 interface PostStructureProps {
   post: Post
 }
@@ -31,7 +32,11 @@ const PostStructure = ({ post }: PostStructureProps) => {
   const { mutate: likeUnlikePost, isPending: isLikeUnlikePending } =
     useLikeUnlikePost()
   const { data: isLiked, isPending: isLikedPending } = useIsLiked(post._id)
-
+  const { data: isFollowing, isPending: isFollowingPending } = useIsFollowing(
+    post.user._id
+  )
+  const { mutate: followUnfollowUser, isPending: isFollowUnfollowPending } =
+    useFollowUnfollowUser()
   const isOwner = authUser?.user._id === post.user._id
 
   useEffect(() => {
@@ -144,11 +149,24 @@ const PostStructure = ({ post }: PostStructureProps) => {
                   >
                     {post.user.fullName}
                   </h1>
-                  {!isOwner && (
-                    <div className="text-xs font-semibold text-blue-500 hover:underline cursor-pointer">
-                      Follow
-                    </div>
-                  )}
+                  {!isOwner &&
+                    (isFollowingPending ? (
+                      <div className=" text-sm text-zinc-400">Loading...</div>
+                    ) : isFollowing?.isFollowing ? (
+                      ""
+                    ) : (
+                      <div onClick={() => followUnfollowUser(post.user._id)}>
+                        {isFollowUnfollowPending ? (
+                          <div className=" text-sm text-zinc-400">
+                            Loading...
+                          </div>
+                        ) : (
+                          <div className="text-xs font-semibold text-blue-500 hover:underline cursor-pointer">
+                            Follow
+                          </div>
+                        )}
+                      </div>
+                    ))}
                 </div>
                 <div className="flex gap-1 items-center">
                   <p className="text-sm text-zinc-400">@{post.user.username}</p>

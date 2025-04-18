@@ -26,6 +26,8 @@ import GetComments from "@/components/pageComponents/GetComments"
 import PostSkeleton from "@/components/skeletons/PostSkeleton"
 import CommentSkeleton from "@/components/skeletons/CommentSkeleton"
 import EditPost from "@/components/pageComponents/EditPost"
+import { useIsFollowing } from "@/hooks/useUser"
+import { useFollowUnfollowUser } from "@/hooks/useUser"
 
 const PostPage = () => {
   const { id } = useParams()
@@ -41,6 +43,11 @@ const PostPage = () => {
   const { mutate: deletePost, isPending: isDeletePending } = useDeletePost()
   const { mutate: likeUnlikePost, isPending: isLikeUnlikePending } =
     useLikeUnlikePost()
+  const { data: isFollowing, isPending: isFollowingPending } = useIsFollowing(
+    post?.post.user._id || ""
+  )
+  const { mutate: followUnfollowUser, isPending: isFollowUnfollowPending } =
+    useFollowUnfollowUser()
   const { data: isLiked, isPending: isLikedPending } = useIsLiked(id as string)
   const isUpdated =
     post?.post?.updatedAt && post?.post?.updatedAt !== post?.post?.createdAt
@@ -178,11 +185,30 @@ const PostPage = () => {
                         >
                           {post.post.user.fullName}
                         </h1>
-                        {!isOwner && (
-                          <div className="text-xs font-semibold text-blue-500 hover:underline cursor-pointer">
-                            Follow
-                          </div>
-                        )}
+                        {!isOwner &&
+                          (isFollowingPending ? (
+                            <div className=" text-sm text-zinc-400">
+                              Loading...
+                            </div>
+                          ) : isFollowing?.isFollowing ? (
+                            ""
+                          ) : (
+                            <div
+                              onClick={() =>
+                                followUnfollowUser(post.post.user._id)
+                              }
+                            >
+                              {isFollowUnfollowPending ? (
+                                <div className=" text-sm text-zinc-400">
+                                  Loading...
+                                </div>
+                              ) : (
+                                <div className="text-xs font-semibold text-blue-500 hover:underline cursor-pointer">
+                                  Follow
+                                </div>
+                              )}
+                            </div>
+                          ))}
                       </div>
                       <div className="flex gap-1 items-center">
                         <p className="text-sm text-zinc-400">
