@@ -11,7 +11,9 @@ const getUserProfile = async (req: Request, res: Response): Promise<void> => {
       res.status(404).json({ message: "User not found!" })
       return
     }
-    res.status(200).json({ message: "User profile fetched successfully!", user })
+    res
+      .status(200)
+      .json({ message: "User profile fetched successfully!", user })
   } catch (error) {
     errorHandler(res, error)
   }
@@ -79,12 +81,10 @@ const getSuggestedUsers = async (
 
     suggestedUsers.forEach((user) => (user.password = null))
 
-    res
-      .status(200)
-      .json({
-        users: suggestedUsers,
-        message: "Suggested users fetched successfully!",
-      })
+    res.status(200).json({
+      users: suggestedUsers,
+      message: "Suggested users fetched successfully!",
+    })
   } catch (error) {
     errorHandler(res, error)
   }
@@ -107,9 +107,9 @@ const updateUserProfile = async (
       return
     }
 
-    const isUsernameTaken = await User.findOne({ 
+    const isUsernameTaken = await User.findOne({
       username,
-      _id: { $ne: userId }
+      _id: { $ne: userId },
     })
 
     if (isUsernameTaken) {
@@ -174,10 +174,57 @@ const isFollowing = async (req: Request, res: Response): Promise<void> => {
   }
 }
 
+const getFollowings = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const user = await User.findOne({ username: req.params.username })
+    if (!user) {
+      res.status(400).json({ message: "User not found!" })
+      return
+    }
+    const followings = user.followings
+    const followingsDetails = await User.find({ _id: { $in: followings } })
+    followingsDetails.forEach((user) => {
+      user.password = undefined as unknown as string
+    })
+    res
+      .status(200)
+      .json({
+        followings: followingsDetails,
+        message: "Followings fetched successfully!",
+      })
+  } catch (error) {
+    errorHandler(res, error)
+  }
+}
+const getFollowers = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const user = await User.findOne({ username: req.params.username })
+    if (!user) {
+      res.status(400).json({ message: "User not found!" })
+      return
+    }
+    const followers = user.followers
+    const followersDetails = await User.find({ _id: { $in: followers } })
+    followersDetails.forEach((user) => {
+      user.password = undefined as unknown as string
+    })
+    res
+      .status(200)
+      .json({
+        followers: followersDetails,
+        message: "Followers fetched successfully!",
+      })
+  } catch (error) {
+    errorHandler(res, error)
+  }
+}
+
 export {
   getUserProfile,
   followUnfollowUser,
   getSuggestedUsers,
   updateUserProfile,
   isFollowing,
+  getFollowers,
+  getFollowings,
 }
