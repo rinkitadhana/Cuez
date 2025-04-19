@@ -1,18 +1,7 @@
 "use client"
 import Image from "next/image"
-import { BiCommentDetail, BiSolidUpvote, BiUpvote } from "react-icons/bi"
-import { HiArrowPathRoundedSquare } from "react-icons/hi2"
-import { IoBookmarkOutline } from "react-icons/io5"
-import { RiShareBoxFill } from "react-icons/ri"
-import { SlOptions } from "react-icons/sl"
-import { useEffect, useRef, useState } from "react"
-import { Post } from "@/types/Post"
-import { useGetMe } from "@/hooks/useAuth"
-import { useDeletePost, useIsLiked, useLikeUnlikePost } from "@/hooks/usePost"
-import { Loader2, X } from "lucide-react"
-import config from "@/config/config"
-import useMessageStore from "@/store/messageStore"
-import { useRouter } from "next/navigation"
+import { useState } from "react"
+import { X } from "lucide-react"
 import { Comment } from "@/types/Comment"
 
 interface CommentStructureProps {
@@ -20,82 +9,7 @@ interface CommentStructureProps {
 }
 
 const CommentStructure = ({ comment }: CommentStructureProps) => {
-  const router = useRouter()
-  const [isOpen, setIsOpen] = useState(false)
   const [isImageModalOpen, setIsImageModalOpen] = useState(false)
-  const menuRef = useRef<HTMLDivElement>(null)
-  const [showWarning, setShowWarning] = useState(false)
-  const warningRef = useRef<HTMLDivElement>(null)
-  const postRef = useRef<HTMLElement>(null)
-  const { data: authUser } = useGetMe()
-  const { mutate: deletePost, isPending } = useDeletePost()
-  const { mutate: likeUnlikePost, isPending: isLikeUnlikePending } =
-    useLikeUnlikePost()
-  const { data: isLiked, isPending: isLikedPending } = useIsLiked(comment._id)
-
-  const isOwner = authUser?.user?._id === comment?.user?._id
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        menuRef.current &&
-        !menuRef.current.contains(event.target as Node) &&
-        !event.composedPath().includes(menuRef.current)
-      ) {
-        setIsOpen(false)
-      }
-
-      if (
-        showWarning &&
-        warningRef.current &&
-        !warningRef.current.contains(event.target as Node) &&
-        !event.composedPath().includes(warningRef.current)
-      ) {
-        setShowWarning(false)
-      }
-    }
-
-    document.addEventListener("mousedown", handleClickOutside)
-    return () => document.removeEventListener("mousedown", handleClickOutside)
-  }, [showWarning])
-
-  const handleDeletePost = () => {
-    deletePost(comment._id, {
-      onSuccess: () => {
-        setIsOpen(false)
-        setShowWarning(false)
-      },
-      onError: () => {
-        setShowWarning(false)
-      },
-    })
-  }
-  const handleLikeUnlikePost = () => {
-    likeUnlikePost(comment._id)
-  }
-
-  const handleShare = async () => {
-    const shareData = {
-      title: "Check out this post",
-      text: "Here's something interesting!",
-      url: `${config.frontendUrl}/post/${comment._id}`,
-    }
-
-    try {
-      if (navigator.share) {
-        await navigator.share(shareData)
-        console.log("Post shared successfully!")
-      } else {
-        await navigator.clipboard.writeText(shareData.url)
-        useMessageStore.setState({
-          message: "Link copied to clipboard!",
-          type: "success",
-        })
-      }
-    } catch (error) {
-      console.error("Error sharing:", error)
-    }
-  }
 
   const formatDate = (date: Date) => {
     const now = new Date()
@@ -168,45 +82,6 @@ const CommentStructure = ({ comment }: CommentStructureProps) => {
           </div>
         </div>
       </div>
-
-      {showWarning && (
-        <div
-          className="fixed inset-0 bg-bgClr/50 backdrop-blur-sm flex justify-center items-center z-[10000]"
-          onClick={(e) => e.stopPropagation()}
-        >
-          <div
-            ref={warningRef}
-            className="bg-bgClr border border-zinc-700 w-full max-w-[400px] rounded-xl p-6"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h2 className="text-xl font-semibold mb-4">Delete post?</h2>
-            <p className="text-zinc-400 mb-6">
-              You are about to delete this post. Are you sure you want to
-              proceed?
-            </p>
-            <div className="flex justify-end gap-3">
-              <button
-                onClick={(e) => {
-                  e.stopPropagation()
-                  setShowWarning(false)
-                }}
-                className="px-4 py-1.5 rounded-xl font-semibold hover:bg-zinc-800 transition-all duration-200"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation()
-                  handleDeletePost()
-                }}
-                className="px-4 py-1.5 rounded-xl font-semibold bg-red-500 text-white hover:bg-red-600 transition-all duration-200"
-              >
-                {isPending ? <Loader2 className="animate-spin" /> : "Delete"}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
       {isImageModalOpen && (
         <div className="fixed inset-0 bg-bgClr/50 backdrop-blur-sm flex justify-center items-center z-[10000]">
           <Image
