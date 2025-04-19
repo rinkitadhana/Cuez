@@ -77,7 +77,7 @@ const EditPost = ({ post }: { post: Post }) => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside)
     }
-  }, [isModalOpen, showEmojiPicker, showWarning, formData])
+  }, [isModalOpen, showEmojiPicker, showWarning, formData, hasChanges])
 
   const convertFileToBase64 = (file: File): Promise<string> => {
     return new Promise((resolve, reject) => {

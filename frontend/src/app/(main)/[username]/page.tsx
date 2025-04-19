@@ -17,7 +17,7 @@ import { useState } from "react"
 import ProfileSkeleton from "@/components/skeletons/ProfileSkeleton"
 import NoUser from "@/components/pageComponents/NoUser"
 import GetUsersList from "./profileComponent/GetUsersList"
-const page = () => {
+const UserProfile = () => {
   const { username } = useParams()
   const [response, setResponse] = useState<string>("user-posts")
   const [isImageModalOpen, setIsImageModalOpen] = useState(false)
@@ -261,4 +261,4 @@ const page = () => {
   )
 }
 
-export default page
+export default UserProfile
