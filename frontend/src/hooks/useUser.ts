@@ -52,10 +52,7 @@ export const useFollowUnfollowUser = () => {
       setMessage(data.message, "success")
       queryClient.invalidateQueries({ queryKey: ["is-following"] })
       queryClient.invalidateQueries({ queryKey: ["user-profile"] })
-      queryClient.invalidateQueries({ queryKey: ["suggested-users"] })
       queryClient.invalidateQueries({ queryKey: ["posts"] })
-      queryClient.invalidateQueries({ queryKey: ["followers"] })
-      queryClient.invalidateQueries({ queryKey: ["followings"] })
     },
     onError: (error: AxiosError) => {
       const message =

@@ -57,11 +57,10 @@ const getSuggestedUsers = async (
 ): Promise<void> => {
   try {
     const userId = req.user._id
-
     const usersFollowedByMe = await User.findById(userId).select("followings")
 
     if (!usersFollowedByMe) {
-      res.status(404).json({ message: "User not found" })
+      res.status(404).json({ message: "User not found!" })
       return
     }
 
@@ -79,7 +78,7 @@ const getSuggestedUsers = async (
     )
     const suggestedUsers = filteredUsers.slice(0, 4)
 
-    suggestedUsers.forEach((user) => (user.password = null))
+    suggestedUsers.forEach((user) => (user.password = undefined))
 
     res.status(200).json({
       users: suggestedUsers,
