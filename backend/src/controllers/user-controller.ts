@@ -178,42 +178,35 @@ const getFollowings = async (req: Request, res: Response): Promise<void> => {
   try {
     const user = await User.findOne({ username: req.params.username })
     if (!user) {
-      res.status(400).json({ message: "User not found!" })
+      res.status(404).json({ message: "User not found!" })
       return
     }
-    const followings = user.followings
-    const followingsDetails = await User.find({ _id: { $in: followings } })
-    followingsDetails.forEach((user) => {
-      user.password = undefined as unknown as string
+    const followingsDetails = await User.find({
+      _id: { $in: user.followings },
+    }).select("-password")
+    res.status(200).json({
+      followings: followingsDetails,
+      message: "Followings fetched successfully!",
     })
-    res
-      .status(200)
-      .json({
-        followings: followingsDetails,
-        message: "Followings fetched successfully!",
-      })
   } catch (error) {
     errorHandler(res, error)
   }
 }
+
 const getFollowers = async (req: Request, res: Response): Promise<void> => {
   try {
     const user = await User.findOne({ username: req.params.username })
     if (!user) {
-      res.status(400).json({ message: "User not found!" })
+      res.status(404).json({ message: "User not found!" })
       return
     }
-    const followers = user.followers
-    const followersDetails = await User.find({ _id: { $in: followers } })
-    followersDetails.forEach((user) => {
-      user.password = undefined as unknown as string
+    const followersDetails = await User.find({
+      _id: { $in: user.followers },
+    }).select("-password")
+    res.status(200).json({
+      followers: followersDetails,
+      message: "Followers fetched successfully!",
     })
-    res
-      .status(200)
-      .json({
-        followers: followersDetails,
-        message: "Followers fetched successfully!",
-      })
   } catch (error) {
     errorHandler(res, error)
   }
