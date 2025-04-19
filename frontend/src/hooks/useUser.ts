@@ -207,3 +207,26 @@ export const useGetFollowing = (username: string) => {
     enabled: !!username,
   })
 }
+
+interface GetFollowsYouResponse {
+  message: string
+  followsYou: boolean
+}
+
+const getFollowsYou = async (
+  userId: string
+): Promise<GetFollowsYouResponse> => {
+  const response = await axios.get<GetFollowsYouResponse>(
+    config.backendUrl + `/user/follows-you/${userId}`,
+    { withCredentials: true }
+  )
+  return response.data
+}
+
+export const useGetFollowsYou = (userId: string) => {
+  return useQuery<GetFollowsYouResponse, AxiosError>({
+    queryKey: ["follows-you", userId],
+    queryFn: () => getFollowsYou(userId),
+    enabled: !!userId,
+  })
+}

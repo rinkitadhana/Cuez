@@ -212,6 +212,26 @@ const getFollowers = async (req: Request, res: Response): Promise<void> => {
   }
 }
 
+const getFollowsYou = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const currentUser = await User.findById(req.user._id)
+    const userToCheck = await User.findById(req.params.id)
+    if (!currentUser || !userToCheck) {
+      res.status(404).json({ message: "User not found!" })
+      return
+    }
+    const followsYou = userToCheck.followers.includes(
+      currentUser._id as unknown as IUser
+    )
+    res.status(200).json({
+      followsYou,
+      message: "Follows you check successful!",
+    })
+  } catch (error) {
+    errorHandler(res, error)
+  }
+}
+
 export {
   getUserProfile,
   followUnfollowUser,
@@ -220,4 +240,5 @@ export {
   isFollowing,
   getFollowers,
   getFollowings,
+  getFollowsYou,
 }

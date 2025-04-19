@@ -5,6 +5,7 @@ import Image from "next/image"
 import { Calendar, Link, Loader2, MapPin, X } from "lucide-react"
 import {
   useFollowUnfollowUser,
+  useGetFollowsYou,
   useGetUserProfile,
   useIsFollowing,
 } from "@/hooks/useUser"
@@ -25,6 +26,7 @@ const page = () => {
   const { data: authUser } = useGetMe()
   const { mutate: followUnfollowUser, isPending: isFollowUnfollowPending } =
     useFollowUnfollowUser()
+  const { data: followsYou } = useGetFollowsYou(data?.user._id || "")
   const [isUsersListOpen, setIsUsersListOpen] = useState(false)
   const [userType, setUserType] = useState<"followers" | "following">(
     "followers"
@@ -107,9 +109,16 @@ const page = () => {
             <div className="px-5 py-3 flex flex-col gap-2.5">
               <div className="flex flex-col">
                 <h1 className="text-2xl font-semibold">{user?.fullName}</h1>
-                <p className="text-sm text-zinc-400 -mt-0.5">
-                  @{user?.username}
-                </p>
+                <div className="flex gap-3 items-center">
+                  <p className="text-sm text-zinc-400 -mt-0.5">
+                    @{user?.username}
+                  </p>
+                  {followsYou?.followsYou && (
+                    <span className=" text-[12px] font-medium text-zinc-400 bg-zinc-800 px-2 py-0.5 rounded-md">
+                      Follows you
+                    </span>
+                  )}
+                </div>
               </div>
               <p className="">{user?.bio}</p>
               <div className="flex gap-3 items-center text-sm text-zinc-400">
