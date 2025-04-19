@@ -62,12 +62,9 @@ const userSchema = new mongoose.Schema<IUser>(
     ],
     followings: [
       {
-        type: [mongoose.Schema.Types.ObjectId],
+        type: mongoose.Schema.Types.ObjectId,
         ref: "User",
-        default: [
-          new mongoose.Types.ObjectId("6613f51d8e9c5cc171d53710"),
-          new mongoose.Types.ObjectId("6613f5b78e9c5cc171d53722"),
-        ],
+        default: [],
       },
     ],
     profileImg: {

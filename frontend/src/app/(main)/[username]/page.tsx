@@ -15,6 +15,7 @@ import GetLikedPost from "./profileComponent/GetLikedPost"
 import { useState } from "react"
 import ProfileSkeleton from "@/components/skeletons/ProfileSkeleton"
 import NoUser from "@/components/pageComponents/NoUser"
+import GetUsersList from "./profileComponent/GetUsersList"
 const page = () => {
   const { username } = useParams()
   const [response, setResponse] = useState<string>("user-posts")
@@ -24,6 +25,10 @@ const page = () => {
   const { data: authUser } = useGetMe()
   const { mutate: followUnfollowUser, isPending: isFollowUnfollowPending } =
     useFollowUnfollowUser()
+  const [isUsersListOpen, setIsUsersListOpen] = useState(false)
+  const [userType, setUserType] = useState<"followers" | "following">(
+    "followers"
+  )
   const { data: isFollowing } = useIsFollowing(data?.user._id || "")
   const user = data?.user
   const owner = authUser?.user._id === user?._id
@@ -130,14 +135,26 @@ const page = () => {
                 </div>
               </div>
               <div className="flex gap-4 items-center">
-                <div className="flex gap-1">
+                <button
+                  onClick={() => {
+                    setUserType("following")
+                    setIsUsersListOpen(true)
+                  }}
+                  className="flex gap-1 hover:underline"
+                >
                   <span>{user?.followings.length}</span>{" "}
                   <span className="text-zinc-400">Following</span>
-                </div>
-                <div className="flex gap-1">
+                </button>
+                <button
+                  onClick={() => {
+                    setUserType("followers")
+                    setIsUsersListOpen(true)
+                  }}
+                  className="flex gap-1 hover:underline"
+                >
                   <span>{user?.followers.length}</span>{" "}
                   <span className="text-zinc-400">Followers</span>
-                </div>
+                </button>
               </div>
             </div>
             <div className="flex items-center justify-center mt-3  py-2.5 border-b border-zinc-700">
@@ -222,6 +239,14 @@ const page = () => {
             <X />
           </button>
         </div>
+      )}
+      {user && (
+        <GetUsersList
+          user={user}
+          type={userType}
+          isOpen={isUsersListOpen}
+          onClose={() => setIsUsersListOpen(false)}
+        />
       )}
     </MainWrapper>
   )

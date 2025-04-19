@@ -54,6 +54,8 @@ export const useFollowUnfollowUser = () => {
       queryClient.invalidateQueries({ queryKey: ["user-profile"] })
       queryClient.invalidateQueries({ queryKey: ["suggested-users"] })
       queryClient.invalidateQueries({ queryKey: ["posts"] })
+      queryClient.invalidateQueries({ queryKey: ["followers"] })
+      queryClient.invalidateQueries({ queryKey: ["followings"] })
     },
     onError: (error: AxiosError) => {
       const message =
@@ -81,6 +83,7 @@ export const useIsFollowing = (userId: string) => {
   return useQuery<IsFollowingResponse, AxiosError>({
     queryKey: ["is-following", userId],
     queryFn: () => isFollowing(userId),
+    enabled: !!userId,
   })
 }
 
@@ -103,6 +106,7 @@ export const useGetUserProfile = (username: string) => {
   return useQuery<UserProfileResponse, AxiosError>({
     queryKey: ["user-profile", username],
     queryFn: () => getUserProfile(username),
+    enabled: !!username,
   })
 }
 
@@ -155,5 +159,51 @@ export const useUpdateUserProfile = () => {
         "Failed to update profile"
       setMessage(message, "error")
     },
+  })
+}
+
+interface GetFollowersResponse {
+  message: string
+  followers: User[]
+}
+
+const getFollowers = async (
+  username: string
+): Promise<GetFollowersResponse> => {
+  const response = await axios.get<GetFollowersResponse>(
+    config.backendUrl + `/user/followers/${username}`,
+    { withCredentials: true }
+  )
+  return response.data
+}
+
+export const useGetFollowers = (username: string) => {
+  return useQuery<GetFollowersResponse, AxiosError>({
+    queryKey: ["followers", username],
+    queryFn: () => getFollowers(username),
+    enabled: !!username,
+  })
+}
+
+interface GetFollowingResponse {
+  message: string
+  followings: User[]
+}
+
+const getFollowing = async (
+  username: string
+): Promise<GetFollowingResponse> => {
+  const response = await axios.get<GetFollowingResponse>(
+    config.backendUrl + `/user/followings/${username}`,
+    { withCredentials: true }
+  )
+  return response.data
+}
+
+export const useGetFollowing = (username: string) => {
+  return useQuery<GetFollowingResponse, AxiosError>({
+    queryKey: ["followings", username],
+    queryFn: () => getFollowing(username),
+    enabled: !!username,
   })
 }

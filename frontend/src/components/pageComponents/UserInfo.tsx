@@ -1,0 +1,66 @@
+import { useFollowUnfollowUser, useIsFollowing } from "@/hooks/useUser"
+import Image from "next/image"
+import React from "react"
+import { User } from "@/types/User"
+import { useGetMe } from "@/hooks/useAuth"
+import { Loader2 } from "lucide-react"
+import { useRouter } from "next/navigation"
+const UserInfo = ({ user }: { user: User }) => {
+  const router = useRouter()
+  const { data: followingState, isLoading: isFollowingLoading } =
+    useIsFollowing(user._id || "")
+  const { mutate: followUnfollowUser, isPending: isFollowUnfollowPending } =
+    useFollowUnfollowUser()
+  const { data: authUser } = useGetMe()
+  const isLoading = isFollowUnfollowPending || isFollowingLoading
+  const handleFollowUnfollowUser = () => {
+    followUnfollowUser(user._id)
+  }
+
+  return (
+    <div className="flex items-center justify-between">
+      <div className="flex items-center gap-2">
+        <Image
+          src={user.profileImg}
+          alt={user.username}
+          width={50}
+          height={50}
+          className="size-11 rounded-xl cursor-pointer hover:brightness-90 transition-all duration-200"
+          onClick={() => router.push(`/${user.username}`)}
+        />
+        <div>
+          <div
+            onClick={() => router.push(`/${user.username}`)}
+            className="font-semibold cursor-pointer hover:underline"
+          >
+            {user.fullName}
+          </div>
+          <p className="text-sm text-zinc-400">@{user.username}</p>
+        </div>
+      </div>
+      {authUser?.user._id !== user._id && (
+        <button onClick={handleFollowUnfollowUser}>
+          {followingState?.isFollowing ? (
+            <div className="text-semibold px-4 py-1.5 rounded-xl bg-zinc-800 hover:bg-zinc-800/80 transition-all duration-200">
+              {isLoading ? (
+                <Loader2 className="animate-spin" size={22} />
+              ) : (
+                "Following"
+              )}
+            </div>
+          ) : (
+            <div className="text-semibold px-4 py-1.5 rounded-xl bg-mainclr hover:bg-mainclr/80 transition-all duration-200">
+              {isLoading ? (
+                <Loader2 className="animate-spin" size={22} />
+              ) : (
+                "Follow"
+              )}
+            </div>
+          )}
+        </button>
+      )}
+    </div>
+  )
+}
+
+export default UserInfo
