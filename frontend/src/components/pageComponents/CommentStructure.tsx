@@ -33,7 +33,7 @@ const CommentStructure = ({ comment }: CommentStructureProps) => {
     useLikeUnlikePost()
   const { data: isLiked, isPending: isLikedPending } = useIsLiked(comment._id)
 
-  const isOwner = authUser?.user._id === comment.user._id
+  const isOwner = authUser?.user?._id === comment?.user?._id
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -113,7 +113,7 @@ const CommentStructure = ({ comment }: CommentStructureProps) => {
     <section className="flex relative flex-col gap-4 p-4 border-b border-zinc-700  transition-all duration-200">
       <div className="flex gap-2 w-full">
         <Image
-          src={comment.user.profileImg}
+          src={comment?.user?.profileImg || "/img/pfp/default.webp"}
           alt="user avatar"
           width={32}
           height={32}
@@ -124,15 +124,17 @@ const CommentStructure = ({ comment }: CommentStructureProps) => {
             <div className="flex gap-2 items-center">
               <div className="flex flex-col -space-y-1">
                 <div className="flex gap-2 items-center">
-                  <h1 className="font-semibold">{comment.user.fullName}</h1>
+                  <h1 className="font-semibold">
+                    {comment?.user?.fullName || "Unknown User"}
+                  </h1>
                 </div>
                 <div className="flex gap-1 items-center">
                   <p className="text-sm text-zinc-400">
-                    @{comment.user.username}
+                    @{comment?.user?.username || "Unknown User"}
                   </p>
                   <div className="text-sm text-zinc-400">
                     <span> {" • "}</span>
-                    <span>{formatDate(new Date(comment.createdAt))}</span>
+                    <span>{formatDate(new Date(comment?.createdAt))}</span>
                   </div>
                 </div>
               </div>

@@ -44,7 +44,7 @@ const PostPage = () => {
   const { mutate: likeUnlikePost, isPending: isLikeUnlikePending } =
     useLikeUnlikePost()
   const { data: isFollowing, isPending: isFollowingPending } = useIsFollowing(
-    post?.post.user._id || ""
+    post?.post?.user?._id || ""
   )
   const { mutate: followUnfollowUser, isPending: isFollowUnfollowPending } =
     useFollowUnfollowUser()
@@ -156,7 +156,7 @@ const PostPage = () => {
     }
     return new Date(date).toLocaleString("en-US", options)
   }
-  const isOwner = authUser?.user._id === post?.post.user._id
+  const isOwner = authUser?.user._id === post?.post?.user?._id
 
   return (
     <MainWrapper>
@@ -167,7 +167,7 @@ const PostPage = () => {
             <div className="flex gap-2 w-full">
               <Image
                 onClick={userProfile}
-                src={post.post.user.profileImg}
+                src={post?.post?.user?.profileImg || "/img/pfp/default.webp"}
                 alt="user avatar"
                 width={48}
                 height={48}
@@ -184,7 +184,7 @@ const PostPage = () => {
                           onClick={userProfile}
                           className="font-semibold hover:underline cursor-pointer"
                         >
-                          {post.post.user.fullName}
+                          {post?.post?.user?.fullName || "Unknown User"}
                         </h1>
                         {!isOwner &&
                           (isFollowingPending ? (
@@ -196,7 +196,7 @@ const PostPage = () => {
                           ) : (
                             <div
                               onClick={() =>
-                                followUnfollowUser(post.post.user._id)
+                                followUnfollowUser(post?.post?.user?._id || "")
                               }
                             >
                               {isFollowUnfollowPending ? (
@@ -213,12 +213,12 @@ const PostPage = () => {
                       </div>
                       <div className="flex gap-1 items-center">
                         <p className="text-sm text-zinc-400">
-                          @{post.post.user.username}
+                          @{post?.post?.user?.username || "Unknown User"}
                         </p>
                         <div className="text-sm text-zinc-400">
                           <span> {" • "}</span>
                           <span>
-                            {formatDate(new Date(post.post.createdAt))}
+                            {formatDate(new Date(post?.post?.createdAt))}
                           </span>
                         </div>
                       </div>
@@ -237,7 +237,7 @@ const PostPage = () => {
                     )}
                     {isOpen && (
                       <div className="absolute flex flex-col items-start gap-0.5 top-14 right-5 bg-zinc-900 z-10 border border-zinc-700 p-2 w-32 rounded-lg">
-                        <EditPost post={post.post} />
+                        <EditPost post={post?.post} />
                         <button
                           onClick={(e) => {
                             e.stopPropagation()
@@ -253,14 +253,14 @@ const PostPage = () => {
                   </div>
                 </div>
                 <div className="flex flex-col gap-4 w-full">
-                  <div>{post.post.text}</div>
-                  {post.post.img && (
+                  <div>{post?.post?.text}</div>
+                  {post?.post?.img && (
                     <div
                       onClick={() => setIsImageModalOpen(true)}
                       className="cursor-pointer"
                     >
                       <Image
-                        src={post.post.img}
+                        src={post?.post?.img}
                         alt="Post image"
                         width={500}
                         height={500}
@@ -268,10 +268,10 @@ const PostPage = () => {
                       />
                     </div>
                   )}
-                  {post.post.video && (
+                  {post?.post?.video && (
                     <div>
                       <video
-                        src={post.post.video}
+                        src={post?.post?.video}
                         controls
                         className="rounded-lg w-full"
                       />
@@ -280,10 +280,10 @@ const PostPage = () => {
                   <div className="text-sm text-zinc-400">
                     {isUpdated
                       ? `Edited on ${formatDateTime(
-                          new Date(post.post.editedAt || "")
+                          new Date(post?.post?.editedAt || "")
                         )}`
                       : `Posted on ${formatDateTime(
-                          new Date(post.post.createdAt)
+                          new Date(post?.post?.createdAt || "")
                         )}`}
                   </div>
                   <div className="flex justify-between text-lg select-none">
@@ -293,7 +293,7 @@ const PostPage = () => {
                           <BiCommentDetail className="group-hover/comment:scale-[85%] transition-all duration-300" />
                         </button>
                         <span className="text-sm">
-                          {post.post.comments.length}
+                          {post?.post?.comments?.length}
                         </span>
                       </div>
                       <div className="flex items-center gap-1">
@@ -316,7 +316,7 @@ const PostPage = () => {
                           )}
                         </button>
                         <span className="text-sm">
-                          {post.post.likes.length}
+                          {post?.post?.likes?.length}
                         </span>
                       </div>
                     </div>
@@ -374,7 +374,7 @@ const PostPage = () => {
           {isImageModalOpen && (
             <div className="fixed inset-0 bg-bgClr/50 backdrop-blur-sm flex justify-center items-center z-[10000]">
               <Image
-                src={post.post.img || ""}
+                src={post?.post?.img || ""}
                 alt="Post image"
                 width={1920}
                 height={1080}

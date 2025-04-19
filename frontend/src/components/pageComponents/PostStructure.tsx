@@ -33,11 +33,11 @@ const PostStructure = ({ post }: PostStructureProps) => {
     useLikeUnlikePost()
   const { data: isLiked, isPending: isLikedPending } = useIsLiked(post._id)
   const { data: isFollowing, isPending: isFollowingPending } = useIsFollowing(
-    post.user._id
+    post?.user?._id || ""
   )
   const { mutate: followUnfollowUser, isPending: isFollowUnfollowPending } =
     useFollowUnfollowUser()
-  const isOwner = authUser?.user._id === post.user._id
+  const isOwner = authUser?.user._id === post?.user?._id
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -129,7 +129,7 @@ const PostStructure = ({ post }: PostStructureProps) => {
             e.stopPropagation()
             userProfile()
           }}
-          src={post.user.profileImg}
+          src={post?.user?.profileImg || "/img/pfp/default.webp"}
           alt="user avatar"
           width={32}
           height={32}
@@ -147,7 +147,7 @@ const PostStructure = ({ post }: PostStructureProps) => {
                     onClick={userProfile}
                     className="font-semibold hover:underline cursor-pointer"
                   >
-                    {post.user.fullName}
+                    {post?.user?.fullName || "Unknown User"}
                   </h1>
                   {!isOwner &&
                     (isFollowingPending ? (
@@ -169,7 +169,9 @@ const PostStructure = ({ post }: PostStructureProps) => {
                     ))}
                 </div>
                 <div className="flex gap-1 items-center">
-                  <p className="text-sm text-zinc-400">@{post.user.username}</p>
+                  <p className="text-sm text-zinc-400">
+                    @{post?.user?.username || "Unknown User"}
+                  </p>
                   <div className="text-sm text-zinc-400">
                     <span> {" • "}</span>
                     <span>{formatDate(new Date(post.createdAt))}</span>
