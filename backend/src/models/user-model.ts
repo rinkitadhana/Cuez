@@ -30,7 +30,6 @@ const userSchema = new mongoose.Schema<IUser>(
       type: String,
       required: [true, "Name is required!"],
       unique: true,
-      lowercase: true,
       trim: true,
       minlength: [3, "Name must be at least 3 characters long!"],
       maxlength: [20, "Name cannot exceed 50 characters!"],
