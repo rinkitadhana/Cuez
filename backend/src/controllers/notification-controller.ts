@@ -1,21 +1,22 @@
 import { Request, Response } from "express"
 import { errorHandler } from "../utils/errorHandler"
 import Notification from "../models/notification-model"
+
 const getNotifications = async (req: Request, res: Response): Promise<void> => {
   try {
     const userId = req.user._id.toString()
     const notifications = await Notification.find({ to: userId }).populate(
       "from",
-      "-password username profilePicture"
+      "-password fullname username profilePicture"
     )
     await Notification.updateMany({ to: userId }, { $set: { read: true } })
-    res.status(200).json(notifications)
+    res.status(200).json({ notifications })
   } catch (error) {
     errorHandler(res, error)
   }
 }
 
-const deleteNotifications = async (
+const deleteAllNotifications = async (
   req: Request,
   res: Response
 ): Promise<void> => {
@@ -40,4 +41,4 @@ const deleteNotification = async (
     errorHandler(res, error)
   }
 }
-export { getNotifications, deleteNotification, deleteNotifications }
+export { getNotifications, deleteNotification, deleteAllNotifications }

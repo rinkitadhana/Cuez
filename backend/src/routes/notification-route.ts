@@ -3,12 +3,12 @@ import { protectRoute } from "../middlewares/ProtectRoute"
 import {
   getNotifications,
   deleteNotification,
-  deleteNotifications,
+  deleteAllNotifications,
 } from "../controllers/notification-controller"
 const router = express.Router()
 
 router.get("/", protectRoute, getNotifications)
-router.get("/delete-all", protectRoute, deleteNotifications)
+router.get("/delete-all", protectRoute, deleteAllNotifications)
 router.delete("/:id", protectRoute, deleteNotification)
 
 export default router
