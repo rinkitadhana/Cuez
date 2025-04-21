@@ -103,6 +103,17 @@ const NotificationMessage = ({
     deleteNotification(notification._id)
   }
   const router = useRouter()
+  const formatDate = (date: Date) => {
+    const now = new Date()
+    const postDate = new Date(date)
+    const diffInSeconds = Math.floor(
+      (now.getTime() - postDate.getTime()) / 1000
+    )
+    if (diffInSeconds < 60) return `${diffInSeconds}s`
+    if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}m`
+    if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}h`
+    return `${Math.floor(diffInSeconds / 86400)}d`
+  }
 
   return (
     <div
@@ -144,8 +155,9 @@ const NotificationMessage = ({
               {notification?.from?.fullName || "Deleted User"}
             </span>
             <span className="text-zinc-400 ml-1">{getNotificationText()}</span>
+
             <span className="text-zinc-500 ml-2 text-sm">
-              {notification?.createdAt}
+              {" • "} {formatDate(new Date(notification?.createdAt))}
             </span>
           </div>
         </div>
