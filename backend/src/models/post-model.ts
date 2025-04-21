@@ -7,6 +7,7 @@ export interface IPost extends Document {
   video?: string
   editedAt?: Date
   likes: mongoose.Types.ObjectId[]
+  bookmarks: mongoose.Types.ObjectId[]
   comments: IComment[]
   createdAt: Date
   updatedAt: Date
@@ -38,6 +39,12 @@ const postSchema = new mongoose.Schema<IPost>(
       type: String,
     },
     likes: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+    bookmarks: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
