@@ -35,8 +35,11 @@ const PostStructure = ({ post }: PostStructureProps) => {
   const { data: isFollowing, isPending: isFollowingPending } = useIsFollowing(
     post?.user?._id || ""
   )
-  const { mutate: followUnfollowUser, isPending: isFollowUnfollowPending } =
-    useFollowUnfollowUser()
+  const {
+    mutate: followUnfollowUser,
+    isPending: isFollowUnfollowPending,
+    isError: isFollowUnfollowError,
+  } = useFollowUnfollowUser()
   const isOwner = authUser?.user._id === post?.user?._id
 
   useEffect(() => {
@@ -147,20 +150,20 @@ const PostStructure = ({ post }: PostStructureProps) => {
                     onClick={userProfile}
                     className="font-semibold hover:underline cursor-pointer"
                   >
-                    {post?.user?.fullName || "Unknown User"}
+                    {post?.user?.fullName || "Deleted User"}
                   </h1>
                   {!isOwner &&
                     (isFollowingPending ? (
-                      <div className=" text-sm text-zinc-400">Loading...</div>
+                      <div className=" text-sm text-zinc-400">...</div>
                     ) : isFollowing?.isFollowing ? (
                       ""
                     ) : (
                       <div onClick={() => followUnfollowUser(post.user._id)}>
-                        {isFollowUnfollowPending ? (
-                          <div className=" text-sm text-zinc-400">
-                            Loading...
-                          </div>
-                        ) : (
+                        {isFollowUnfollowPending && (
+                          <div className="text-sm text-zinc-400">...</div>
+                        )}
+                        {isFollowUnfollowError && ""}
+                        {!isFollowUnfollowPending && !isFollowUnfollowError && (
                           <div className="text-xs font-semibold text-blue-500 hover:underline cursor-pointer">
                             Follow
                           </div>
@@ -170,7 +173,7 @@ const PostStructure = ({ post }: PostStructureProps) => {
                 </div>
                 <div className="flex gap-1 items-center">
                   <p className="text-sm text-zinc-400">
-                    @{post?.user?.username || "Unknown User"}
+                    @{post?.user?.username || "DeletedUser"}
                   </p>
                   <div className="text-sm text-zinc-400">
                     <span> {" • "}</span>

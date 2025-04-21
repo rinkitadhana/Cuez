@@ -184,7 +184,7 @@ const PostPage = () => {
                           onClick={userProfile}
                           className="font-semibold hover:underline cursor-pointer"
                         >
-                          {post?.post?.user?.fullName || "Unknown User"}
+                          {post?.post?.user?.fullName || "Deleted User"}
                         </h1>
                         {!isOwner &&
                           (isFollowingPending ? (
@@ -213,7 +213,7 @@ const PostPage = () => {
                       </div>
                       <div className="flex gap-1 items-center">
                         <p className="text-sm text-zinc-400">
-                          @{post?.post?.user?.username || "Unknown User"}
+                          @{post?.post?.user?.username || "DeletedUser"}
                         </p>
                         <div className="text-sm text-zinc-400">
                           <span> {" • "}</span>

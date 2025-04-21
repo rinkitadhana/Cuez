@@ -39,12 +39,12 @@ const CommentStructure = ({ comment }: CommentStructureProps) => {
               <div className="flex flex-col -space-y-1">
                 <div className="flex gap-2 items-center">
                   <h1 className="font-semibold">
-                    {comment?.user?.fullName || "Unknown User"}
+                    {comment?.user?.fullName || "Deleted User"}
                   </h1>
                 </div>
                 <div className="flex gap-1 items-center">
                   <p className="text-sm text-zinc-400">
-                    @{comment?.user?.username || "Unknown User"}
+                    @{comment?.user?.username || "DeletedUser"}
                   </p>
                   <div className="text-sm text-zinc-400">
                     <span> {" • "}</span>
