@@ -39,6 +39,7 @@ const PostPage = () => {
   const menuRef = useRef<HTMLDivElement>(null)
   const [showWarning, setShowWarning] = useState(false)
   const warningRef = useRef<HTMLDivElement>(null)
+  const [commentActive, setCommentActive] = useState(false)
   const { data: authUser } = useGetMe()
   const { mutate: deletePost, isPending: isDeletePending } = useDeletePost()
   const { mutate: likeUnlikePost, isPending: isLikeUnlikePending } =
@@ -62,6 +63,11 @@ const PostPage = () => {
         !warningRef.current.contains(event.target as Node)
       ) {
         setShowWarning(false)
+      }
+      // Add check for comment section click outside
+      const commentInput = document.querySelector("#comment-input")
+      if (commentInput && !commentInput.contains(event.target as Node)) {
+        setCommentActive(false)
       }
     }
     document.addEventListener("mousedown", handleClickOutside)
@@ -289,7 +295,10 @@ const PostPage = () => {
                   <div className="flex justify-between text-lg select-none">
                     <div className="flex gap-3 items-center">
                       <div className="flex items-center gap-1">
-                        <button className="flex items-center gap-1 p-1.5 hover:bg-blue-500/30 group/comment rounded-lg transition-all duration-200">
+                        <button
+                          onClick={() => setCommentActive(true)}
+                          className="flex items-center gap-1 p-1.5 hover:bg-blue-500/30 group/comment rounded-lg transition-all duration-200"
+                        >
                           <BiCommentDetail className="group-hover/comment:scale-[85%] transition-all duration-300" />
                         </button>
                         <span className="text-sm">
@@ -336,7 +345,7 @@ const PostPage = () => {
               </div>
             </div>
           </div>
-          <CreateComment />
+          <CreateComment commentActive={commentActive} />
           <GetComments />
 
           {showWarning && (

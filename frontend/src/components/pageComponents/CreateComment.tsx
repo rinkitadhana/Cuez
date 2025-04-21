@@ -8,7 +8,7 @@ import { useCommentPost } from "@/hooks/usePost"
 import { useParams } from "next/navigation"
 import useMessageStore from "@/store/messageStore"
 
-const CreateComment = () => {
+const CreateComment = ({ commentActive }: { commentActive: boolean }) => {
   const { data: authUser } = useGetMe()
   const { mutate: commentPost, isPending: isCommentPostPending } =
     useCommentPost()
@@ -36,6 +36,12 @@ const CreateComment = () => {
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
   const hasMedia = !!formData.img || !!formData.video
+
+  useEffect(() => {
+    if (commentActive && textareaRef.current) {
+      textareaRef.current.focus()
+    }
+  }, [commentActive])
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -177,7 +183,7 @@ const CreateComment = () => {
       />
       <div className="flex-1">
         <textarea
-          id="commentInput"
+          id="comment-input"
           ref={textareaRef}
           value={formData.text}
           onChange={(e) => {
