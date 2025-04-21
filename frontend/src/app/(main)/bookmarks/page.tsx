@@ -1,11 +1,12 @@
 import MainWrapper from "@/layout/MainWrapper"
 import Header from "./bookmarkComponent/Header"
+import GetBookmarks from "./bookmarkComponent/GetBookmarks"
 
 const page = () => {
   return (
     <MainWrapper>
       <Header />
-      <div className="flex flex-col h-screen"></div>
+      <GetBookmarks />
     </MainWrapper>
   )
 }
