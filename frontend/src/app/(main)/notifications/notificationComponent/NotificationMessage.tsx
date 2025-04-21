@@ -118,7 +118,7 @@ const NotificationMessage = ({
   return (
     <div
       className={`flex px-6 py-4 border-b border-zinc-700 hover:bg-zinc-900 transition-all duration-200 cursor-pointer group ${
-        !notification.read ? "bg-zinc-900/40" : ""
+        !notification.read ? "bg-zinc-800" : ""
       }`}
       onClick={() => {
         if (notification.type === "follow") {
@@ -151,7 +151,13 @@ const NotificationMessage = ({
       <div className="flex flex-col flex-1">
         <div className="flex justify-between items-start">
           <div className="flex-1">
-            <span className="font-bold hover:underline">
+            <span
+              onClick={(e) => {
+                e.stopPropagation()
+                router.push(`/${notification?.from?.username}`)
+              }}
+              className="font-bold hover:underline"
+            >
               {notification?.from?.fullName || "Deleted User"}
             </span>
             <span className="text-zinc-400 ml-1">{getNotificationText()}</span>
