@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react"
+import React, { useRef } from "react"
 import { createPortal } from "react-dom"
 import EmojiPicker from "emoji-picker-react"
 import { Theme, EmojiStyle } from "emoji-picker-react"
@@ -9,6 +9,7 @@ interface EmojiPickerPortalProps {
   onEmojiClick: (emojiObject: { emoji: string }) => void
   buttonRef: React.RefObject<HTMLButtonElement | null>
   position: "top" | "bottom"
+  pickerRef?: React.RefObject<HTMLDivElement | null>
 }
 
 const EmojiPickerPortal: React.FC<EmojiPickerPortalProps> = ({
@@ -17,27 +18,11 @@ const EmojiPickerPortal: React.FC<EmojiPickerPortalProps> = ({
   onEmojiClick,
   buttonRef,
   position,
+  pickerRef,
 }) => {
-  const pickerRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        pickerRef.current &&
-        !pickerRef.current.contains(event.target as Node)
-      ) {
-        onClose()
-      }
-    }
-
-    if (isOpen) {
-      document.addEventListener("mousedown", handleClickOutside)
-    }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside)
-    }
-  }, [isOpen, onClose])
+  // Use the passed pickerRef or create a local one if not provided
+  const localPickerRef = useRef<HTMLDivElement>(null)
+  const usedPickerRef = pickerRef || localPickerRef
 
   if (!isOpen) return null
 
@@ -55,7 +40,7 @@ const EmojiPickerPortal: React.FC<EmojiPickerPortalProps> = ({
   }
 
   return createPortal(
-    <div ref={pickerRef} style={style} onClick={(e) => e.stopPropagation()}>
+    <div ref={usedPickerRef} style={style} onClick={(e) => e.stopPropagation()}>
       <EmojiPicker
         onEmojiClick={onEmojiClick}
         theme={Theme.DARK}

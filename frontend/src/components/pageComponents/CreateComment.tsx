@@ -45,12 +45,16 @@ const CreateComment = ({ commentActive }: { commentActive: boolean }) => {
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
+      // Don't do anything if the emoji button was clicked
       if (
-        emojiPickerRef.current &&
-        !emojiPickerRef.current.contains(event.target as Node)
+        emojiButtonRef.current === event.target ||
+        emojiButtonRef.current?.contains(event.target as Node)
       ) {
-        setShowEmojiPicker(false)
+        return
       }
+
+      // Close the picker if clicked elsewhere
+      setShowEmojiPicker(false)
     }
 
     if (showEmojiPicker) {
@@ -150,6 +154,7 @@ const CreateComment = ({ commentActive }: { commentActive: boolean }) => {
   }
 
   const toggleEmojiPicker = (e: React.MouseEvent) => {
+    e.preventDefault()
     e.stopPropagation()
 
     if (showEmojiPicker) {
@@ -157,6 +162,7 @@ const CreateComment = ({ commentActive }: { commentActive: boolean }) => {
       return
     }
 
+    // Only calculate position when opening
     if (emojiButtonRef.current) {
       const rect = emojiButtonRef.current.getBoundingClientRect()
       const spaceBelow = window.innerHeight - rect.bottom

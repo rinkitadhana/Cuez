@@ -205,9 +205,7 @@ const PostPage = () => {
                         </h1>
                         {!isOwner &&
                           (isFollowingPending ? (
-                            <div className=" text-sm text-zinc-400">
-                              ...
-                            </div>
+                            <div className=" text-sm text-zinc-400">...</div>
                           ) : isFollowing?.isFollowing ? (
                             ""
                           ) : (
