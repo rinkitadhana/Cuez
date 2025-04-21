@@ -242,6 +242,14 @@ const commentPost = async (req: Request, res: Response): Promise<void> => {
     }
     post.comments.push(commentData as IComment)
     await post.save()
+
+    const notification = new Notification({
+      from: userId,
+      to: post.user.toString(),
+      type: "reply",
+      post: post._id,
+    })
+    await notification.save()
     res.status(200).json({ message: "Comment added successfully!" })
   } catch (error) {
     errorHandler(res, error)
@@ -260,25 +268,26 @@ const likeUnlikePost = async (req: Request, res: Response): Promise<void> => {
     if (userLikedPost) {
       await Post.updateOne({ _id: req.params.id }, { $pull: { likes: userId } })
       await User.updateOne({ _id: userId }, { $pull: { likedPosts: post._id } })
-      res.status(200).json({ message: "Post unliked successfully!" })
       await Notification.deleteMany({
         from: userId,
         to: post.user.toString(),
         type: "like",
+        post: post._id,
       })
+      res.status(200).json({ message: "Post unliked successfully!" })
       return
     } else {
       await Post.updateOne({ _id: req.params.id }, { $push: { likes: userId } })
       await User.updateOne({ _id: userId }, { $push: { likedPosts: post._id } })
-      await post.save()
       const notification = new Notification({
         from: userId,
         to: post.user.toString(),
         type: "like",
+        post: post._id,
       })
       await notification.save()
+      res.status(200).json({ message: "Post liked successfully!" })
     }
-    res.status(200).json({ message: "Post liked successfully!" })
   } catch (error) {
     errorHandler(res, error)
   }

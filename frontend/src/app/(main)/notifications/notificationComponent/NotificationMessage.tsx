@@ -1,29 +1,16 @@
 "use client"
+import { Notification } from "@/types/Notification"
+
 import Image from "next/image"
-import { useState } from "react"
 import { MdDeleteOutline } from "react-icons/md"
 
-interface NotificationProps {
-  type: "follow" | "like" | "repost" | "reply" | "mention"
-  username: string
-  userImage: string
-  timestamp: string
-  content?: string
-  isRead?: boolean
-}
-
 const NotificationMessage = ({
-  type = "like",
-  username = "damnGruz",
-  userImage = "/img/pfp/Gruz.jpeg",
-  timestamp = "2h",
-  content = "",
-  isRead = false,
-}: NotificationProps) => {
-  const [read, setRead] = useState(isRead)
-
+  notification,
+}: {
+  notification: Notification
+}) => {
   const getNotificationIcon = () => {
-    switch (type) {
+    switch (notification.type) {
       case "follow":
         return (
           <div className="absolute -right-1 -bottom-1 bg-mainclr p-1 rounded-full">
@@ -89,31 +76,13 @@ const NotificationMessage = ({
             </svg>
           </div>
         )
-      case "mention":
-        return (
-          <div className="absolute -right-1 -bottom-1 bg-purple-500 p-1 rounded-full">
-            <svg
-              width="12"
-              height="12"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="3"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <circle cx="12" cy="12" r="4" />
-              <path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.92 7.94" />
-            </svg>
-          </div>
-        )
       default:
         return null
     }
   }
 
   const getNotificationText = () => {
-    switch (type) {
+    switch (notification.type) {
       case "follow":
         return "followed you"
       case "like":
@@ -122,8 +91,6 @@ const NotificationMessage = ({
         return "reposted your post"
       case "reply":
         return "replied to your post"
-      case "mention":
-        return "mentioned you"
       default:
         return ""
     }
@@ -132,14 +99,13 @@ const NotificationMessage = ({
   return (
     <div
       className={`flex px-6 py-4 border-b border-zinc-700 hover:bg-zinc-900 transition-all duration-200 cursor-pointer group ${
-        !read ? "bg-zinc-900/40" : ""
+        !notification.read ? "bg-zinc-900/40" : ""
       }`}
-      onClick={() => setRead(true)}
     >
       <div className="relative mr-4">
         <Image
-          src={userImage}
-          alt={`${username}'s profile picture`}
+          src={notification.from.profileImg || "/img/pfp/default.webp"}
+          alt={`${notification.from.fullName}'s profile picture`}
           width={48}
           height={48}
           className="rounded-xl"
@@ -149,13 +115,19 @@ const NotificationMessage = ({
       <div className="flex flex-col flex-1">
         <div className="flex justify-between items-start">
           <div className="flex-1">
-            <span className="font-bold hover:underline">{username}</span>
+            <span className="font-bold hover:underline">
+              {notification.from.fullName || "Deleted User"}
+            </span>
             <span className="text-zinc-400 ml-1">{getNotificationText()}</span>
-            <span className="text-zinc-500 ml-2 text-sm">{timestamp}</span>
+            <span className="text-zinc-500 ml-2 text-sm">
+              {notification.createdAt}
+            </span>
           </div>
         </div>
-        {content && (
-          <p className="text-zinc-400 mt-1 text-sm line-clamp-2">{content}</p>
+        {notification.post && (
+          <p className="text-zinc-400 mt-1 text-sm line-clamp-2">
+            {notification.post.text}
+          </p>
         )}
       </div>
       <div

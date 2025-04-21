@@ -2,6 +2,7 @@ import { errorHandler } from "../utils/errorHandler"
 import User, { IUser } from "../models/user-model"
 import { Request, Response } from "express"
 import { v2 as cloudinary } from "cloudinary"
+import Notification from "../models/notification-model"
 
 const getUserProfile = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -41,10 +42,24 @@ const followUnfollowUser = async (
       await User.findByIdAndUpdate(id, { $pull: { followers: req.user._id } })
       await User.findByIdAndUpdate(req.user._id, { $pull: { followings: id } })
       res.status(200).json({ message: "User unfollowed successfully!" })
+      await Notification.deleteMany({
+        from: req.user._id,
+        to: id,
+        type: "follow",
+        post: null,
+      })
+      return
     } else {
       await User.findByIdAndUpdate(id, { $push: { followers: req.user._id } })
       await User.findByIdAndUpdate(req.user._id, { $push: { followings: id } })
       res.status(200).json({ message: "User followed successfully!" })
+      const notification = new Notification({
+        from: req.user._id,
+        to: id,
+        type: "follow",
+        post: null,
+      })
+      await notification.save()
     }
   } catch (error) {
     errorHandler(res, error)

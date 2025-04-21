@@ -5,12 +5,20 @@ import Notification from "../models/notification-model"
 const getNotifications = async (req: Request, res: Response): Promise<void> => {
   try {
     const userId = req.user._id.toString()
-    const notifications = await Notification.find({ to: userId }).populate(
-      "from",
-      "-password fullname username profilePicture"
-    )
+    if (!userId) {
+      res.status(401).json({ message: "Unauthorized" })
+      return
+    }
+    const notifications = await Notification.find({ to: userId })
+      .populate({
+        path: "from",
+        select: "-password",
+      })
+      .populate("post", "text img video")
     await Notification.updateMany({ to: userId }, { $set: { read: true } })
-    res.status(200).json({ notifications })
+    res
+      .status(200)
+      .json({ message: "Notifications fetched successfully", notifications })
   } catch (error) {
     errorHandler(res, error)
   }

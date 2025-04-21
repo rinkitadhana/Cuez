@@ -3,7 +3,8 @@ import mongoose, { Document } from "mongoose"
 export interface INotification extends Document {
   from: mongoose.Types.ObjectId
   to: mongoose.Types.ObjectId
-  type: "follow" | "like" | "comment"
+  type: "follow" | "like" | "reply" | "repost"
+  post?: mongoose.Types.ObjectId
   read: boolean
   createdAt: Date
   updatedAt: Date
@@ -24,7 +25,12 @@ const notificationSchema = new mongoose.Schema<INotification>(
     type: {
       type: String,
       required: true,
-      enum: ["follow", "like", "comment"],
+      enum: ["follow", "like", "reply", "repost"],
+    },
+    post: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Post",
+      default: null,
     },
     read: {
       type: Boolean,

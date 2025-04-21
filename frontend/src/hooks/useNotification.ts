@@ -11,7 +11,10 @@ interface GetNotificationsResponse {
 
 const getNotifications = async (): Promise<GetNotificationsResponse> => {
   const response = await axios.get<GetNotificationsResponse>(
-    `${config.backendUrl}/notification`
+    `${config.backendUrl}/notification`,
+    {
+      withCredentials: true,
+    }
   )
   return response.data
 }
@@ -29,8 +32,11 @@ interface DeleteAllNotificationsResponse {
 
 const deleteAllNotifications =
   async (): Promise<DeleteAllNotificationsResponse> => {
-    const response = await axios.get<DeleteAllNotificationsResponse>(
-      `${config.backendUrl}/notification/delete-all`
+    const response = await axios.delete<DeleteAllNotificationsResponse>(
+      `${config.backendUrl}/notification/delete-all`,
+      {
+        withCredentials: true,
+      }
     )
     return response.data
   }
@@ -61,7 +67,10 @@ const deleteNotification = async (
   id: string
 ): Promise<DeleteNotificationResponse> => {
   const response = await axios.delete<DeleteNotificationResponse>(
-    `${config.backendUrl}/notification/${id}`
+    `${config.backendUrl}/notification/${id}`,
+    {
+      withCredentials: true,
+    }
   )
   return response.data
 }
