@@ -14,6 +14,7 @@ interface IUser extends Document {
   link: string
   likedPosts: IPost[]
   location: string
+  bookmarks: IPost[]
   createdAt: Date
   updatedAt: Date
 }
@@ -89,6 +90,13 @@ const userSchema = new mongoose.Schema<IUser>(
       default: "Earth, Milky Way",
     },
     likedPosts: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Post",
+        default: [],
+      },
+    ],
+    bookmarks: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Post",

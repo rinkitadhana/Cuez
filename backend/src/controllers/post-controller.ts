@@ -496,6 +496,98 @@ const getPostById = async (req: Request, res: Response): Promise<void> => {
   }
 }
 
+const bookmarkPost = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const post = await Post.findById(req.params.id)
+    const user = await User.findById(req.user._id.toString())
+    if (!post) {
+      res.status(404).json({ message: "Post not found!" })
+      return
+    }
+    if (!user) {
+      res.status(404).json({ message: "User not found!" })
+      return
+    }
+    const isBookmarked = post.bookmarks.includes(req.user._id.toString())
+    if (isBookmarked) {
+      await Post.updateOne(
+        { _id: req.params.id },
+        { $pull: { bookmarks: req.user._id.toString() } }
+      )
+      await User.updateOne(
+        { _id: req.user._id.toString() },
+        { $pull: { bookmarks: post._id } }
+      )
+      res.status(200).json({ message: "Post unbookmarked successfully!" })
+      return
+    } else {
+      await Post.updateOne(
+        { _id: req.params.id },
+        { $push: { bookmarks: req.user._id.toString() } }
+      )
+      await User.updateOne(
+        { _id: req.user._id.toString() },
+        { $push: { bookmarks: post._id } }
+      )
+      res.status(200).json({ message: "Post bookmarked successfully!" })
+      return
+    }
+  } catch (error) {
+    errorHandler(res, error)
+  }
+}
+
+const isBookmarked = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const post = await Post.findById(req.params.id)
+    const user = await User.findById(req.user._id.toString())
+    if (!post) {
+      res.status(404).json({ message: "Post not found!" })
+      return
+    }
+    if (!user) {
+      res.status(404).json({ message: "User not found!" })
+      return
+    }
+    const isBookmarked = post.bookmarks.includes(req.user._id.toString())
+    res
+      .status(200)
+      .json({ isBookmarked, message: "Bookmarked post fetched successfully!" })
+  } catch (error) {
+    errorHandler(res, error)
+  }
+}
+
+const getBookmarkedPosts = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const user = await User.findById(req.user._id.toString())
+    if (!user) {
+      res.status(404).json({ message: "User not found!" })
+      return
+    }
+    const bookmarkedPosts = await Post.find({ _id: { $in: user.bookmarks } })
+      .sort({ createdAt: -1 })
+      .populate({
+        path: "user",
+        select: "-password",
+      })
+
+    if (bookmarkedPosts.length === 0) {
+      res.status(200).json({ message: "No bookmarked posts found!", posts: [] })
+      return
+    }
+    res.status(200).json({
+      message: "Bookmarked posts fetched successfully!",
+      posts: bookmarkedPosts,
+    })
+  } catch (error) {
+    errorHandler(res, error)
+  }
+}
+
 export {
   createPost,
   deletePost,
@@ -509,4 +601,7 @@ export {
   isLiked,
   getPostById,
   getTrendingPosts,
+  bookmarkPost,
+  isBookmarked,
+  getBookmarkedPosts,
 }

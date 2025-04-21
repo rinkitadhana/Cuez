@@ -79,6 +79,8 @@ export const useCreatePost = () => {
       queryClient.invalidateQueries({ queryKey: ["posts"] })
       queryClient.invalidateQueries({ queryKey: ["user-posts"] })
       queryClient.invalidateQueries({ queryKey: ["liked-posts"] })
+      queryClient.invalidateQueries({ queryKey: ["bookmarked-posts"] })
+      queryClient.invalidateQueries({ queryKey: ["is-bookmarked"] })
     },
     onError: (error: AxiosError) => {
       const message =
@@ -116,6 +118,8 @@ export const useDeletePost = () => {
       queryClient.invalidateQueries({ queryKey: ["posts"] })
       queryClient.invalidateQueries({ queryKey: ["user-posts"] })
       queryClient.invalidateQueries({ queryKey: ["liked-posts"] })
+      queryClient.invalidateQueries({ queryKey: ["bookmarked-posts"] })
+      queryClient.invalidateQueries({ queryKey: ["is-bookmarked"] })
     },
     onError: (error: AxiosError) => {
       const message =
@@ -168,6 +172,10 @@ export const useEditPost = () => {
       queryClient.invalidateQueries({ queryKey: ["user-posts"] })
       queryClient.invalidateQueries({ queryKey: ["liked-posts"] })
       queryClient.invalidateQueries({ queryKey: ["post", variables.postId] })
+      queryClient.invalidateQueries({ queryKey: ["bookmarked-posts"] })
+      queryClient.invalidateQueries({
+        queryKey: ["is-bookmarked", variables.postId],
+      })
     },
     onError: (error: AxiosError) => {
       const message =
@@ -209,6 +217,8 @@ export const useLikeUnlikePost = () => {
       queryClient.invalidateQueries({ queryKey: ["is-liked", postId] })
       queryClient.invalidateQueries({ queryKey: ["user-posts"] })
       queryClient.invalidateQueries({ queryKey: ["liked-posts"] })
+      queryClient.invalidateQueries({ queryKey: ["bookmarked-posts"] })
+      queryClient.invalidateQueries({ queryKey: ["is-bookmarked", postId] })
     },
     onError: (error: AxiosError) => {
       const message =
@@ -295,6 +305,8 @@ export const useCommentPost = () => {
       queryClient.invalidateQueries({ queryKey: ["post", postId] })
       queryClient.invalidateQueries({ queryKey: ["user-posts"] })
       queryClient.invalidateQueries({ queryKey: ["liked-posts"] })
+      queryClient.invalidateQueries({ queryKey: ["bookmarked-posts"] })
+      queryClient.invalidateQueries({ queryKey: ["is-bookmarked", postId] })
     },
     onError: (error: AxiosError) => {
       const message =
@@ -346,5 +358,81 @@ export const useGetLikedPosts = (username: string) => {
   return useQuery<GetLikedPostsResponse, AxiosError>({
     queryKey: ["liked-posts", username],
     queryFn: () => getLikedPosts(username),
+  })
+}
+
+interface BookmarkPostResponse {
+  message: string
+}
+
+const bookmarkPost = async (postId: string): Promise<BookmarkPostResponse> => {
+  const { data } = await axios.post<BookmarkPostResponse>(
+    config.backendUrl + `/post/bookmark-post/${postId}`,
+    {},
+    { withCredentials: true }
+  )
+  return data
+}
+
+export const useBookmarkPost = () => {
+  const { setMessage } = useMessageStore()
+  const queryClient = useQueryClient()
+  return useMutation<BookmarkPostResponse, AxiosError, string>({
+    mutationFn: bookmarkPost,
+    onSuccess: (data: BookmarkPostResponse, postId) => {
+      setMessage(data.message, "success")
+      queryClient.invalidateQueries({ queryKey: ["posts"] })
+      queryClient.invalidateQueries({ queryKey: ["post", postId] })
+      queryClient.invalidateQueries({ queryKey: ["is-bookmarked", postId] })
+      queryClient.invalidateQueries({ queryKey: ["user-posts"] })
+      queryClient.invalidateQueries({ queryKey: ["liked-posts"] })
+      queryClient.invalidateQueries({ queryKey: ["bookmarked-posts"] })
+    },
+    onError: (error: AxiosError) => {
+      const message =
+        (error.response?.data as BookmarkPostResponse)?.message ||
+        "Bookmark Post failed!"
+      setMessage(message, "error")
+    },
+  })
+}
+
+interface IsBookmarkedResponse {
+  message: string
+  isBookmarked: boolean
+}
+
+const isBookmarked = async (postId: string): Promise<IsBookmarkedResponse> => {
+  const { data } = await axios.get<IsBookmarkedResponse>(
+    config.backendUrl + `/post/is-bookmarked/${postId}`,
+    { withCredentials: true }
+  )
+  return data
+}
+
+export const useIsBookmarked = (postId: string) => {
+  return useQuery<IsBookmarkedResponse, AxiosError>({
+    queryKey: ["is-bookmarked", postId],
+    queryFn: () => isBookmarked(postId),
+  })
+}
+
+interface GetBookmarkedPostsResponse {
+  message: string
+  posts: Post[]
+}
+
+const getBookmarkedPosts = async (): Promise<GetBookmarkedPostsResponse> => {
+  const { data } = await axios.get<GetBookmarkedPostsResponse>(
+    config.backendUrl + `/post/bookmarked-posts`,
+    { withCredentials: true }
+  )
+  return data
+}
+
+export const useGetBookmarkedPosts = () => {
+  return useQuery<GetBookmarkedPostsResponse, AxiosError>({
+    queryKey: ["bookmarked-posts"],
+    queryFn: () => getBookmarkedPosts(),
   })
 }

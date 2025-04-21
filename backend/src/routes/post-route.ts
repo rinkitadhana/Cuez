@@ -13,6 +13,9 @@ import {
   isLiked,
   getPostById,
   getTrendingPosts,
+  bookmarkPost,
+  getBookmarkedPosts,
+  isBookmarked,
 } from "../controllers/post-controller"
 const router = express.Router()
 
@@ -27,5 +30,9 @@ router.get("/following-posts", protectRoute, getFollowingPosts)
 router.get("/trending-posts", getTrendingPosts)
 router.get("/liked-posts/:username", protectRoute, getLikedPosts)
 router.get("/user-posts/:username", protectRoute, getUserPosts)
+router.post("/bookmark-post/:id", protectRoute, bookmarkPost)
+router.get("/is-bookmarked/:id", protectRoute, isBookmarked)
+router.get("/bookmarked-posts", protectRoute, getBookmarkedPosts)
+
 router.get("/post/:id", getPostById)
 export default router
