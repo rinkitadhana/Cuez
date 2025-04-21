@@ -206,7 +206,7 @@ const PostPage = () => {
                         {!isOwner &&
                           (isFollowingPending ? (
                             <div className=" text-sm text-zinc-400">
-                              Loading...
+                              ...
                             </div>
                           ) : isFollowing?.isFollowing ? (
                             ""
@@ -218,7 +218,7 @@ const PostPage = () => {
                             >
                               {isFollowUnfollowPending ? (
                                 <div className=" text-sm text-zinc-400">
-                                  Loading...
+                                  ...
                                 </div>
                               ) : (
                                 <div className="text-xs font-semibold text-blue-500 hover:underline cursor-pointer">
