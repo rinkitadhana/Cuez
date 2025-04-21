@@ -15,6 +15,7 @@ const getNotifications = async (req: Request, res: Response): Promise<void> => {
         select: "-password",
       })
       .populate("post", "text img video")
+      .sort({ createdAt: -1 })
     await Notification.updateMany({ to: userId }, { $set: { read: true } })
     res
       .status(200)

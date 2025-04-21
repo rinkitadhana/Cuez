@@ -1,8 +1,10 @@
 "use client"
 import { Notification } from "@/types/Notification"
-
 import Image from "next/image"
 import { MdDeleteOutline } from "react-icons/md"
+import { useDeleteNotification } from "@/hooks/useNotification"
+import { Loader2 } from "lucide-react"
+import { useRouter } from "next/navigation"
 
 const NotificationMessage = ({
   notification,
@@ -96,16 +98,39 @@ const NotificationMessage = ({
     }
   }
 
+  const { mutate: deleteNotification, isPending } = useDeleteNotification()
+  const handleDeleteNotification = () => {
+    deleteNotification(notification._id)
+  }
+  const router = useRouter()
+
   return (
     <div
       className={`flex px-6 py-4 border-b border-zinc-700 hover:bg-zinc-900 transition-all duration-200 cursor-pointer group ${
         !notification.read ? "bg-zinc-900/40" : ""
       }`}
+      onClick={() => {
+        if (notification.type === "follow") {
+          router.push(`/${notification.from.username}`)
+        } else if (notification.type === "like") {
+          router.push(`/post/${notification.post?._id}`)
+        } else if (notification.type === "repost") {
+          router.push(`/post/${notification.post?._id}`)
+        } else if (notification.type === "reply") {
+          router.push(`/post/${notification.post?._id}`)
+        }
+      }}
     >
-      <div className="relative mr-4">
+      <div
+        onClick={(e) => {
+          e.stopPropagation()
+          router.push(`/${notification?.from?.username}`)
+        }}
+        className="relative mr-4"
+      >
         <Image
-          src={notification.from.profileImg || "/img/pfp/default.webp"}
-          alt={`${notification.from.fullName}'s profile picture`}
+          src={notification?.from?.profileImg || "/img/pfp/default.webp"}
+          alt={`${notification?.from?.fullName}'s profile picture`}
           width={48}
           height={48}
           className="rounded-xl"
@@ -116,17 +141,19 @@ const NotificationMessage = ({
         <div className="flex justify-between items-start">
           <div className="flex-1">
             <span className="font-bold hover:underline">
-              {notification.from.fullName || "Deleted User"}
+              {notification?.from?.fullName || "Deleted User"}
             </span>
             <span className="text-zinc-400 ml-1">{getNotificationText()}</span>
             <span className="text-zinc-500 ml-2 text-sm">
-              {notification.createdAt}
+              {notification?.createdAt}
             </span>
           </div>
         </div>
-        {notification.post && (
+        {notification?.post && (
           <p className="text-zinc-400 mt-1 text-sm line-clamp-2">
-            {notification.post.text}
+            {notification?.post?.text}
+            {notification?.post?.img && "(Image)"}
+            {notification?.post?.video && "(Video)"}
           </p>
         )}
       </div>
@@ -134,9 +161,14 @@ const NotificationMessage = ({
         className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 p-2 hover:bg-zinc-800 rounded-xl cursor-pointer self-center ml-2"
         onClick={(e) => {
           e.stopPropagation()
+          handleDeleteNotification()
         }}
       >
-        <MdDeleteOutline className="text-xl" />
+        {isPending ? (
+          <Loader2 className="animate-spin" size={22} />
+        ) : (
+          <MdDeleteOutline size={22} />
+        )}
       </div>
     </div>
   )
