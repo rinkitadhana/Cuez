@@ -303,7 +303,7 @@ const PostPage = () => {
                           new Date(post?.post?.createdAt || "")
                         )}`}
                   </div>
-                  <div className="flex justify-between text-lg select-none">
+                  <div className="flex justify-between text-lg select-none text-zinc-400">
                     <div className="flex gap-3 items-center">
                       <div className="flex items-center gap-1">
                         <button

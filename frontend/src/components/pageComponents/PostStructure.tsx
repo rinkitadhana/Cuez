@@ -264,7 +264,7 @@ const PostStructure = ({ post }: PostStructureProps) => {
                 />
               </div>
             )}
-            <div className="flex justify-between text-lg select-none">
+            <div className="flex justify-between text-lg select-none text-zinc-400">
               <div
                 onClick={(e) => e.stopPropagation()}
                 className="flex gap-3 items-center"
