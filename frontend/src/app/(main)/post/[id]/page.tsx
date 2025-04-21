@@ -75,13 +75,14 @@ const PostPage = () => {
   }, [showWarning])
 
   useEffect(() => {
-    if (searchParams.get("focus") === "comment") {
+    if (searchParams.get("focus") === "comment-input") {
       const commentInput = document.querySelector(
-        "#commentInput"
+        "#comment-input"
       ) as HTMLInputElement
       if (commentInput) {
         commentInput.focus()
       }
+      setCommentActive(true)
     }
   }, [searchParams])
 
