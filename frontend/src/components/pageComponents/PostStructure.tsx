@@ -2,13 +2,19 @@
 import Image from "next/image"
 import { BiCommentDetail, BiSolidUpvote, BiUpvote } from "react-icons/bi"
 import { HiArrowPathRoundedSquare } from "react-icons/hi2"
-import { IoBookmarkOutline } from "react-icons/io5"
+import { IoBookmark, IoBookmarkOutline } from "react-icons/io5"
 import { RiShareBoxFill } from "react-icons/ri"
 import { SlOptions } from "react-icons/sl"
 import { useEffect, useRef, useState } from "react"
 import { Post } from "@/types/Post"
 import { useGetMe } from "@/hooks/useAuth"
-import { useDeletePost, useIsLiked, useLikeUnlikePost } from "@/hooks/usePost"
+import {
+  useBookmarkPost,
+  useDeletePost,
+  useIsBookmarked,
+  useIsLiked,
+  useLikeUnlikePost,
+} from "@/hooks/usePost"
 import { Loader2, X } from "lucide-react"
 import config from "@/config/config"
 import useMessageStore from "@/store/messageStore"
@@ -31,6 +37,10 @@ const PostStructure = ({ post }: PostStructureProps) => {
   const { mutate: deletePost, isPending } = useDeletePost()
   const { mutate: likeUnlikePost, isPending: isLikeUnlikePending } =
     useLikeUnlikePost()
+  const { mutate: bookmarkPost, isPending: isBookmarkPending } =
+    useBookmarkPost()
+  const { data: isBookmarked, isPending: isBookmarkedPending } =
+    useIsBookmarked(post._id)
   const { data: isLiked, isPending: isLikedPending } = useIsLiked(post._id)
   const { data: isFollowing, isPending: isFollowingPending } = useIsFollowing(
     post?.user?._id || ""
@@ -83,6 +93,9 @@ const PostStructure = ({ post }: PostStructureProps) => {
   const userProfile = () => {
     if (!post?.user._id) return
     router.push(`/${post?.user.username}`)
+  }
+  const handleBookmarkPost = () => {
+    bookmarkPost(post._id)
   }
 
   const handleShare = async () => {
@@ -294,8 +307,20 @@ const PostStructure = ({ post }: PostStructureProps) => {
                 onClick={(e) => e.stopPropagation()}
                 className="flex gap-1 items-center"
               >
-                <button className="p-1.5 hover:bg-blue-500/30 rounded-lg transition-all duration-200">
-                  <IoBookmarkOutline />
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    handleBookmarkPost()
+                  }}
+                  className="p-1.5 hover:bg-blue-500/30 rounded-lg transition-all duration-200"
+                >
+                  {isBookmarkPending || isBookmarkedPending ? (
+                    <Loader2 className="animate-spin size-[18px]" />
+                  ) : isBookmarked?.isBookmarked ? (
+                    <IoBookmark className="text-blue-500" />
+                  ) : (
+                    <IoBookmarkOutline />
+                  )}
                 </button>
                 <button
                   onClick={handleShare}

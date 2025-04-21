@@ -2,14 +2,16 @@
 import Image from "next/image"
 import { BiCommentDetail, BiSolidUpvote, BiUpvote } from "react-icons/bi"
 import { HiArrowPathRoundedSquare } from "react-icons/hi2"
-import { IoBookmarkOutline } from "react-icons/io5"
+import { IoBookmark, IoBookmarkOutline } from "react-icons/io5"
 import { RiShareBoxFill } from "react-icons/ri"
 import { SlOptions } from "react-icons/sl"
 import { useEffect, useRef, useState } from "react"
 import { useGetMe } from "@/hooks/useAuth"
 import {
+  useBookmarkPost,
   useDeletePost,
   useGetPostById,
+  useIsBookmarked,
   useIsLiked,
   useLikeUnlikePost,
 } from "@/hooks/usePost"
@@ -49,6 +51,10 @@ const PostPage = () => {
   )
   const { mutate: followUnfollowUser, isPending: isFollowUnfollowPending } =
     useFollowUnfollowUser()
+  const { mutate: bookmarkPost, isPending: isBookmarkPending } =
+    useBookmarkPost()
+  const { data: isBookmarked, isPending: isBookmarkedPending } =
+    useIsBookmarked(id as string)
   const { data: isLiked, isPending: isLikedPending } = useIsLiked(id as string)
   const isUpdated = post?.post.editedAt !== post?.post.createdAt
 
@@ -102,6 +108,10 @@ const PostPage = () => {
     router.push(`/${post?.post.user.username}`)
   }
 
+  const handleBookmarkPost = () => {
+    if (!post?.post._id) return
+    bookmarkPost(post.post._id)
+  }
   const handleLikeUnlikePost = () => {
     if (!post?.post._id) return
     likeUnlikePost(post.post._id)
@@ -331,8 +341,20 @@ const PostPage = () => {
                       </div>
                     </div>
                     <div className="flex gap-1 items-center">
-                      <button className="p-1.5 hover:bg-blue-500/30 rounded-lg transition-all duration-200">
-                        <IoBookmarkOutline />
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          handleBookmarkPost()
+                        }}
+                        className="p-1.5 hover:bg-blue-500/30 rounded-lg transition-all duration-200"
+                      >
+                        {isBookmarkPending || isBookmarkedPending ? (
+                          <Loader2 className="animate-spin size-[18px]" />
+                        ) : isBookmarked?.isBookmarked ? (
+                          <IoBookmark className="text-blue-500" />
+                        ) : (
+                          <IoBookmarkOutline />
+                        )}
                       </button>
                       <button
                         onClick={handleShare}
