@@ -27,13 +27,19 @@ import {
   RiSearchLine,
 } from "react-icons/ri"
 import { SlOptions } from "react-icons/sl"
+import { useGetUnreadNotificationsCount } from "@/hooks/useNotification"
+import { Loader2 } from "lucide-react"
 
 const LeftSidebar = () => {
   const pathname = usePathname()
   const [isOpen, setIsOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
-  const { mutate: logout } = useLogout()
-  const { data: me } = useGetMe()
+  const { mutate: logout, isPending: isLogoutPending } = useLogout()
+  const { data: me, isLoading: isMeLoading } = useGetMe()
+  const {
+    data: unreadNotificationsCount,
+    isLoading: isUnreadNotificationsCountLoading,
+  } = useGetUnreadNotificationsCount()
 
   const handleLogout = () => {
     logout()
@@ -87,8 +93,44 @@ const LeftSidebar = () => {
       href: "/notifications",
       label: "Notifications",
       icon: {
-        filled: <BsBellFill className="text-xl" />,
-        outline: <BsBell className="text-xl" />,
+        filled: (
+          <div className="relative">
+            <BsBellFill className="text-xl" />
+            {isUnreadNotificationsCountLoading ? (
+              <div className="absolute -top-2 -right-1.5">
+                <Loader2 className="animate-spin" size={12} />
+              </div>
+            ) : unreadNotificationsCount?.count &&
+              unreadNotificationsCount.count > 0 ? (
+              <div className="absolute -top-2 -right-1.5 bg-mainclr rounded-full min-w-[16px] h-4 flex items-center justify-center">
+                <span className="text-[10px] font-bold">
+                  {unreadNotificationsCount.count > 99
+                    ? "99+"
+                    : unreadNotificationsCount.count}
+                </span>
+              </div>
+            ) : null}
+          </div>
+        ),
+        outline: (
+          <div className="relative">
+            <BsBell className="text-xl" />
+            {isUnreadNotificationsCountLoading ? (
+              <div className="absolute -top-2 -right-1.5">
+                <Loader2 className="animate-spin" size={12} />
+              </div>
+            ) : unreadNotificationsCount?.count &&
+              unreadNotificationsCount.count > 0 ? (
+              <div className="absolute -top-2 -right-1.5 bg-mainclr rounded-full min-w-[16px] h-4 flex items-center justify-center">
+                <span className="text-[10px] font-bold">
+                  {unreadNotificationsCount.count > 99
+                    ? "99+"
+                    : unreadNotificationsCount.count}
+                </span>
+              </div>
+            ) : null}
+          </div>
+        ),
       },
     },
     {
@@ -129,41 +171,47 @@ const LeftSidebar = () => {
     <div className="w-full flex flex-col justify-between py-4 select-none h-screen">
       <div className="flex flex-col gap-3">
         <div className="relative" ref={menuRef}>
-          <div
-            onClick={() => setIsOpen(!isOpen)}
-            className={` flex cursor-pointer items-center justify-between gap-2 w-full -ml-1  rounded-2xl group/pfp  transition-all duration-200 py-2 px-2 select-none      
-              ${isOpen ? "bg-zinc-800 ml-0" : "hover:ml-0 hover:bg-zinc-800"}`}
-          >
+          {isMeLoading ? (
             <div className="flex items-center gap-2">
-              <Image
-                src={me?.user.profileImg || "/img/pfp/Gruz.jpeg"}
-                alt="Profile picture"
-                width={36}
-                height={36}
-                className="rounded-xl size-9 object-cover"
-              />
-              <div
-                className={`opacity-0  transition-all duration-200 ${
-                  isOpen ? "opacity-100" : "group-hover/pfp:opacity-100"
-                }`}
-              >
-                <h1 className="font-semibold text-sm truncate">
-                  {me?.user.fullName}
-                </h1>
-                <p className="text-xs text-zinc-400 truncate">
-                  @{me?.user.username}
-                </p>
+              <Loader2 className="animate-spin" size={22} />
+              <p className="text-sm">Loading...</p>
+            </div>
+          ) : (
+            <div
+              onClick={() => setIsOpen(!isOpen)}
+              className={` flex cursor-pointer items-center justify-between gap-2 w-full -ml-1  rounded-2xl group/pfp  transition-all duration-200 py-2 px-2 select-none      
+              ${isOpen ? "bg-zinc-800 ml-0" : "hover:ml-0 hover:bg-zinc-800"}`}
+            >
+              <div className="flex items-center gap-2">
+                <Image
+                  src={me?.user.profileImg || "/img/pfp/Gruz.jpeg"}
+                  alt="Profile picture"
+                  width={36}
+                  height={36}
+                  className="rounded-xl size-9 object-cover"
+                />
+                <div
+                  className={`opacity-0  transition-all duration-200 ${
+                    isOpen ? "opacity-100" : "group-hover/pfp:opacity-100"
+                  }`}
+                >
+                  <h1 className="font-semibold text-sm truncate">
+                    {me?.user.fullName}
+                  </h1>
+                  <p className="text-xs text-zinc-400 truncate">
+                    @{me?.user.username}
+                  </p>
+                </div>
+              </div>
+              <div className="px-1">
+                <SlOptions
+                  className={`opacity-0  ${
+                    isOpen ? "opacity-80" : "group-hover/pfp:opacity-80"
+                  } transition-all duration-200`}
+                />
               </div>
             </div>
-            <div className="px-1">
-            <SlOptions
-              className={`opacity-0  ${
-                isOpen ? "opacity-80" : "group-hover/pfp:opacity-80"
-              } transition-all duration-200`}
-            />
-            </div>
-           
-          </div>
+          )}
 
           {isOpen && (
             <div className="absolute top-16 left-0 w-full bg-zinc-800 cursor-pointer flex flex-col gap-1 p-2 select-none rounded-2xl">
@@ -178,8 +226,14 @@ const LeftSidebar = () => {
                 onClick={handleLogout}
                 className="font-semibold flex items-center gap-2.5 px-2.5 py-2.5 rounded-xl hover:bg-zinc-500/20 transition-colors duration-200"
               >
-                <LuLogOut className="" />
-                <p className="text-sm">Logout</p>
+                {isLogoutPending ? (
+                  <Loader2 className="animate-spin" size={22} />
+                ) : (
+                  <>
+                    <LuLogOut className="" />
+                    <p className="text-sm">Logout</p>
+                  </>
+                )}
               </button>
             </div>
           )}

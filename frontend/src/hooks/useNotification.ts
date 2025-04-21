@@ -49,6 +49,9 @@ export const useDeleteAllNotifications = () => {
     onSuccess: (data: DeleteAllNotificationsResponse) => {
       setMessage(data.message, "success")
       queryClient.invalidateQueries({ queryKey: ["notifications"] })
+      queryClient.invalidateQueries({
+        queryKey: ["unread-notifications-count"],
+      })
     },
     onError: (error: AxiosError) => {
       const message =
@@ -83,6 +86,9 @@ export const useDeleteNotification = () => {
     onSuccess: (data: DeleteNotificationResponse) => {
       setMessage(data.message, "success")
       queryClient.invalidateQueries({ queryKey: ["notifications"] })
+      queryClient.invalidateQueries({
+        queryKey: ["unread-notifications-count"],
+      })
     },
     onError: (error: AxiosError) => {
       const message =
@@ -90,5 +96,29 @@ export const useDeleteNotification = () => {
         "Failed to delete notification!"
       setMessage(message, "error")
     },
+  })
+}
+
+interface GetUnreadNotificationsCountResponse {
+  message: string
+  count: number
+}
+
+const getUnreadNotificationsCount =
+  async (): Promise<GetUnreadNotificationsCountResponse> => {
+    const response = await axios.get<GetUnreadNotificationsCountResponse>(
+      `${config.backendUrl}/notification/unread-count`,
+      {
+        withCredentials: true,
+      }
+    )
+    return response.data
+  }
+
+export const useGetUnreadNotificationsCount = () => {
+  return useQuery<GetUnreadNotificationsCountResponse, AxiosError>({
+    queryKey: ["unread-notifications-count"],
+    queryFn: getUnreadNotificationsCount,
+    refetchInterval: 5000,
   })
 }

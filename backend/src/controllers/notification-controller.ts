@@ -50,4 +50,30 @@ const deleteNotification = async (
     errorHandler(res, error)
   }
 }
-export { getNotifications, deleteNotification, deleteAllNotifications }
+
+const getUnreadNotificationsCount = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const userId = req.user._id.toString()
+    if (!userId) {
+      res.status(401).json({ message: "Unauthorized" })
+      return
+    }
+    const count = await Notification.countDocuments({ to: userId, read: false })
+    res.status(200).json({
+      message: "Unread notifications count fetched successfully",
+      count,
+    })
+  } catch (error) {
+    errorHandler(res, error)
+  }
+}
+
+export {
+  getNotifications,
+  deleteNotification,
+  deleteAllNotifications,
+  getUnreadNotificationsCount,
+}
