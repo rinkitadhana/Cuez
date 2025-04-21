@@ -95,16 +95,22 @@ const editPost = async (req: Request, res: Response): Promise<void> => {
 
     if (img) {
       if (post.img) {
-        const oldImageId = post.img.split("/").pop()?.split(".")[0]
-        if (oldImageId) {
-          await cloudinary.uploader.destroy(`posts/${oldImageId}`, {
-            resource_type: "image",
-          })
+        const imageId = post.img.split("/").pop()?.split(".")[0]
+        if (imageId) {
+          try {
+            await cloudinary.uploader.destroy(`posts/${imageId}`, {
+              resource_type: "image",
+              invalidate: true,
+            })
+          } catch (error) {
+            console.error("Error deleting old image:", error)
+          }
         }
       }
       const uploadedResponse = await cloudinary.uploader.upload(img, {
         folder: "posts",
         resource_type: "image",
+        invalidate: true,
       })
       updateData.img = uploadedResponse.secure_url
       updateData.editedAt = new Date()
@@ -112,16 +118,22 @@ const editPost = async (req: Request, res: Response): Promise<void> => {
 
     if (video) {
       if (post.video) {
-        const oldVideoId = post.video.split("/").pop()?.split(".")[0]
-        if (oldVideoId) {
-          await cloudinary.uploader.destroy(`posts/${oldVideoId}`, {
-            resource_type: "video",
-          })
+        const videoId = post.video.split("/").pop()?.split(".")[0]
+        if (videoId) {
+          try {
+            await cloudinary.uploader.destroy(`posts/${videoId}`, {
+              resource_type: "video",
+              invalidate: true,
+            })
+          } catch (error) {
+            console.error("Error deleting old video:", error)
+          }
         }
       }
       const uploadedResponse = await cloudinary.uploader.upload(video, {
         folder: "posts",
         resource_type: "video",
+        invalidate: true,
       })
       updateData.video = uploadedResponse.secure_url
       updateData.editedAt = new Date()
