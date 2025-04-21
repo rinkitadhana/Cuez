@@ -14,13 +14,11 @@ interface EmojiPickerPortalProps {
 
 const EmojiPickerPortal: React.FC<EmojiPickerPortalProps> = ({
   isOpen,
-  onClose,
   onEmojiClick,
   buttonRef,
   position,
   pickerRef,
 }) => {
-  // Use the passed pickerRef or create a local one if not provided
   const localPickerRef = useRef<HTMLDivElement>(null)
   const usedPickerRef = pickerRef || localPickerRef
 

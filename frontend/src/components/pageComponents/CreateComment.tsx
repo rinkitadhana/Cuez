@@ -32,7 +32,6 @@ const CreateComment = ({ commentActive }: { commentActive: boolean }) => {
     videoFile?: File
   }>({})
   const emojiButtonRef = useRef<HTMLButtonElement>(null)
-  const emojiPickerRef = useRef<HTMLDivElement>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
   const hasMedia = !!formData.img || !!formData.video
