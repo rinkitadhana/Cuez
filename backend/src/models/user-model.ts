@@ -10,6 +10,7 @@ interface IUser extends Document {
   followings: IUser[]
   profileImg: string
   coverImg: string
+  cuezBadge: boolean
   bio: string
   link: string
   likedPosts: IPost[]
@@ -103,6 +104,10 @@ const userSchema = new mongoose.Schema<IUser>(
         default: [],
       },
     ],
+    cuezBadge: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,
