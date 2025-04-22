@@ -3,11 +3,12 @@
 import { useState } from "react"
 import Input from "./Input"
 import { LoaderCircle } from "lucide-react"
+import { useCreateFeedback, FeedbackInput } from "@/hooks/useFeedback"
 
 const FeedbackForm = () => {
+  const { mutate: createFeedback, isPending } = useCreateFeedback()
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
-  const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -18,9 +19,9 @@ const FeedbackForm = () => {
       setTimeout(() => setError(false), 5000)
       return
     }
-    setIsSubmitting(true)
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-    setIsSubmitting(false)
+
+    const feedbackData: FeedbackInput = { title, description }
+    createFeedback(feedbackData)
   }
 
   return (
@@ -47,12 +48,15 @@ const FeedbackForm = () => {
         <div className="relative">
           <textarea
             value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            onChange={(e) => {
+              setDescription(e.target.value)
+              e.target.style.height = "auto"
+              e.target.style.height = `${e.target.scrollHeight}px`
+            }}
             placeholder="Description"
-            className={`w-full px-4 py-2.5 placeholder:select-none bg-transparent border rounded-[10px] placeholder:text-zinc-500 outline-none transition-colors duration-200 ${
+            className={`w-full px-4 py-2.5 placeholder:select-none bg-transparent border rounded-[10px] placeholder:text-zinc-500 outline-none transition-colors duration-200 min-h-[120px] overflow-hidden resize-none ${
               error ? "border-red-500" : "border-zinc-500 focus:border-mainclr"
             }`}
-            rows={3}
           />
           {error && (
             <p className="text-red-500 text-sm mt-1">
@@ -62,8 +66,12 @@ const FeedbackForm = () => {
         </div>
       </div>
 
-      <button type="submit" disabled={isSubmitting} className="blue-btn">
-        {isSubmitting ? (
+      <button
+        type="submit"
+        disabled={isPending}
+        className=" font-semibold select-none text-center   px-3 py-2 bg-mainclr hover:bg-mainclr/70 cursor-pointer transition duration-200 rounded-xl"
+      >
+        {isPending ? (
           <div className="flex items-center justify-center">
             <LoaderCircle className="animate-spin" />
           </div>

@@ -8,11 +8,17 @@ interface CreateFeedbackResponse {
   message: string
 }
 
+// New interface for feedback creation
+export interface FeedbackInput {
+  title: string
+  description: string
+}
+
 const createFeedback = async (
-  feedback: Feedback
+  feedback: FeedbackInput
 ): Promise<CreateFeedbackResponse> => {
   const { data } = await axios.post<CreateFeedbackResponse>(
-    `${config.backendUrl}/create-feedback`,
+    `${config.backendUrl}/feedback/create-feedback`,
     feedback,
     {
       withCredentials: true,
@@ -24,7 +30,7 @@ const createFeedback = async (
 export const useCreateFeedback = () => {
   const { setMessage } = useMessageStore()
   const queryClient = useQueryClient()
-  return useMutation<CreateFeedbackResponse, AxiosError, Feedback>({
+  return useMutation<CreateFeedbackResponse, AxiosError, FeedbackInput>({
     mutationFn: createFeedback,
     onSuccess: (data: CreateFeedbackResponse) => {
       setMessage(data.message, "success")
@@ -46,9 +52,12 @@ interface GetFeedbacksResponse {
 }
 
 const getFeedbacks = async (): Promise<GetFeedbacksResponse> => {
-  const { data } = await axios.get(`${config.backendUrl}/all-feedbacks`, {
-    withCredentials: true,
-  })
+  const { data } = await axios.get(
+    `${config.backendUrl}/feedback/all-feedbacks`,
+    {
+      withCredentials: true,
+    }
+  )
   return data
 }
 
