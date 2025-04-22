@@ -3,6 +3,7 @@
 import BelowTip from "@/components/infoTips/BelowTip"
 import useFeedTypeStore from "@/store/FeedTypeStore"
 import { Hash } from "lucide-react"
+import Link from "next/link"
 import { useEffect, useState } from "react"
 
 const HomeHeader = () => {
@@ -42,9 +43,11 @@ const HomeHeader = () => {
         </div>
       </div>
       <BelowTip text="Feedbacks">
-        <div className="p-2 hover:bg-zinc-800 rounded-xl cursor-pointer opacity-95">
-          <Hash size={20} />
-        </div>
+        <Link href="/feedback">
+          <div className="p-2 hover:bg-zinc-800 rounded-xl w-fit cursor-pointer opacity-95">
+            <Hash size={20} />
+          </div>
+        </Link>
       </BelowTip>
     </div>
   )

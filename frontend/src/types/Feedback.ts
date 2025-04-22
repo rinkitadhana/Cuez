@@ -6,7 +6,7 @@ export const feedbackSchema = z.object({
   title: z.string(),
   description: z.string(),
   user: userSchema,
-  createAt: z.date(),
+  createdAt: z.date(),
   updatedAt: z.date(),
 })
 

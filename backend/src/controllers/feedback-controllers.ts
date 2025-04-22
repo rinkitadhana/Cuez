@@ -25,11 +25,9 @@ const createFeedback = async (req: Request, res: Response): Promise<void> => {
     if (!user.cuezBadge) {
       user.cuezBadge = true
       await user.save()
-      res
-        .status(201)
-        .json({
-          message: "Congratulations! You got a Cuez badge, check your profile.",
-        })
+      res.status(201).json({
+        message: "Congratulations! You got a Cuez badge, check your profile.",
+      })
     } else {
       res
         .status(201)
@@ -44,7 +42,7 @@ const getFeedbacks = async (req: Request, res: Response): Promise<void> => {
   try {
     const feedbacks = await Feedback.find()
       .populate({
-        path: "User",
+        path: "user",
         select: "-password",
       })
       .sort({ createdAt: -1 })
