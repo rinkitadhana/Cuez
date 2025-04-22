@@ -5,6 +5,8 @@ import authRoute from "./routes/auth-route"
 import userRoute from "./routes/user-route"
 import postRoute from "./routes/post-route"
 import notificationRoute from "./routes/notification-route"
+import feedbackRoute from "./routes/feedback-route"
+
 import cookieParser from "cookie-parser"
 import cors from "cors"
 dotenv.config()
@@ -46,6 +48,7 @@ app.use("/api/auth", authRoute)
 app.use("/api/user", userRoute)
 app.use("/api/post", postRoute)
 app.use("/api/notification", notificationRoute)
+app.use("/api/feedback", feedbackRoute)
 
 //Listening
 app.listen(PORT, () => {
