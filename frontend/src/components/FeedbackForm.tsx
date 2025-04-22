@@ -19,9 +19,10 @@ const FeedbackForm = () => {
       setTimeout(() => setError(false), 5000)
       return
     }
-
     const feedbackData: FeedbackInput = { title, description }
     createFeedback(feedbackData)
+    setTitle("")
+    setDescription("")
   }
 
   return (

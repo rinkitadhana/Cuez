@@ -25,8 +25,16 @@ const createFeedback = async (req: Request, res: Response): Promise<void> => {
     if (!user.cuezBadge) {
       user.cuezBadge = true
       await user.save()
+      res
+        .status(201)
+        .json({
+          message: "Congratulations! You got a Cuez badge, check your profile.",
+        })
+    } else {
+      res
+        .status(201)
+        .json({ message: "Thankyou for making this platform better!" })
     }
-    res.status(201).json({ message: "Feedback created successfully" })
   } catch (error) {
     errorHandler(res, error)
   }

@@ -8,7 +8,6 @@ interface CreateFeedbackResponse {
   message: string
 }
 
-// New interface for feedback creation
 export interface FeedbackInput {
   title: string
   description: string
