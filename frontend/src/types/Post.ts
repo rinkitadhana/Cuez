@@ -8,6 +8,7 @@ export const postSchema = z.object({
   text: z.string().optional(),
   img: z.string().optional(),
   video: z.string().optional(),
+  cuezBadge: z.string().optional(),
   likes: z.array(z.string()),
   comments: z.array(commentSchema),
   createdAt: z.string(),

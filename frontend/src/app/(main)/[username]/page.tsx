@@ -108,8 +108,25 @@ const UserProfile = () => {
             </div>
             <div className="px-5 py-3 flex flex-col gap-2.5">
               <div className="flex flex-col">
-                <h1 className="text-2xl font-semibold">{user?.fullName}</h1>
-                <div className="flex gap-3 items-center">
+                <div className="flex gap-2 items-center">
+                  <h1 className="text-2xl font-semibold">{user?.fullName}</h1>
+                  {user?.cuezBadge && (
+                    <div
+                      title="Cuez Badge"
+                      className="flex items-center border border-zinc-700 rounded-md p-0.5 bg-white"
+                    >
+                      <Image
+                        src="/img/icon/cuez-logo.png"
+                        alt="cuez-logo"
+                        width={20}
+                        height={20}
+                        className="rounded-full size-4"
+                      />
+                    </div>
+                  )}
+                </div>
+
+                <div className="flex gap-2 items-center">
                   <p className="text-sm text-zinc-400 -mt-0.5">
                     @{user?.username}
                   </p>
