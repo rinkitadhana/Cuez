@@ -131,7 +131,7 @@ const UserProfile = () => {
                     @{user?.username}
                   </p>
                   {followsYou?.followsYou && (
-                    <span className=" text-[12px] font-medium text-zinc-400 bg-zinc-800 px-2 py-0.5 rounded-md">
+                    <span className=" text-[12px] font-medium text-zinc-400 bg-zinc-800 px-1.5 rounded-md">
                       Follows you
                     </span>
                   )}
