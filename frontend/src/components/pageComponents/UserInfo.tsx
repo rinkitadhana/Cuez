@@ -49,7 +49,7 @@ const UserInfo = ({ user }: { user: User }) => {
             <p className="text-sm text-zinc-400">
               @{user.username || "DeletedUser"}
             </p>
-            {followsYou && <FollowsYou />}
+            {followsYou?.followsYou && <FollowsYou />}
           </div>
         </div>
       </div>
