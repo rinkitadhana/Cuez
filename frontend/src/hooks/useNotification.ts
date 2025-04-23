@@ -119,6 +119,6 @@ export const useGetUnreadNotificationsCount = () => {
   return useQuery<GetUnreadNotificationsCountResponse, AxiosError>({
     queryKey: ["unread-notifications-count"],
     queryFn: getUnreadNotificationsCount,
-    refetchInterval: 5000,
+    refetchInterval: 60000,
   })
 }

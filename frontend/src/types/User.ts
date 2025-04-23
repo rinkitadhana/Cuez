@@ -11,6 +11,7 @@ export const userSchema = z.lazy(() =>
     bio: z.string(),
     link: z.string(),
     likedPosts: z.array(z.string()),
+    cuezBadge: z.boolean(),
     location: z.string(),
     createdAt: z.string(),
     updatedAt: z.string(),

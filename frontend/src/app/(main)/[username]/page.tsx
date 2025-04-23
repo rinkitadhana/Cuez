@@ -120,7 +120,7 @@ const UserProfile = () => {
                         alt="cuez-logo"
                         width={20}
                         height={20}
-                        className="rounded-full size-4"
+                        className="rounded-full size-[14px]"
                       />
                     </div>
                   )}

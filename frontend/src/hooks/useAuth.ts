@@ -3,6 +3,7 @@ import config from "../config/config"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import axios, { AxiosError } from "axios"
 import { useRouter } from "next/navigation"
+import { User } from "@/types/User"
 
 interface SendOtpResponse {
   message: string
@@ -212,23 +213,9 @@ export const useLogout = () => {
   })
 }
 
-interface IUser {
-  _id: string
-  fullName: string
-  username: string
-  email: string
-  profileImg: string
-  coverImg: string
-  bio: string
-  link: string
-  location: string
-  createdAt: string
-  updatedAt: string
-}
-
 interface GetMeResponse {
   message: string
-  user: IUser
+  user: User
 }
 
 const getMe = async (): Promise<GetMeResponse> => {
