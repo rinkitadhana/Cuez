@@ -234,7 +234,7 @@ const getFollowsYou = async (req: Request, res: Response): Promise<void> => {
       res.status(404).json({ message: "User not found!" })
       return
     }
-    const followsYou = userToCheck.followers.includes(
+    const followsYou = userToCheck.followings.includes(
       currentUser._id as unknown as IUser
     )
     res.status(200).json({
