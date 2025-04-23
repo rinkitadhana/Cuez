@@ -1,10 +1,7 @@
 "use client"
-import { useGetMe } from "@/hooks/useAuth"
-import { useGetUserProfile } from "@/hooks/useUser"
-import { ArrowLeft, PencilLine } from "lucide-react"
-import Link from "next/link"
+
+import { ArrowLeft } from "lucide-react"
 import { useRouter } from "next/navigation"
-import { useParams } from "next/navigation"
 const Header = () => {
   const router = useRouter()
 

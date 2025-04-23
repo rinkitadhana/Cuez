@@ -1,4 +1,5 @@
 import { Feedback } from "@/types/Feedback"
+import Image from "next/image"
 import React from "react"
 
 const FeedbackStructure = ({ feedback }: { feedback: Feedback }) => {
@@ -15,7 +16,9 @@ const FeedbackStructure = ({ feedback }: { feedback: Feedback }) => {
   return (
     <div className="bg-zinc-900/60 p-4 border border-zinc-700 rounded-xl">
       <div className="flex items-center mb-3">
-        <img
+        <Image
+          width={40}
+          height={40}
           src={feedback?.user?.profileImg}
           alt={feedback?.user?.fullName}
           className="w-10 h-10 rounded-xl mr-3"
