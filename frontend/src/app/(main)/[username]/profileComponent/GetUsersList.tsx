@@ -28,7 +28,7 @@ const GetUsersList = ({
       onClick={onClose}
     >
       <div
-        className="bg-bgClr rounded-xl w-[400px] max-h-[80vh] overflow-y-auto relative"
+        className="bg-bgClr rounded-xl w-[450px] max-h-[80vh] border border-zinc-700 overflow-y-auto relative"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="p-3 border-b border-zinc-700 flex justify-center relative">

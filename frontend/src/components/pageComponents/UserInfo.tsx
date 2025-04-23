@@ -1,16 +1,23 @@
-import { useFollowUnfollowUser, useIsFollowing } from "@/hooks/useUser"
+import {
+  useFollowUnfollowUser,
+  useGetFollowsYou,
+  useIsFollowing,
+} from "@/hooks/useUser"
 import Image from "next/image"
 import React from "react"
 import { User } from "@/types/User"
 import { useGetMe } from "@/hooks/useAuth"
 import { Loader2 } from "lucide-react"
 import { useRouter } from "next/navigation"
+import CuezBadge from "./CuezBadge"
+import FollowsYou from "./FollowsYou"
 const UserInfo = ({ user }: { user: User }) => {
   const router = useRouter()
   const { data: followingState, isLoading: isFollowingLoading } =
     useIsFollowing(user._id || "")
   const { mutate: followUnfollowUser, isPending: isFollowUnfollowPending } =
     useFollowUnfollowUser()
+  const { data: followsYou } = useGetFollowsYou(user._id || "")
   const { data: authUser } = useGetMe()
   const isLoading = isFollowUnfollowPending || isFollowingLoading
   const handleFollowUnfollowUser = () => {
@@ -29,13 +36,21 @@ const UserInfo = ({ user }: { user: User }) => {
           onClick={() => router.push(`/${user.username}`)}
         />
         <div>
-          <div
-            onClick={() => router.push(`/${user.username}`)}
-            className="font-semibold cursor-pointer hover:underline"
-          >
-            {user.fullName}
+          <div className="flex items-center gap-1">
+            <div
+              onClick={() => router.push(`/${user.username}`)}
+              className="font-semibold cursor-pointer hover:underline"
+            >
+              {user.fullName || "Deleted User"}
+            </div>
+            {user.cuezBadge && <CuezBadge />}
           </div>
-          <p className="text-sm text-zinc-400">@{user.username}</p>
+          <div className="flex items-center gap-1">
+            <p className="text-sm text-zinc-400">
+              @{user.username || "DeletedUser"}
+            </p>
+            {followsYou && <FollowsYou />}
+          </div>
         </div>
       </div>
       {authUser?.user._id !== user._id && (

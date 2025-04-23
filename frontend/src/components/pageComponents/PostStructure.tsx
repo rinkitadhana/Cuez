@@ -21,6 +21,7 @@ import useMessageStore from "@/store/messageStore"
 import { useRouter } from "next/navigation"
 import EditPost from "./EditPost"
 import { useFollowUnfollowUser, useIsFollowing } from "@/hooks/useUser"
+import CuezBadge from "./CuezBadge"
 interface PostStructureProps {
   post: Post
 }
@@ -159,12 +160,16 @@ const PostStructure = ({ post }: PostStructureProps) => {
             >
               <div className="flex flex-col -space-y-1">
                 <div className="flex gap-2 items-center">
-                  <h1
-                    onClick={userProfile}
-                    className="font-semibold hover:underline cursor-pointer"
-                  >
-                    {post?.user?.fullName || "Deleted User"}
-                  </h1>
+                  <div className="flex gap-1 items-center">
+                    <h1
+                      onClick={userProfile}
+                      className="font-semibold hover:underline cursor-pointer"
+                    >
+                      {post?.user?.fullName || "Deleted User"}
+                    </h1>
+                    {post?.user?.cuezBadge && <CuezBadge />}
+                  </div>
+
                   {!isOwner &&
                     (isFollowingPending ? (
                       <div className=" text-sm text-zinc-400">...</div>

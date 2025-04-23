@@ -30,6 +30,7 @@ import CommentSkeleton from "@/components/skeletons/CommentSkeleton"
 import EditPost from "@/components/pageComponents/EditPost"
 import { useIsFollowing } from "@/hooks/useUser"
 import { useFollowUnfollowUser } from "@/hooks/useUser"
+import CuezBadge from "@/components/pageComponents/CuezBadge"
 
 const PostPage = () => {
   const { id } = useParams()
@@ -197,12 +198,15 @@ const PostPage = () => {
                   <div className="flex gap-2 items-center">
                     <div className="flex flex-col -space-y-1">
                       <div className="flex gap-2 items-center">
-                        <h1
-                          onClick={userProfile}
-                          className="font-semibold hover:underline cursor-pointer"
-                        >
-                          {post?.post?.user?.fullName || "Deleted User"}
-                        </h1>
+                        <div className="flex gap-1 items-center">
+                          <h1
+                            onClick={userProfile}
+                            className="font-semibold hover:underline cursor-pointer"
+                          >
+                            {post?.post?.user?.fullName || "Deleted User"}
+                          </h1>
+                          {post?.post?.user?.cuezBadge && <CuezBadge />}
+                        </div>
                         {!isOwner &&
                           (isFollowingPending ? (
                             <div className=" text-sm text-zinc-400">...</div>

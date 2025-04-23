@@ -53,6 +53,9 @@ export const useFollowUnfollowUser = () => {
       queryClient.invalidateQueries({ queryKey: ["is-following"] })
       queryClient.invalidateQueries({ queryKey: ["user-profile"] })
       queryClient.invalidateQueries({ queryKey: ["posts"] })
+      queryClient.invalidateQueries({ queryKey: ["followers"] })
+      queryClient.invalidateQueries({ queryKey: ["followings"] })
+      queryClient.invalidateQueries({ queryKey: ["follows-you"] })
     },
     onError: (error: AxiosError) => {
       const message =

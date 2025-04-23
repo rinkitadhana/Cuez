@@ -17,6 +17,7 @@ import { useState } from "react"
 import ProfileSkeleton from "@/components/skeletons/ProfileSkeleton"
 import NoUser from "@/components/pageComponents/NoUser"
 import GetUsersList from "./profileComponent/GetUsersList"
+import FollowsYou from "@/components/pageComponents/FollowsYou"
 const UserProfile = () => {
   const { username } = useParams()
   const [response, setResponse] = useState<string>("user-posts")
@@ -131,9 +132,7 @@ const UserProfile = () => {
                     @{user?.username}
                   </p>
                   {followsYou?.followsYou && (
-                    <span className=" text-[12px] font-medium text-zinc-400 bg-zinc-800 px-1.5 rounded-md">
-                      Follows you
-                    </span>
+                    <FollowsYou />
                   )}
                 </div>
               </div>

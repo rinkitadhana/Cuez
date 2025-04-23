@@ -3,6 +3,8 @@ import Image from "next/image"
 import { useState } from "react"
 import { X } from "lucide-react"
 import { Comment } from "@/types/Comment"
+import CuezBadge from "./CuezBadge"
+import { useRouter } from "next/navigation"
 
 interface CommentStructureProps {
   comment: Comment
@@ -22,6 +24,10 @@ const CommentStructure = ({ comment }: CommentStructureProps) => {
     if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}h`
     return `${Math.floor(diffInSeconds / 86400)}d`
   }
+  const router = useRouter()
+  const userProfile = () => {
+    router.push(`/${comment?.user?.username}`)
+  }
 
   return (
     <section className="flex relative flex-col gap-4 p-4 border-b border-zinc-700  transition-all duration-200">
@@ -30,17 +36,24 @@ const CommentStructure = ({ comment }: CommentStructureProps) => {
           src={comment?.user?.profileImg || "/img/pfp/default.webp"}
           alt="user avatar"
           width={32}
+          onClick={userProfile}
           height={32}
-          className="rounded-lg size-10 select-none"
+          className="rounded-lg size-10 select-none hover:brightness-90 cursor-pointer"
         />
         <div className="flex flex-col gap-1 w-full">
           <div className="flex items-center justify-between">
             <div className="flex gap-2 items-center">
               <div className="flex flex-col -space-y-1">
                 <div className="flex gap-2 items-center">
-                  <h1 className="font-semibold">
-                    {comment?.user?.fullName || "Deleted User"}
-                  </h1>
+                  <div className="flex gap-1 items-center">
+                    <h1
+                      onClick={userProfile}
+                      className="font-semibold hover:underline cursor-pointer"
+                    >
+                      {comment?.user?.fullName || "Deleted User"}
+                    </h1>
+                    {comment?.user?.cuezBadge && <CuezBadge />}
+                  </div>
                 </div>
                 <div className="flex gap-1 items-center">
                   <p className="text-sm text-zinc-400">

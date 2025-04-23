@@ -1,6 +1,8 @@
 import { Feedback } from "@/types/Feedback"
 import Image from "next/image"
 import React from "react"
+import CuezBadge from "./CuezBadge"
+import { useRouter } from "next/navigation"
 
 const FeedbackStructure = ({ feedback }: { feedback: Feedback }) => {
   const formatDateTime = (date: Date) => {
@@ -13,18 +15,32 @@ const FeedbackStructure = ({ feedback }: { feedback: Feedback }) => {
     }
     return new Date(date).toLocaleString("en-US", options)
   }
+  const router = useRouter()
+
+  const userProfile = () => {
+    router.push(`/${feedback?.user?.username}`)
+  }
   return (
     <div className="bg-zinc-900/60 p-4 border border-zinc-700 rounded-xl">
-      <div className="flex items-center mb-3">
+      <div className="flex items-center gap-2 mb-3">
         <Image
           width={40}
           height={40}
-          src={feedback?.user?.profileImg}
-          alt={feedback?.user?.fullName}
-          className="w-10 h-10 rounded-xl mr-3"
+          onClick={userProfile}
+          src={feedback?.user?.profileImg || "/img/pfp/default.webp"}
+          alt={feedback?.user?.fullName || "Deleted User"}
+          className="w-10 h-10 rounded-xl hover:brightness-90 cursor-pointer transition-all duration-200"
         />
         <div>
-          <h3 className="font-semibold">{feedback?.user?.fullName}</h3>
+          <div className="flex items-center gap-1">
+            <h3
+              onClick={userProfile}
+              className="font-semibold hover:underline cursor-pointer"
+            >
+              {feedback?.user?.fullName || "Deleted User"}
+            </h3>
+            {feedback?.user?.cuezBadge && <CuezBadge />}
+          </div>
           <p className="text-sm text-gray-400">
             {formatDateTime(feedback?.createdAt)}
           </p>
