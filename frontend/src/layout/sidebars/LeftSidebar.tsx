@@ -73,22 +73,22 @@ const LeftSidebar = () => {
         outline: <RiSearchLine className="text-xl" />,
       },
     },
-    {
-      href: "/projects",
-      label: "Projects",
-      icon: {
-        filled: <IoFolderOpen className="text-xl" />,
-        outline: <IoFolderOpenOutline className="text-xl" />,
-      },
-    },
-    {
-      href: "/discussions",
-      label: "Discussions",
-      icon: {
-        filled: <BiSolidChat className="text-xl" />,
-        outline: <BiChat className="text-xl" />,
-      },
-    },
+    // {
+    //   href: "/projects",
+    //   label: "Projects",
+    //   icon: {
+    //     filled: <IoFolderOpen className="text-xl" />,
+    //     outline: <IoFolderOpenOutline className="text-xl" />,
+    //   },
+    // },
+    // {
+    //   href: "/discussions",
+    //   label: "Discussions",
+    //   icon: {
+    //     filled: <BiSolidChat className="text-xl" />,
+    //     outline: <BiChat className="text-xl" />,
+    //   },
+    // },
     {
       href: "/notifications",
       label: "Notifications",
