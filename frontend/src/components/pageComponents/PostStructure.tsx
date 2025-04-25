@@ -109,7 +109,6 @@ const PostStructure = ({ post }: PostStructureProps) => {
     try {
       if (navigator.share) {
         await navigator.share(shareData)
-        console.log("Post shared successfully!")
       } else {
         await navigator.clipboard.writeText(shareData.url)
         useMessageStore.setState({

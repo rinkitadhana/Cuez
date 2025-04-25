@@ -153,7 +153,7 @@ const MobileNavbar = () => {
 
   return (
     <nav className="fixed md:hidden bottom-0 left-0 right-0 bg-bgClr border-t border-zinc-700 z-50">
-      <div className="max-w-screen-lg mx-auto px-3 py-1">
+      <div className="max-w-screen-lg mx-auto px-6 py-1">
         <div className="flex justify-between items-center">
           {links.map((link) => {
             const isActive = isLinkActive(link.href)
