@@ -156,7 +156,7 @@ const PostPage = () => {
   if (isPostPending) {
     return (
       <MainWrapper>
-        <Header />
+        <Header title="Post" />
         <PostSkeleton />
         <CommentSkeleton />
         <CommentSkeleton />
@@ -178,7 +178,7 @@ const PostPage = () => {
 
   return (
     <MainWrapper>
-      <Header />
+      <Header title="Post" />
       {post?.post ? (
         <section>
           <div className="flex relative flex-col gap-4 p-4">

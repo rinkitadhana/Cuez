@@ -11,11 +11,18 @@ import { useLogout, useGetMe } from "@/hooks/useAuth"
 import {
   IoBookmarks,
   IoBookmarksOutline,
+  IoFolderOpen,
+  IoFolderOpenOutline,
   IoSettingsOutline,
   IoSettingsSharp,
 } from "react-icons/io5"
 import { LuLogOut } from "react-icons/lu"
-import { MdChatBubble, MdChatBubbleOutline } from "react-icons/md"
+import {
+  MdChatBubble,
+  MdChatBubbleOutline,
+  MdOutlineWork,
+  MdWorkOutline,
+} from "react-icons/md"
 import {
   RiHome2Fill,
   RiHome2Line,
@@ -69,22 +76,22 @@ const LeftSidebar = () => {
         outline: <RiSearchLine className="text-xl" />,
       },
     },
-    // {
-    //   href: "/projects",
-    //   label: "Projects",
-    //   icon: {
-    //     filled: <IoFolderOpen className="text-xl" />,
-    //     outline: <IoFolderOpenOutline className="text-xl" />,
-    //   },
-    // },
-    // {
-    //   href: "/discussions",
-    //   label: "Discussions",
-    //   icon: {
-    //     filled: <BiSolidChat className="text-xl" />,
-    //     outline: <BiChat className="text-xl" />,
-    //   },
-    // },
+    {
+      href: "/projects",
+      label: "Projects",
+      icon: {
+        filled: <IoFolderOpen className="text-xl" />,
+        outline: <IoFolderOpenOutline className="text-xl" />,
+      },
+    },
+    {
+      href: "/jobs",
+      label: "Jobs",
+      icon: {
+        filled: <MdOutlineWork className="text-xl" />,
+        outline: <MdWorkOutline className="text-xl" />,
+      },
+    },
     {
       href: "/notifications",
       label: "Notifications",

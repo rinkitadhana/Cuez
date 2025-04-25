@@ -3,7 +3,7 @@
 import { ArrowLeft } from "lucide-react"
 import { useRouter } from "next/navigation"
 
-const Header = () => {
+const Header = ({ title }: { title: string }) => {
   const router = useRouter()
 
   const handleBack = () => {
@@ -19,7 +19,7 @@ const Header = () => {
         >
           <ArrowLeft size={20} />
         </button>
-        <h1 className="font-semibold opacity-95">Post</h1>
+        <h1 className="font-semibold opacity-95">{title}</h1>
       </div>
     </div>
   )

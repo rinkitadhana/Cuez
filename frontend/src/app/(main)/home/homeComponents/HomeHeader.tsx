@@ -1,6 +1,7 @@
 "use client"
 
 import BelowTip from "@/components/infoTips/BelowTip"
+import MenuButton from "@/components/MenuButton"
 import useFeedTypeStore from "@/store/FeedTypeStore"
 import { Hash } from "lucide-react"
 import Link from "next/link"
@@ -14,8 +15,9 @@ const HomeHeader = () => {
   }, [activeTab, setFeedType])
 
   return (
-    <div className="flex w-full select-none justify-between items-center border-b border-zinc-700 sticky top-0 bg-bgClr px-6 z-10">
-      <p className="font-semibold opacity-95">Scroll</p>
+    <div className="flex w-full select-none justify-between items-center border-b border-zinc-700 sticky top-0 bg-bgClr px-4 z-10">
+      <p className="font-semibold opacity-95 hidden md:block">Scroll</p>
+      <MenuButton />
       <div className="flex items-center border border-zinc-700  rounded-xl my-2.5">
         <div
           onClick={() => setActiveTab("All")}
