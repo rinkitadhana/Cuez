@@ -2,6 +2,7 @@ import MobileMenu from "@/components/MobileMenu"
 import MobileNavbar from "./MobileNavbar"
 import LeftSidebar from "./sidebars/LeftSidebar"
 import RightSidebar from "./sidebars/RightSidebar"
+import PostButton from "@/components/pageComponents/PostButton"
 
 const MainWrapper = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -10,7 +11,8 @@ const MainWrapper = ({ children }: { children: React.ReactNode }) => {
         <div className="lg:w-[17%] md:w-[25%] w-full h-full hidden md:block md:pl-4">
           <LeftSidebar />
         </div>
-        <div className="lg:w-[53%] md:w-full w-full border-x border-zinc-700 overflow-y-auto scrollbar-hide">
+        <div className="relative lg:w-[53%] md:w-full w-full border-x border-zinc-700 overflow-y-auto scrollbar-hide">
+          <PostButton />
           {children}
         </div>
         <div className="lg:w-[30%] pr-4 w-full h-full overflow-y-auto scrollbar-hide md:hidden hidden lg:hidden xl:block">
