@@ -6,7 +6,7 @@ import { useEffect, useState } from "react"
 import LoadingScreen from "./LoadingScreen"
 
 const AuthGuard = ({ children }: { children: React.ReactNode }) => {
-  const { data: user, isLoading, error } = useGetMe()
+  const { data: user, isLoading } = useGetMe()
   const router = useRouter()
   const pathname = usePathname()
   const [isChecking, setIsChecking] = useState(true)
