@@ -7,6 +7,7 @@ import EmojiPicker from "emoji-picker-react"
 import { Theme, EmojiStyle } from "emoji-picker-react"
 import { useGetMe } from "@/hooks/useAuth"
 import { useCreatePost } from "@/hooks/usePost"
+import { FiFeather } from "react-icons/fi"
 
 const CreatePost = () => {
   const [formData, setFormData] = useState<{
@@ -197,9 +198,9 @@ const CreatePost = () => {
     <>
       <button
         onClick={() => setIsModalOpen(true)}
-        className="px-3 py-2 rounded-xl bg-mainclr text-white font-semibold hover:bg-mainclr/80 transition-all duration-200"
+        className="px-3 flex items-center justify-center gap-2 py-2 rounded-xl bg-mainclr text-white font-semibold hover:bg-mainclr/80 transition-all duration-200"
       >
-        Create a post
+        <FiFeather size={19} /> Create a post
       </button>
 
       {isModalOpen && (

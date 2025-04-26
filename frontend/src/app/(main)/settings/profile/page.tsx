@@ -29,6 +29,8 @@ const ProfilePage = () => {
     bio: "",
     link: "",
     location: "",
+    profileImg: "",
+    coverImg: "",
   })
 
   const [profileImgPreview, setProfileImgPreview] = useState<string | null>(
@@ -47,7 +49,11 @@ const ProfilePage = () => {
         bio: authUser.user.bio,
         link: authUser.user.link,
         location: authUser.user.location,
+        profileImg: authUser.user.profileImg,
+        coverImg: authUser.user.coverImg,
       })
+      setProfileImgPreview(authUser.user.profileImg || null)
+      setCoverImgPreview(authUser.user.coverImg || null)
     }
   }, [authUser])
 
@@ -128,8 +134,8 @@ const ProfilePage = () => {
             <Image
               src={
                 coverImgPreview ||
-                authUser?.user.coverImg ||
-                "/img/default-cover.jpg"
+                authUser?.user?.coverImg ||
+                "/img/cover/default.webp"
               }
               alt="Cover"
               fill
@@ -155,8 +161,8 @@ const ProfilePage = () => {
               <Image
                 src={
                   profileImgPreview ||
-                  authUser?.user.profileImg ||
-                  "/img/default-avatar.jpg"
+                  authUser?.user?.profileImg ||
+                  "/img/pfp/default.webp"
                 }
                 alt="Profile"
                 width={120}
