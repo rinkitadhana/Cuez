@@ -219,13 +219,18 @@ interface GetMeResponse {
 }
 
 const getMe = async (): Promise<GetMeResponse> => {
-  const response = await axios.get<GetMeResponse>(
-    config.backendUrl + "/auth/me",
-    {
-      withCredentials: true,
-    }
-  )
-  return response.data
+  try {
+    const response = await axios.get<GetMeResponse>(
+      config.backendUrl + "/auth/me",
+      {
+        withCredentials: true,
+      }
+    )
+    return response.data
+  } catch (error) {
+    console.error("Error fetching user data:", error)
+    throw error
+  }
 }
 
 export const useGetMe = () => {
