@@ -65,7 +65,7 @@ const UserProfile = () => {
             <div className="rounded-xl relative mb-[60px] select-none">
               <Image
                 src={user?.coverImg || ""}
-                className="w-full h-[200px] object-cover cursor-pointer hover:brightness-90 transition-all duration-200"
+                className="w-full h-[200px] object-cover bg-white cursor-pointer hover:brightness-90 transition-all duration-200"
                 alt="profile"
                 width={1000}
                 height={1000}
@@ -73,7 +73,7 @@ const UserProfile = () => {
               />
               <Image
                 src={user?.profileImg || ""}
-                className="absolute -bottom-[60px] left-5 size-[120px] object-cover rounded-xl border-4 border-bgClr cursor-pointer hover:brightness-90 transition-all duration-200"
+                className="absolute -bottom-[60px] bg-white left-5 size-[120px] object-cover rounded-xl border-4 border-bgClr cursor-pointer hover:brightness-90 transition-all duration-200"
                 alt="profile"
                 width={1000}
                 height={1000}
@@ -121,7 +121,7 @@ const UserProfile = () => {
                         alt="cuez-logo"
                         width={20}
                         height={20}
-                        className="rounded-full size-[14px]"
+                        className="rounded-full bg-white object-cover size-[14px]"
                       />
                     </div>
                   )}
@@ -131,9 +131,7 @@ const UserProfile = () => {
                   <p className="text-sm text-zinc-400 -mt-0.5">
                     @{user?.username}
                   </p>
-                  {followsYou?.followsYou && (
-                    <FollowsYou />
-                  )}
+                  {followsYou?.followsYou && <FollowsYou />}
                 </div>
               </div>
               <p className="">{user?.bio}</p>
@@ -223,7 +221,7 @@ const UserProfile = () => {
               width={800}
               height={800}
               quality={100}
-              className="rounded-xl w-[400px] h-[400px] object-cover"
+              className="rounded-xl w-[400px] h-[400px] bg-white object-cover"
             />
           </div>
           <button
@@ -251,7 +249,7 @@ const UserProfile = () => {
               alt="Cover image"
               width={1920}
               height={1080}
-              className="rounded-xl max-w-full max-h-full object-cover"
+              className="rounded-xl max-w-full bg-white max-h-full object-cover"
             />
           </div>
           <button

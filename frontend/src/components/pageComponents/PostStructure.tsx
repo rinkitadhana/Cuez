@@ -149,7 +149,7 @@ const PostStructure = ({ post }: PostStructureProps) => {
           alt="user avatar"
           width={32}
           height={32}
-          className="rounded-lg size-10 select-none cursor-pointer hover:brightness-90 transition-all duration-200"
+          className="rounded-lg size-10 select-none cursor-pointer bg-white object-cover hover:brightness-90 transition-all duration-200"
         />
         <div className="flex flex-col gap-1 w-full">
           <div className="flex items-center justify-between">

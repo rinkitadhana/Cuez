@@ -184,7 +184,7 @@ const CreateComment = ({ commentActive }: { commentActive: boolean }) => {
         alt="user avatar"
         width={32}
         height={32}
-        className="rounded-xl size-9 select-none"
+        className="rounded-xl size-9 select-none object-cover bg-white"
       />
       <div className="flex-1">
         <textarea

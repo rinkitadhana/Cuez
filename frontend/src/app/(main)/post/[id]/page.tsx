@@ -191,7 +191,7 @@ const PostPage = () => {
                 height={48}
                 quality={100}
                 priority
-                className="rounded-lg size-10 select-none cursor-pointer hover:brightness-90 transition-all duration-200"
+                className="rounded-lg size-10 select-none cursor-pointer object-cover bg-white hover:brightness-90 transition-all duration-200"
               />
               <div className="flex flex-col gap-1 w-full">
                 <div className="flex items-center justify-between">

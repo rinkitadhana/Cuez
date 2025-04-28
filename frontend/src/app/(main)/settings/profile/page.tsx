@@ -139,7 +139,7 @@ const ProfilePage = () => {
               }
               alt="Cover"
               fill
-              className="object-cover"
+              className="object-cover bg-white"
             />
             <button
               onClick={() => coverImgRef.current?.click()}
@@ -167,7 +167,7 @@ const ProfilePage = () => {
                 alt="Profile"
                 width={120}
                 height={120}
-                className="rounded-xl size-[120px] object-cover shadow-lg border-4 border-bgClr"
+                className="rounded-xl bg-white size-[120px] object-cover shadow-lg border-4 border-bgClr"
               />
               <button
                 onClick={() => profileImgRef.current?.click()}

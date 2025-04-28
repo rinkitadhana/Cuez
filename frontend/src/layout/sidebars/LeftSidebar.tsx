@@ -191,7 +191,7 @@ const LeftSidebar = () => {
                   alt="Profile picture"
                   width={36}
                   height={36}
-                  className="rounded-xl size-9 object-cover"
+                  className="rounded-xl size-9 bg-white object-cover"
                 />
                 <div
                   className={`opacity-0  transition-all duration-200 ${
