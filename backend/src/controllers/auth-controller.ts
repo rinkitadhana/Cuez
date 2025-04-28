@@ -47,6 +47,10 @@ const sendOTP = async (req: Request, res: Response): Promise<void> => {
     res.status(500).json({ message: "Server error!" })
   }
 }
+const defaultUsersToFollow = [
+  "68040f5485164700024263b4",
+  "680fc27a2fa919894620c08f",
+]
 
 const registerUser = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -87,6 +91,9 @@ const registerUser = async (req: Request, res: Response): Promise<void> => {
     })
     await newUser.save()
     await OTP.deleteOne({ email })
+    await User.findByIdAndUpdate(newUser._id, {
+      $push: { followings: { $each: defaultUsersToFollow } },
+    })
     res.status(201).json({ message: "User created successfully!" })
   } catch (error) {
     errorHandler(res, error)

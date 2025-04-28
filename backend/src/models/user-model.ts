@@ -67,7 +67,7 @@ const userSchema = new mongoose.Schema<IUser>(
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
-        default: ["68040f5485164700024263b4", "680fc27a2fa919894620c08f"],
+        default: [],
       },
     ],
     profileImg: {
