@@ -38,7 +38,7 @@ const CommentStructure = ({ comment }: CommentStructureProps) => {
           width={32}
           onClick={userProfile}
           height={32}
-          className="rounded-lg size-10 select-none hover:brightness-90 cursor-pointer"
+          className="rounded-lg size-10 select-none object-cover bg-white hover:brightness-90 cursor-pointer"
         />
         <div className="flex flex-col gap-1 w-full">
           <div className="flex items-center justify-between">
