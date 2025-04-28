@@ -19,8 +19,8 @@ const Message: React.FC = () => {
   if (!message) return null
 
   return (
-    <div className="fixed left-5 bottom-5 flex justify-start items-center w-full select-none">
-      <div className="w-fit px-3 py-2 text-white text-center text-sm font-medium rounded-full z-[99999] flex items-center gap-2 bg-zinc-800 ">
+    <div className="fixed left-0 bottom-0 w-full flex justify-start items-center p-5 pointer-events-none z-[999999]">
+      <div className="w-fit px-4 py-2.5 text-white text-center text-sm font-medium rounded-full flex items-center gap-2 bg-zinc-800/90 shadow-xl backdrop-blur-sm border border-zinc-700 pointer-events-auto">
         {type === "success" ? (
           <span className="text-green-500">
             <CircleCheck size={18} />
