@@ -94,6 +94,12 @@ const registerUser = async (req: Request, res: Response): Promise<void> => {
     await User.findByIdAndUpdate(newUser._id, {
       $push: { followings: { $each: defaultUsersToFollow } },
     })
+    await User.findByIdAndUpdate(defaultUsersToFollow[0], {
+      $push: { followers: newUser._id },
+    })
+    await User.findByIdAndUpdate(defaultUsersToFollow[1], {
+      $push: { followers: newUser._id },
+    })
     res.status(201).json({ message: "User created successfully!" })
   } catch (error) {
     errorHandler(res, error)
