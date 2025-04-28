@@ -144,7 +144,7 @@ const NotificationMessage = ({
           alt={`${notification?.from?.fullName}'s profile picture`}
           width={48}
           height={48}
-          className="rounded-xl"
+          className="rounded-xl size-[48px] object-cover"
         />
         {getNotificationIcon()}
       </div>

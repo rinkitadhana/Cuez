@@ -135,7 +135,7 @@ const UserProfile = () => {
                 </div>
               </div>
               <p className="">{user?.bio}</p>
-              <div className="flex gap-3 items-center text-sm text-zinc-400">
+              <div className="flex flex-wrap gap-3 items-center text-sm text-zinc-400">
                 <div className="flex gap-1 items-center">
                   <MapPin size={14} /> {user?.location}
                 </div>
