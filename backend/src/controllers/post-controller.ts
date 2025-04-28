@@ -30,7 +30,7 @@ const createPost = async (req: Request, res: Response): Promise<void> => {
 
     if (img) {
       const uploadedResponse = await cloudinary.uploader.upload(img, {
-        folder: "posts",
+        folder: "cuez/posts",
         resource_type: "image",
       })
       postData = { ...postData, img: uploadedResponse.secure_url }
@@ -38,7 +38,7 @@ const createPost = async (req: Request, res: Response): Promise<void> => {
 
     if (video) {
       const uploadedResponse = await cloudinary.uploader.upload(video, {
-        folder: "posts",
+        folder: "cuez/posts",
         resource_type: "video",
       })
       postData = { ...postData, video: uploadedResponse.secure_url }
@@ -59,7 +59,8 @@ const createPost = async (req: Request, res: Response): Promise<void> => {
 
 const editPost = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { text, img, video } = req.body
+    const { text } = req.body
+    const { img, video } = req.body
     const post = await Post.findById(req.params.id)
     const userId = req.user._id.toString()
     const user = await User.findById(userId)
@@ -93,12 +94,12 @@ const editPost = async (req: Request, res: Response): Promise<void> => {
       editedAt?: Date
     } = {}
 
-    if (img) {
+    if (img && img !== post.img) {
       if (post.img) {
         const imageId = post.img.split("/").pop()?.split(".")[0]
         if (imageId) {
           try {
-            await cloudinary.uploader.destroy(`posts/${imageId}`, {
+            await cloudinary.uploader.destroy(`cuez/posts/${imageId}`, {
               resource_type: "image",
               invalidate: true,
             })
@@ -108,7 +109,7 @@ const editPost = async (req: Request, res: Response): Promise<void> => {
         }
       }
       const uploadedResponse = await cloudinary.uploader.upload(img, {
-        folder: "posts",
+        folder: "cuez/posts",
         resource_type: "image",
         invalidate: true,
       })
@@ -116,12 +117,12 @@ const editPost = async (req: Request, res: Response): Promise<void> => {
       updateData.editedAt = new Date()
     }
 
-    if (video) {
+    if (video && video !== post.video) {
       if (post.video) {
         const videoId = post.video.split("/").pop()?.split(".")[0]
         if (videoId) {
           try {
-            await cloudinary.uploader.destroy(`posts/${videoId}`, {
+            await cloudinary.uploader.destroy(`cuez/posts/${videoId}`, {
               resource_type: "video",
               invalidate: true,
             })
@@ -131,7 +132,7 @@ const editPost = async (req: Request, res: Response): Promise<void> => {
         }
       }
       const uploadedResponse = await cloudinary.uploader.upload(video, {
-        folder: "posts",
+        folder: "cuez/posts",
         resource_type: "video",
         invalidate: true,
       })
@@ -184,7 +185,7 @@ const deletePost = async (req: Request, res: Response): Promise<void> => {
     if (post.img) {
       const imageId = post.img.split("/").pop()?.split(".")[0]
       if (imageId) {
-        await cloudinary.uploader.destroy(`posts/${imageId}`, {
+        await cloudinary.uploader.destroy(`cuez/posts/${imageId}`, {
           resource_type: "image",
         })
       }
@@ -193,7 +194,7 @@ const deletePost = async (req: Request, res: Response): Promise<void> => {
     if (post.video) {
       const videoId = post.video.split("/").pop()?.split(".")[0]
       if (videoId) {
-        await cloudinary.uploader.destroy(`posts/${videoId}`, {
+        await cloudinary.uploader.destroy(`cuez/posts/${videoId}`, {
           resource_type: "video",
         })
       }
@@ -235,7 +236,7 @@ const commentPost = async (req: Request, res: Response): Promise<void> => {
 
     if (img) {
       const uploadedResponse = await cloudinary.uploader.upload(img, {
-        folder: "comments",
+        folder: "cuez/comments",
         resource_type: "image",
       })
       commentData = { ...commentData, img: uploadedResponse.secure_url }
@@ -243,7 +244,7 @@ const commentPost = async (req: Request, res: Response): Promise<void> => {
 
     if (video) {
       const uploadedResponse = await cloudinary.uploader.upload(video, {
-        folder: "comments",
+        folder: "cuez/comments",
         resource_type: "video",
       })
       commentData = { ...commentData, video: uploadedResponse.secure_url }

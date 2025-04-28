@@ -131,27 +131,27 @@ const updateUserProfile = async (
       return
     }
 
-    if (profileImg) {
+    if (profileImg && profileImg !== user.profileImg) {
       if (user.profileImg) {
         const publicId = user.profileImg.split("/").pop()?.split(".")[0]
         if (publicId) {
-          await cloudinary.uploader.destroy(`profile-images/${publicId}`)
+          await cloudinary.uploader.destroy(`cuez/profile-images/${publicId}`)
         }
       }
       const uploadedImg = await cloudinary.uploader.upload(profileImg, {
-        folder: "profile-images",
+        folder: "cuez/profile-images",
       })
       user.profileImg = uploadedImg.secure_url
     }
-    if (coverImg) {
+    if (coverImg && coverImg !== user.coverImg) {
       if (user.coverImg) {
         const publicId = user.coverImg.split("/").pop()?.split(".")[0]
         if (publicId) {
-          await cloudinary.uploader.destroy(`cover-images/${publicId}`)
+          await cloudinary.uploader.destroy(`cuez/cover-images/${publicId}`)
         }
       }
       const uploadedImg = await cloudinary.uploader.upload(coverImg, {
-        folder: "cover-images",
+        folder: "cuez/cover-images",
       })
       user.coverImg = uploadedImg.secure_url
     }
