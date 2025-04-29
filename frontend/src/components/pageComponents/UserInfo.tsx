@@ -53,7 +53,7 @@ const UserInfo = ({ user }: { user: User }) => {
           </div>
         </div>
       </div>
-      <div className="flex items-center px-4 select-none">
+      <div className="flex items-center pl-4 select-none">
         {authUser?.user._id !== user._id && (
           <button onClick={handleFollowUnfollowUser}>
             {followingState?.isFollowing ? (

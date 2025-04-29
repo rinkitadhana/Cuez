@@ -15,7 +15,7 @@ import {
 import Link from "next/link"
 import { FaRegUser } from "react-icons/fa"
 import { LuLogOut } from "react-icons/lu"
-const page = () => {
+const SettingsPage = () => {
   const { data, isLoading } = useGetMe()
   const { mutate: logout } = useLogout()
   const links = [
@@ -99,4 +99,4 @@ const page = () => {
   )
 }
 
-export default page
+export default SettingsPage

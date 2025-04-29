@@ -30,7 +30,7 @@ const GetUsersList = ({
 
   return (
     <div
-      className="fixed inset-0 bg-black/50 flex items-center justify-center"
+      className="fixed inset-0 bg-black/50 md:px-0 px-4 flex items-center justify-center"
       onClick={onClose}
     >
       <div
@@ -48,7 +48,7 @@ const GetUsersList = ({
             <X size={20} />
           </button>
         </div>
-        <div className="flex flex-col gap-3 p-4">
+        <div className="flex flex-col gap-5 p-4">
           {isLoading ? (
             <p className="text-center text-zinc-400 py-4">Loading...</p>
           ) : data?.length === 0 ? (
