@@ -3,14 +3,14 @@ import PostStructure from "@/components/pageComponents/PostStructure"
 import { useGetPosts } from "@/hooks/usePost"
 import { Post } from "@/types/Post"
 import PostSkeleton from "@/components/skeletons/PostSkeleton"
-import NoPosts from "@/components/pageComponents/NoPosts"
+import NoPosts from "@/components/notAvailable/NoPosts"
 const GetPosts = () => {
   const { data, isLoading } = useGetPosts()
 
   return (
     <section>
       {isLoading && (
-        <div className="flex flex-col p-4">
+        <div className="flex flex-col">
           {Array.from({ length: 8 }).map((_, i) => (
             <PostSkeleton key={i} />
           ))}

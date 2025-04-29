@@ -1,6 +1,6 @@
 "use client"
 
-import MenuButton from "@/components/MenuButton"
+import MenuButton from "@/layout/MenuButton"
 import { useGetBookmarkedPosts } from "@/hooks/usePost"
 import { Loader2 } from "lucide-react"
 

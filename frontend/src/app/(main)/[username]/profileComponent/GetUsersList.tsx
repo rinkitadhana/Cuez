@@ -15,10 +15,16 @@ const GetUsersList = ({
   isOpen: boolean
   onClose: () => void
 }) => {
-  const { data: followers } = useGetFollowers(user.username)
-  const { data: following } = useGetFollowing(user.username)
+  const { data: followers, isLoading: isFollowersLoading } = useGetFollowers(
+    user.username
+  )
+  const { data: following, isLoading: isFollowingLoading } = useGetFollowing(
+    user.username
+  )
   const data =
     type === "followers" ? followers?.followers : following?.followings
+  const isLoading =
+    type === "followers" ? isFollowersLoading : isFollowingLoading
 
   if (!isOpen) return null
 
@@ -43,7 +49,9 @@ const GetUsersList = ({
           </button>
         </div>
         <div className="flex flex-col gap-3 p-4">
-          {data?.length === 0 ? (
+          {isLoading ? (
+            <p className="text-center text-zinc-400 py-4">Loading...</p>
+          ) : data?.length === 0 ? (
             <p className="text-center text-zinc-400 py-4">
               No {type === "followers" ? "followers" : "following"} yet
             </p>

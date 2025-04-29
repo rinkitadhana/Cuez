@@ -15,7 +15,7 @@ import GetUserPost from "./profileComponent/GetUserPost"
 import GetLikedPost from "./profileComponent/GetLikedPost"
 import { useState } from "react"
 import ProfileSkeleton from "@/components/skeletons/ProfileSkeleton"
-import NoUser from "@/components/pageComponents/NoUser"
+import NoUser from "@/components/notAvailable/NoUser"
 import GetUsersList from "./profileComponent/GetUsersList"
 import FollowsYou from "@/components/pageComponents/FollowsYou"
 const UserProfile = () => {

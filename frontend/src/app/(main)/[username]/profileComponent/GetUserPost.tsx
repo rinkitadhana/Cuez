@@ -4,7 +4,7 @@ import { Post } from "@/types/Post"
 import { useParams } from "next/navigation"
 import React from "react"
 import PostSkeleton from "@/components/skeletons/PostSkeleton"
-import NoPosts from "@/components/pageComponents/NoPosts"
+import NoProfilePosts from "@/components/notAvailable/NoProfilePosts"
 const GetUserPost = () => {
   const { username } = useParams()
   const { data, isLoading, error } = useGetUserPosts(username as string)
@@ -22,7 +22,7 @@ const GetUserPost = () => {
       {data && (
         <>
           {data?.userPosts.length === 0 ? (
-            <NoPosts />
+            <NoProfilePosts />
           ) : (
             <div>
               {data?.userPosts.map((post: Post) => (

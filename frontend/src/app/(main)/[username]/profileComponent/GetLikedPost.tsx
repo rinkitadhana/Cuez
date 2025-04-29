@@ -3,7 +3,7 @@ import { useGetLikedPosts } from "@/hooks/usePost"
 import PostSkeleton from "@/components/skeletons/PostSkeleton"
 import { Post } from "@/types/Post"
 import PostStructure from "@/components/pageComponents/PostStructure"
-import NoPosts from "@/components/pageComponents/NoPosts"
+import NoProfilePosts from "@/components/notAvailable/NoProfilePosts"
 
 const GetLikedPost = () => {
   const { username } = useParams()
@@ -21,7 +21,7 @@ const GetLikedPost = () => {
       {data && (
         <>
           {data?.likedPosts.length === 0 ? (
-            <NoPosts />
+            <NoProfilePosts />
           ) : (
             <div>
               {data?.likedPosts.map((post: Post) => (

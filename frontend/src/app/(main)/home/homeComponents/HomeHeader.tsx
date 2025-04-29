@@ -1,7 +1,7 @@
 "use client"
 
 import BelowTip from "@/components/infoTips/BelowTip"
-import MenuButton from "@/components/MenuButton"
+import MenuButton from "@/layout/MenuButton"
 import useFeedTypeStore from "@/store/FeedTypeStore"
 import { Hash } from "lucide-react"
 import Link from "next/link"

@@ -3,7 +3,7 @@ import BelowTip from "@/components/infoTips/BelowTip"
 import { useDeleteAllNotifications } from "@/hooks/useNotification"
 import { MdDeleteOutline } from "react-icons/md"
 import { Loader2 } from "lucide-react"
-import MenuButton from "@/components/MenuButton"
+import MenuButton from "@/layout/MenuButton"
 const Header = () => {
   const { mutate: deleteAllNotifications, isPending } =
     useDeleteAllNotifications()

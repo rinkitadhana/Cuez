@@ -22,11 +22,11 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { useParams } from "next/navigation"
 import MainWrapper from "@/layout/MainWrapper"
 import Header from "../postComponents/Header"
-import NoPost from "@/components/pageComponents/NoPost"
+import NoPost from "@/components/notAvailable/NoPost"
 import CreateComment from "@/components/pageComponents/CreateComment"
 import GetComments from "@/components/pageComponents/GetComments"
 import PostSkeleton from "@/components/skeletons/PostSkeleton"
-import CommentSkeleton from "@/components/skeletons/CommentSkeleton"
+import PostWithoutImage from "@/components/skeletons/PostWithoutImage"
 import EditPost from "@/components/pageComponents/EditPost"
 import { useIsFollowing } from "@/hooks/useUser"
 import { useFollowUnfollowUser } from "@/hooks/useUser"
@@ -158,9 +158,9 @@ const PostPage = () => {
       <MainWrapper>
         <Header title="Post" />
         <PostSkeleton />
-        <CommentSkeleton />
-        <CommentSkeleton />
-        <CommentSkeleton />
+        <PostWithoutImage />
+        <PostWithoutImage />
+        <PostWithoutImage />
       </MainWrapper>
     )
   }
