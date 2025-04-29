@@ -189,15 +189,100 @@ const CreateComment = ({ commentActive }: { commentActive: boolean }) => {
   }
 
   return (
-    <div className="flex items-start gap-4 p-4 border-y bg-zinc-900 border-zinc-700 w-full">
-      <Image
-        src={authUser?.user.profileImg || ""}
-        alt="user avatar"
-        width={32}
-        height={32}
-        className="rounded-xl size-9 select-none object-cover bg-white"
-      />
-      <div className="flex-1">
+    <div className="flex flex-col items-start gap-5 p-4 border-y bg-zinc-900 border-zinc-700 w-full">
+      <div className="flex items-center justify-between w-full">
+        <Image
+          src={authUser?.user.profileImg || ""}
+          alt="user avatar"
+          width={32}
+          height={32}
+          className="rounded-xl size-9 select-none object-cover bg-white"
+        />
+
+        <div className="flex items-center justify-start gap-2">
+          <button
+            onClick={() => document.getElementById("imageInput")?.click()}
+            disabled={hasMedia}
+            className={`p-1.5 ${
+              hasMedia
+                ? "opacity-50 bg-zinc-700 cursor-not-allowed"
+                : "hover:bg-zinc-700 bg-zinc-800 "
+            } rounded-xl transition-all duration-200 border border-zinc-700`}
+          >
+            <input
+              id="imageInput"
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={handleImageSelect}
+              disabled={hasMedia}
+            />
+            <ImagePlus size={18} className={hasMedia ? "opacity-50" : ""} />
+          </button>
+          <button
+            onClick={() => document.getElementById("videoInput")?.click()}
+            disabled={hasMedia}
+            className={`p-1.5 ${
+              hasMedia
+                ? "opacity-50 bg-zinc-700 cursor-not-allowed"
+                : "hover:bg-zinc-700 bg-zinc-800 "
+            } rounded-xl transition-all duration-200 border border-zinc-700`}
+          >
+            <input
+              id="videoInput"
+              type="file"
+              accept="video/*"
+              className="hidden"
+              onChange={handleVideoSelect}
+              disabled={hasMedia}
+            />
+            <MdOutlineVideoCameraBack
+              size={18}
+              className={hasMedia ? "opacity-50" : ""}
+            />
+          </button>
+          <div className="relative">
+            <button
+              ref={emojiButtonRef}
+              onClick={toggleEmojiPicker}
+              className={`p-1.5 ${
+                showEmojiPicker
+                  ? "bg-zinc-700 "
+                  : "hover:bg-zinc-700 bg-zinc-800  "
+              } rounded-xl transition-all duration-200 border border-zinc-700 cursor-pointer`}
+            >
+              <SmilePlus size={18} />
+            </button>
+            <EmojiPickerPortal
+              isOpen={showEmojiPicker}
+              onClose={() => setShowEmojiPicker(false)}
+              onEmojiClick={onEmojiClick}
+              buttonRef={emojiButtonRef}
+              position={emojiPosition}
+            />
+          </div>
+          <button
+            onClick={handleCommentPost}
+            disabled={
+              isCommentPostPending ||
+              (!formData.text && !formData.img && !formData.video)
+            }
+            className={`p-1.5 ${
+              isCommentPostPending ||
+              (!formData.text && !formData.img && !formData.video)
+                ? "opacity-50 bg-zinc-800 cursor-not-allowed"
+                : "bg-mainclr hover:bg-mainclr/80"
+            } rounded-xl transition-all duration-200`}
+          >
+            {isCommentPostPending ? (
+              <Loader2 size={20} className="animate-spin" />
+            ) : (
+              <ArrowUpFromDot size={20} />
+            )}
+          </button>
+        </div>
+      </div>
+      <div className="w-full">
         <textarea
           id="comment-input"
           ref={textareaRef}
@@ -211,7 +296,7 @@ const CreateComment = ({ commentActive }: { commentActive: boolean }) => {
             e.target.style.height = `${e.target.scrollHeight}px`
           }}
           placeholder="Add a comment..."
-          className="w-full outline-none bg-transparent resize-none overflow-hidden min-h-[40px]"
+          className="w-full outline-none placeholder:select-none bg-transparent resize-none overflow-hidden min-h-[40px]"
         />
         {(formData.img || formData.video) && (
           <div className="relative w-full mt-2">
@@ -241,88 +326,6 @@ const CreateComment = ({ commentActive }: { commentActive: boolean }) => {
             </div>
           </div>
         )}
-      </div>
-      <div className="flex items-center justify-start gap-2">
-        <button
-          onClick={() => document.getElementById("imageInput")?.click()}
-          disabled={hasMedia}
-          className={`p-1.5 ${
-            hasMedia
-              ? "opacity-50 bg-zinc-700 cursor-not-allowed"
-              : "hover:bg-zinc-700 bg-zinc-800 "
-          } rounded-xl transition-all duration-200 border border-zinc-700`}
-        >
-          <input
-            id="imageInput"
-            type="file"
-            accept="image/*"
-            className="hidden"
-            onChange={handleImageSelect}
-            disabled={hasMedia}
-          />
-          <ImagePlus size={18} className={hasMedia ? "opacity-50" : ""} />
-        </button>
-        <button
-          onClick={() => document.getElementById("videoInput")?.click()}
-          disabled={hasMedia}
-          className={`p-1.5 ${
-            hasMedia
-              ? "opacity-50 bg-zinc-700 cursor-not-allowed"
-              : "hover:bg-zinc-700 bg-zinc-800 "
-          } rounded-xl transition-all duration-200 border border-zinc-700`}
-        >
-          <input
-            id="videoInput"
-            type="file"
-            accept="video/*"
-            className="hidden"
-            onChange={handleVideoSelect}
-            disabled={hasMedia}
-          />
-          <MdOutlineVideoCameraBack
-            size={18}
-            className={hasMedia ? "opacity-50" : ""}
-          />
-        </button>
-        <div className="relative">
-          <button
-            ref={emojiButtonRef}
-            onClick={toggleEmojiPicker}
-            className={`p-1.5 ${
-              showEmojiPicker
-                ? "bg-zinc-700 "
-                : "hover:bg-zinc-700 bg-zinc-800  "
-            } rounded-xl transition-all duration-200 border border-zinc-700 cursor-pointer`}
-          >
-            <SmilePlus size={18} />
-          </button>
-          <EmojiPickerPortal
-            isOpen={showEmojiPicker}
-            onClose={() => setShowEmojiPicker(false)}
-            onEmojiClick={onEmojiClick}
-            buttonRef={emojiButtonRef}
-            position={emojiPosition}
-          />
-        </div>
-        <button
-          onClick={handleCommentPost}
-          disabled={
-            isCommentPostPending ||
-            (!formData.text && !formData.img && !formData.video)
-          }
-          className={`p-1.5 ${
-            isCommentPostPending ||
-            (!formData.text && !formData.img && !formData.video)
-              ? "opacity-50 bg-zinc-800 cursor-not-allowed"
-              : "bg-mainclr hover:bg-mainclr/80"
-          } rounded-xl transition-all duration-200`}
-        >
-          {isCommentPostPending ? (
-            <Loader2 size={20} className="animate-spin" />
-          ) : (
-            <ArrowUpFromDot size={20} />
-          )}
-        </button>
       </div>
     </div>
   )
