@@ -65,7 +65,7 @@ const UserProfile = () => {
             <div className="rounded-xl relative mb-[60px] select-none">
               <Image
                 src={user?.coverImg || ""}
-                className="w-full h-[200px] object-cover bg-white cursor-pointer hover:brightness-90 transition-all duration-200"
+                className="w-full h-[160px] md:h-[200px] object-cover bg-white cursor-pointer hover:brightness-90 transition-all duration-200"
                 alt="profile"
                 width={1000}
                 height={1000}
