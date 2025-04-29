@@ -31,6 +31,7 @@ import EditPost from "@/components/pageComponents/EditPost"
 import { useIsFollowing } from "@/hooks/useUser"
 import { useFollowUnfollowUser } from "@/hooks/useUser"
 import CuezBadge from "@/components/pageComponents/CuezBadge"
+import PageHead from "@/components/pageComponents/PageHead"
 
 const PostPage = () => {
   const { id } = useParams()
@@ -178,6 +179,9 @@ const PostPage = () => {
 
   return (
     <MainWrapper>
+      <PageHead
+        title={`${post?.post?.user?.fullName} on Cuez: "${post?.post?.text}"`}
+      />
       <Header title="Post" />
       {post?.post ? (
         <section>

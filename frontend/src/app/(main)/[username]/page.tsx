@@ -18,6 +18,7 @@ import ProfileSkeleton from "@/components/skeletons/ProfileSkeleton"
 import NoUser from "@/components/notAvailable/NoUser"
 import GetUsersList from "./profileComponent/GetUsersList"
 import FollowsYou from "@/components/pageComponents/FollowsYou"
+import PageHead from "@/components/pageComponents/PageHead"
 const UserProfile = () => {
   const { username } = useParams()
   const [response, setResponse] = useState<string>("user-posts")
@@ -54,6 +55,7 @@ const UserProfile = () => {
 
   return (
     <MainWrapper>
+      <PageHead title={`${user?.fullName} (${user?.username}) / Cuez`} />
       <div>
         <Header />
         {isLoading ? (

@@ -1,5 +1,6 @@
 "use client"
 import Input from "@/components/Input"
+import PageHead from "@/components/pageComponents/PageHead"
 import { useSendOtp, useRegister } from "@/hooks/useAuth"
 import Footer from "@/layout/Footer"
 import useMessageStore from "@/store/messageStore"
@@ -138,6 +139,7 @@ const SignUp = () => {
 
   return (
     <section className="flex flex-col py-4 h-screen">
+      <PageHead title="SignUp / Cuez" />
       <div className="flex-grow sin-screen ">
         <form className=" flex flex-col gap-6" onSubmit={handleSignup}>
           <div className=" flex flex-col gap-4">
@@ -247,7 +249,7 @@ const SignUp = () => {
           </div>
           {isButtonDisabled ? (
             <div className=" text-sm text-center text-zinc-400">
-              Check spam if you don't see the code.
+              Check spam if you don&apos;t see the code.
             </div>
           ) : (
             <></>

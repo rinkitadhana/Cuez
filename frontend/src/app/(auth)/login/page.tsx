@@ -1,5 +1,6 @@
 "use client"
 import Input from "@/components/Input"
+import PageHead from "@/components/pageComponents/PageHead"
 import { useLogin } from "@/hooks/useAuth"
 import Footer from "@/layout/Footer"
 import { Eye, EyeOff, LoaderCircle, LockKeyhole, UserRound } from "lucide-react"
@@ -45,6 +46,7 @@ const LogIn = () => {
 
   return (
     <section className="flex flex-col py-4 h-screen">
+      <PageHead title="Login / Cuez" />
       <div className="flex-grow sin-screen ">
         <form className=" flex flex-col gap-6" onSubmit={handleLogin}>
           <div className=" flex flex-col gap-4">

@@ -1,9 +1,11 @@
 import ComingSoon from "@/components/ComingSoon"
+import PageHead from "@/components/pageComponents/PageHead"
 import MainWrapper from "@/layout/MainWrapper"
 
 const page = () => {
   return (
     <MainWrapper>
+      <PageHead title="Jobs / Cuez" />
       <ComingSoon />
     </MainWrapper>
   )

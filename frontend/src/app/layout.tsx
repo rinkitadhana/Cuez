@@ -15,7 +15,6 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: "Cuez",
   description: "Cuez - A social media app for programmers",
   icons: {
     icon: {

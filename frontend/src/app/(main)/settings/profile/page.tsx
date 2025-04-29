@@ -7,6 +7,7 @@ import Image from "next/image"
 import { ArrowLeft, Camera, Loader2 } from "lucide-react"
 import MainWrapper from "@/layout/MainWrapper"
 import { useUpdateUserProfile } from "@/hooks/useUser"
+import PageHead from "@/components/pageComponents/PageHead"
 
 interface UpdateProfileData {
   fullName: string
@@ -105,6 +106,7 @@ const ProfilePage = () => {
 
   return (
     <MainWrapper>
+      <PageHead title="Edit Profile" />
       <div className="flex flex-col min-h-screen">
         <div className="flex sticky top-0 z-50 bg-bgClr items-center justify-between border-b border-zinc-700 px-4 h-[60px]">
           <div className="flex items-center gap-3">
