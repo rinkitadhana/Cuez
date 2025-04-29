@@ -11,7 +11,7 @@ const MainWrapper = ({ children }: { children: React.ReactNode }) => {
         <div className="lg:w-[17%] md:w-[25%] w-full h-full hidden md:block md:pl-4">
           <LeftSidebar />
         </div>
-        <div className="relative lg:w-[53%] md:w-full w-full md:border-x md:border-zinc-700 overflow-y-auto scrollbar-hide mb-10 md:mb-0">
+        <div className="relative lg:w-[53%] md:w-full w-full md:border-x md:border-zinc-700 overflow-y-auto scrollbar-hide">
           <PostButton />
           {children}
         </div>
