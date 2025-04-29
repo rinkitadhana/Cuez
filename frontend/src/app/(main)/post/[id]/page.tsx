@@ -282,14 +282,14 @@ const PostPage = () => {
                   {post?.post?.img && (
                     <div
                       onClick={() => setIsImageModalOpen(true)}
-                      className="cursor-pointer"
+                      className="cursor-pointer select-none"
                     >
                       <Image
                         src={post?.post?.img}
                         alt="Post image"
                         width={500}
                         height={500}
-                        className="rounded-lg w-full"
+                        className="rounded-lg w-full select-none"
                       />
                     </div>
                   )}
@@ -298,7 +298,7 @@ const PostPage = () => {
                       <video
                         src={post?.post?.video}
                         controls
-                        className="rounded-lg w-full"
+                        className="rounded-lg w-full select-none"
                       />
                     </div>
                   )}
@@ -423,7 +423,7 @@ const PostPage = () => {
                 alt="Post image"
                 width={1920}
                 height={1080}
-                className="rounded-lg max-w-full max-h-full object-contain"
+                className="rounded-lg max-w-full max-h-full object-contain select-none"
               />
               <button
                 onClick={() => setIsImageModalOpen(false)}
