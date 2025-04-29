@@ -259,6 +259,13 @@ const ForgotPassword = () => {
                 </Link>
               </div>
             </div>
+            {isButtonDisabled ? (
+              <div className=" text-sm text-center text-zinc-400">
+                Check spam if you don't see the code.
+              </div>
+            ) : (
+              <></>
+            )}
           </form>
         )}
       </div>
