@@ -26,7 +26,7 @@ const UserInfo = ({ user }: { user: User }) => {
 
   return (
     <div className="flex w-full items-center justify-between">
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 truncate">
         <Image
           src={user?.profileImg || "/img/pfp/default.webp"}
           alt={user?.username || "default"}
@@ -53,27 +53,29 @@ const UserInfo = ({ user }: { user: User }) => {
           </div>
         </div>
       </div>
-      {authUser?.user._id !== user._id && (
-        <button onClick={handleFollowUnfollowUser}>
-          {followingState?.isFollowing ? (
-            <div className="font-semibold px-4 py-1.5 rounded-xl bg-zinc-800 hover:bg-zinc-800/80 transition-all duration-200">
-              {isLoading ? (
-                <Loader2 className="animate-spin" size={22} />
-              ) : (
-                "Following"
-              )}
-            </div>
-          ) : (
-            <div className="font-semibold px-4 py-1.5 rounded-xl bg-mainclr hover:bg-mainclr/80 transition-all duration-200">
-              {isLoading ? (
-                <Loader2 className="animate-spin" size={22} />
-              ) : (
-                "Follow"
-              )}
-            </div>
-          )}
-        </button>
-      )}
+      <div className="flex items-center px-4">
+        {authUser?.user._id !== user._id && (
+          <button onClick={handleFollowUnfollowUser}>
+            {followingState?.isFollowing ? (
+              <div className="font-semibold px-4 py-1.5 rounded-xl bg-zinc-800 hover:bg-zinc-800/80 transition-all duration-200">
+                {isLoading ? (
+                  <Loader2 className="animate-spin" size={22} />
+                ) : (
+                  "Following"
+                )}
+              </div>
+            ) : (
+              <div className="font-semibold px-4 py-1.5 rounded-xl bg-mainclr hover:bg-mainclr/80 transition-all duration-200">
+                {isLoading ? (
+                  <Loader2 className="animate-spin" size={22} />
+                ) : (
+                  "Follow"
+                )}
+              </div>
+            )}
+          </button>
+        )}
+      </div>
     </div>
   )
 }
