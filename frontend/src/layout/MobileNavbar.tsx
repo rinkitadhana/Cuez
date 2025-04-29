@@ -5,7 +5,7 @@ import { Loader2 } from "lucide-react"
 import { usePathname } from "next/navigation"
 import NextLink from "next/link"
 import { BsBell, BsBellFill } from "react-icons/bs"
-import { FaRegUser, FaUser } from "react-icons/fa"
+import { TiThMenu, TiThMenuOutline } from "react-icons/ti"
 import { IoBookmarks, IoBookmarksOutline } from "react-icons/io5"
 import { MdChatBubble, MdChatBubbleOutline } from "react-icons/md"
 import {
@@ -97,11 +97,11 @@ const MobileNavbar = () => {
       },
     },
     {
-      href: `/${me?.user.username}`,
-      label: "Profile",
+      href: `/more`,
+      label: "More",
       icon: {
-        filled: <FaUser className="text-2xl" />,
-        outline: <FaRegUser className="text-2xl" />,
+        filled: <TiThMenu className="text-2xl" />,
+        outline: <TiThMenuOutline className="text-2xl" />,
       },
     },
     // {
