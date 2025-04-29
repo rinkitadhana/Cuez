@@ -343,21 +343,26 @@ const PostPage = () => {
                       </div>
                     </div>
                     <div className="flex gap-1 items-center">
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          handleBookmarkPost()
-                        }}
-                        className="p-1.5 hover:bg-blue-500/30 rounded-lg transition-all duration-200"
-                      >
-                        {isBookmarkPending || isBookmarkedPending ? (
-                          <Loader2 className="animate-spin size-[18px]" />
-                        ) : isBookmarked?.isBookmarked ? (
-                          <IoBookmark className="text-blue-500" />
-                        ) : (
-                          <IoBookmarkOutline />
-                        )}
-                      </button>
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-sm">
+                          {post?.post?.bookmarks?.length}
+                        </span>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            handleBookmarkPost()
+                          }}
+                          className="p-1.5 hover:bg-blue-500/30 rounded-lg transition-all duration-200"
+                        >
+                          {isBookmarkPending || isBookmarkedPending ? (
+                            <Loader2 className="animate-spin size-[18px]" />
+                          ) : isBookmarked?.isBookmarked ? (
+                            <IoBookmark className="text-blue-500" />
+                          ) : (
+                            <IoBookmarkOutline />
+                          )}
+                        </button>
+                      </div>
                       <button
                         onClick={handleShare}
                         className="p-1.5 hover:bg-green-500/30 rounded-lg transition-all duration-200"
