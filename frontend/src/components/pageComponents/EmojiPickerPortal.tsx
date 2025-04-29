@@ -38,7 +38,12 @@ const EmojiPickerPortal: React.FC<EmojiPickerPortalProps> = ({
   }
 
   return createPortal(
-    <div ref={usedPickerRef} style={style} onClick={(e) => e.stopPropagation()}>
+    <div
+      ref={usedPickerRef}
+      style={style}
+      onClick={(e) => e.stopPropagation()}
+      data-name="emoji-picker"
+    >
       <EmojiPicker
         onEmojiClick={onEmojiClick}
         theme={Theme.DARK}

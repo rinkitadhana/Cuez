@@ -52,6 +52,17 @@ const CreateComment = ({ commentActive }: { commentActive: boolean }) => {
         return
       }
 
+      // Check if the click is inside the emoji picker
+      const emojiPickerElement = document.querySelector(
+        '[data-name="emoji-picker"]'
+      )
+      if (
+        emojiPickerElement &&
+        emojiPickerElement.contains(event.target as Node)
+      ) {
+        return
+      }
+
       // Close the picker if clicked elsewhere
       setShowEmojiPicker(false)
     }
