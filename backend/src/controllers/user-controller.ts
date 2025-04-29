@@ -3,6 +3,7 @@ import User, { IUser } from "../models/user-model"
 import { Request, Response } from "express"
 import { v2 as cloudinary } from "cloudinary"
 import Notification from "../models/notification-model"
+import bcrypt from "bcrypt"
 
 const getUserProfile = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -109,7 +110,15 @@ const updateUserProfile = async (
   res: Response
 ): Promise<void> => {
   try {
-    const { fullName, username, bio, link, location } = req.body
+    const {
+      fullName,
+      username,
+      bio,
+      link,
+      location,
+      currentPassword,
+      newPassword,
+    } = req.body
     const { profileImg, coverImg } = req.body
 
     const userId = req.user._id
@@ -128,6 +137,24 @@ const updateUserProfile = async (
 
     if (isUsernameTaken) {
       res.status(400).json({ message: "Username is already taken!" })
+      return
+    }
+
+    if (currentPassword && newPassword) {
+      const isPasswordCorrect = await bcrypt.compare(
+        currentPassword,
+        user.password
+      )
+      if (!isPasswordCorrect) {
+        res.status(400).json({ message: "Current password is incorrect!" })
+        return
+      }
+      const salt = await bcrypt.genSalt(10)
+      const hashedPassword = await bcrypt.hash(newPassword, salt)
+      user.password = hashedPassword
+
+      await user.save()
+      res.status(200).json({ message: "Password updated successfully!" })
       return
     }
 

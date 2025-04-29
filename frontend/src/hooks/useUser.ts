@@ -117,6 +117,8 @@ interface UpdateUserProfileResponse {
 interface UpdateUserProfileData {
   fullName?: string
   username?: string
+  currentPassword?: string
+  newPassword?: string
   bio?: string
   link?: string
   location?: string

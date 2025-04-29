@@ -11,7 +11,7 @@ import PageHead from "@/components/pageComponents/PageHead"
 
 const HandlePage = () => {
   const router = useRouter()
-  const { data: authUser, isLoading } = useGetMe()
+  const { data: authUser } = useGetMe()
   const { mutate: updateUserProfile, isPending: isUpdating } =
     useUpdateUserProfile()
 
