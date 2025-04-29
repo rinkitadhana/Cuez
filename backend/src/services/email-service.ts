@@ -13,7 +13,7 @@ export const sendOTPEmail = async (
     const mailOptions = {
       from: process.env.EMAIL_USER,
       to: email,
-      subject: "Email Verification OTP",
+      subject: "Cuez - Email Verification OTP",
       html: getOTPEmailTemplate(username, otp),
     }
     await transporter.sendMail(mailOptions)
@@ -32,7 +32,7 @@ export const sendLoginEmail = async (
     const mailOptions = {
       from: process.env.EMAIL_USER,
       to: email,
-      subject: "New Login to your account",
+      subject: "Cuez - New Login to your account",
       html: getLoginEmailTemplate(username),
     }
     await transporter.sendMail(mailOptions)
