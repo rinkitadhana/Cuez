@@ -211,7 +211,9 @@ const PostPage = () => {
                           (isFollowingPending ? (
                             <div className=" text-sm text-zinc-400">...</div>
                           ) : isFollowing?.isFollowing ? (
-                            ""
+                            <div className="text-xs text-zinc-400">
+                              Following
+                            </div>
                           ) : (
                             <div
                               onClick={() =>

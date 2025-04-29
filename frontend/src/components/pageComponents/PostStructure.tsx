@@ -173,7 +173,7 @@ const PostStructure = ({ post }: PostStructureProps) => {
                     (isFollowingPending ? (
                       <div className=" text-sm text-zinc-400">...</div>
                     ) : isFollowing?.isFollowing ? (
-                      ""
+                      <div className="text-xs text-zinc-400">Following</div>
                     ) : (
                       <div onClick={() => followUnfollowUser(post.user._id)}>
                         {isFollowUnfollowPending && (

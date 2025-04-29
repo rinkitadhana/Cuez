@@ -11,7 +11,7 @@ const Header = ({ title }: { title: string }) => {
   }
 
   return (
-    <div className="flex w-full select-none items-center border-b py-2 border-zinc-700 sticky top-0 bg-bgClr px-4 z-10">
+    <div className="flex w-full select-none items-center border-b h-[60px] border-zinc-700 sticky top-0 bg-bgClr px-4 z-10">
       <div className="flex items-center gap-3">
         <button
           onClick={handleBack}

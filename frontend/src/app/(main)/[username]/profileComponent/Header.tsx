@@ -17,7 +17,7 @@ const Header = () => {
   }
 
   return (
-    <div className="flex sticky top-0 z-50 bg-bgClr items-center justify-between border-b border-zinc-700 px-4 py-2.5">
+    <div className="flex sticky top-0 z-50 bg-bgClr items-center justify-between border-b border-zinc-700 h-[60px] px-4">
       <div className=" flex items-center gap-3">
         <button
           onClick={handleBack}

@@ -106,7 +106,7 @@ const ProfilePage = () => {
   return (
     <MainWrapper>
       <div className="flex flex-col min-h-screen">
-        <div className="flex sticky top-0 z-50 bg-bgClr items-center justify-between border-b border-zinc-700 px-4 py-2.5">
+        <div className="flex sticky top-0 z-50 bg-bgClr items-center justify-between border-b border-zinc-700 px-4 h-[60px]">
           <div className="flex items-center gap-3">
             <button
               onClick={() => router.back()}
