@@ -11,7 +11,6 @@ import PageHead from "@/components/pageComponents/PageHead"
 
 interface UpdateProfileData {
   fullName: string
-  username: string
   bio: string
   link: string
   location: string
@@ -26,7 +25,6 @@ const ProfilePage = () => {
     useUpdateUserProfile()
   const [formData, setFormData] = useState<UpdateProfileData>({
     fullName: "",
-    username: "",
     bio: "",
     link: "",
     location: "",
@@ -46,7 +44,6 @@ const ProfilePage = () => {
     if (authUser?.user) {
       setFormData({
         fullName: authUser.user.fullName,
-        username: authUser.user.username,
         bio: authUser.user.bio,
         link: authUser.user.link,
         location: authUser.user.location,
@@ -61,7 +58,7 @@ const ProfilePage = () => {
   const updateProfile = () => {
     updateUserProfile(formData, {
       onSuccess: () => {
-        router.push(`/${formData.username}`)
+        router.push(`/${authUser?.user?.username}`)
       },
     })
   }
@@ -201,19 +198,6 @@ const ProfilePage = () => {
                     onChange={handleChange}
                     className="w-full placeholder:text-zinc-500 bg-transparent outline-none placeholder:select-none"
                     placeholder="Enter your full name"
-                  />
-                </div>
-              </div>
-              <div className="flex flex-col gap-1.5">
-                <label className=" text-sm font-medium">Username</label>
-                <div className="flex flex-row border rounded-xl gap-3 py-2 px-4 border-zinc-500 focus-within:border-mainclr transition-colors duration-200">
-                  <input
-                    name="username"
-                    type="text"
-                    value={formData.username}
-                    onChange={handleChange}
-                    className="w-full placeholder:text-zinc-500 bg-transparent outline-none placeholder:select-none"
-                    placeholder="Enter your username"
                   />
                 </div>
               </div>
