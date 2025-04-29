@@ -32,7 +32,7 @@ const UserInfo = ({ user }: { user: User }) => {
           alt={user?.username || "default"}
           width={50}
           height={50}
-          className="size-11 rounded-xl cursor-pointer object-cover hover:brightness-90 bg-white transition-all duration-200"
+          className="size-11 rounded-xl cursor-pointer select-none object-cover hover:brightness-90 bg-white transition-all duration-200"
           onClick={() => router.push(`/${user.username}`)}
         />
         <div>
@@ -53,7 +53,7 @@ const UserInfo = ({ user }: { user: User }) => {
           </div>
         </div>
       </div>
-      <div className="flex items-center px-4">
+      <div className="flex items-center px-4 select-none">
         {authUser?.user._id !== user._id && (
           <button onClick={handleFollowUnfollowUser}>
             {followingState?.isFollowing ? (

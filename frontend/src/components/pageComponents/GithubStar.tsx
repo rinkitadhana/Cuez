@@ -15,7 +15,7 @@ const GithubStar = () => {
           href="https://github.com/rinkitadhana/cuez"
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-3 py-2.5 px-3 bg-zinc-100 hover:bg-zinc-300 w-full rounded-xl text-black justify-center transition-colors duration-200"
+          className="flex items-center gap-3 py-2.5 px-3 select-none bg-zinc-100 hover:bg-zinc-300 w-full rounded-xl text-black justify-center transition-colors duration-200"
         >
           <FaGithub className="text-lg" />
           <span>Star on GitHub</span>

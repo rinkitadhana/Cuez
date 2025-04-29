@@ -250,7 +250,7 @@ const PostStructure = ({ post }: PostStructureProps) => {
                   alt="Post image"
                   width={500}
                   height={500}
-                  className="rounded-lg w-full"
+                  className="rounded-lg w-full select-none "
                 />
               </div>
             )}
@@ -264,7 +264,7 @@ const PostStructure = ({ post }: PostStructureProps) => {
                 <video
                   src={post?.video}
                   controls
-                  className="rounded-lg w-full"
+                  className="rounded-lg w-full select-none"
                 />
               </div>
             )}
@@ -389,7 +389,7 @@ const PostStructure = ({ post }: PostStructureProps) => {
             alt="Post image"
             width={1920}
             height={1080}
-            className="rounded-lg w-full h-full object-contain"
+            className="rounded-lg w-full h-full object-contain select-none"
           />
           <button
             onClick={(e) => {

@@ -116,14 +116,14 @@ const UserProfile = () => {
                   {user?.cuezBadge && (
                     <div
                       title="Cuez Badge"
-                      className="flex items-center border border-zinc-700 rounded-md p-0.5 bg-white"
+                      className="flex items-center border border-zinc-700 rounded-md p-0.5 bg-white select-none"
                     >
                       <Image
                         src="/img/icon/cuez-logo.png"
                         alt="cuez-logo"
                         width={20}
                         height={20}
-                        className="rounded-full bg-white object-cover size-[14px]"
+                        className="rounded-full bg-white object-cover size-[14px] select-none"
                       />
                     </div>
                   )}
@@ -223,7 +223,7 @@ const UserProfile = () => {
               width={800}
               height={800}
               quality={100}
-              className="rounded-xl w-[400px] h-[400px] bg-white object-cover"
+              className="rounded-xl w-[400px] h-[400px] select-none bg-white object-cover"
             />
           </div>
           <button
@@ -251,7 +251,7 @@ const UserProfile = () => {
               alt="Cover image"
               width={1920}
               height={1080}
-              className="rounded-xl max-w-full bg-white max-h-full object-cover"
+              className="rounded-xl max-w-full select-none bg-white max-h-full object-cover"
             />
           </div>
           <button
