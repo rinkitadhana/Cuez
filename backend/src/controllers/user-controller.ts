@@ -91,7 +91,7 @@ const getSuggestedUsers = async (
     const filteredUsers = users.filter(
       (user) => !usersFollowedByMe.followings.includes(user._id)
     )
-    const suggestedUsers = filteredUsers.slice(0, 4)
+    const suggestedUsers = filteredUsers.slice(0, 3)
 
     suggestedUsers.forEach((user) => (user.password = undefined))
 
