@@ -29,7 +29,7 @@ const NoNotification = () => {
         No notifications yet
       </h3>
       <p className="text-sm text-zinc-400 max-w-[250px] text-center">
-        When you receive notifications, they'll appear here
+        When you receive notifications, they&apos;ll appear here
       </p>
     </motion.div>
   )
