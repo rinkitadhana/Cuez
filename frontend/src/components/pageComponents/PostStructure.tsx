@@ -140,9 +140,7 @@ const PostStructure = ({ post, isReply = false }: PostStructureProps) => {
     <section
       onClick={() => router.push(`/post/${post._id}`)}
       ref={postRef}
-      className={`flex relative flex-col gap-4 p-4 border-b border-zinc-700 hover:bg-zinc-900 transition-all duration-200 cursor-pointer ${
-        isReply ? "pl-8 border-l border-l-zinc-700" : ""
-      }`}
+      className="flex relative flex-col gap-4 p-4 border-b border-zinc-700 hover:bg-zinc-900 transition-all duration-200 cursor-pointer"
     >
       <div className="flex gap-2 w-full">
         <Image
