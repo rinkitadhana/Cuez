@@ -125,7 +125,7 @@ const MobileNavbar = () => {
 
     if (unreadNotificationsCount?.count && unreadNotificationsCount.count > 0) {
       return (
-        <div className="absolute -top-2 -right-1.5 bg-mainclr rounded-full min-w-[16px] h-4 flex items-center justify-center">
+        <div className="absolute -top-2 -right-1.5 bg-mainclr text-white rounded-full min-w-[16px] h-4 flex items-center justify-center">
           <span className="text-[10px] font-bold">
             {unreadNotificationsCount.count > 99
               ? "99+"

@@ -5,7 +5,6 @@ import { MdDeleteOutline } from "react-icons/md"
 import { useDeleteNotification } from "@/hooks/useNotification"
 import { Loader2 } from "lucide-react"
 import { useRouter } from "next/navigation"
-import { motion } from "framer-motion"
 
 const NotificationMessage = ({
   notification,
@@ -117,9 +116,7 @@ const NotificationMessage = ({
   }
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
+    <div
       className={`relative flex items-start px-4 sm:px-6 py-4 border-b border-zinc-800 hover:bg-zinc-900/50 transition-all duration-200 cursor-pointer group overflow-hidden ${
         !notification.read ? "bg-indigo-500/5" : ""
       }`}
@@ -198,7 +195,7 @@ const NotificationMessage = ({
           <MdDeleteOutline size={18} />
         )}
       </button>
-    </motion.div>
+    </div>
   )
 }
 
