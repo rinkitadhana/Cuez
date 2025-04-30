@@ -12,7 +12,7 @@ export const SearchBox = ({
   placeholder = "Search Cuez",
 }: SearchBoxProps) => {
   return (
-    <div className="md:relative hidden w-full max-w-md select-none">
+    <div className="relative md:block hidden w-full max-w-md select-none">
       <div className="relative">
         <input
           type="text"
