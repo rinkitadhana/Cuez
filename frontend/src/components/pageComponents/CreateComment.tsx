@@ -190,7 +190,7 @@ const CreateComment = ({ commentActive }: { commentActive: boolean }) => {
   }
 
   return (
-    <div className="flex flex-col items-start gap-5 p-4 border-y bg-zinc-900 border-zinc-700 w-full">
+    <div className="flex flex-col items-start gap-5 p-4 border-y bg-zinc-800/20 border-zinc-700 w-full">
       <div className="flex items-center justify-between w-full">
         <Image
           src={authUser?.user.profileImg || ""}
@@ -213,7 +213,7 @@ const CreateComment = ({ commentActive }: { commentActive: boolean }) => {
               e.target.style.height = "auto"
               e.target.style.height = `${e.target.scrollHeight}px`
             }}
-            className="w-full bg-transparent border border-gray-600 rounded-lg px-2 py-2 focus:outline-none resize-none"
+            className="w-full bg-transparent border border-gray-600 rounded-lg px-2 py-2 focus:outline-none resize-none scrollbar-hide"
             placeholder="Post your reply..."
             rows={2}
           />
@@ -257,29 +257,45 @@ const CreateComment = ({ commentActive }: { commentActive: boolean }) => {
         </div>
 
         <div className="flex justify-between items-center">
-          <div className="flex gap-2">
-            <label className="cursor-pointer">
+          <div className="flex gap-2.5 text-zinc-100">
+            <label
+              className={`p-1.5 ${
+                hasMedia
+                  ? " bg-zinc-700 cursor-not-allowed"
+                  : "hover:bg-zinc-700 bg-zinc-800 "
+              } rounded-xl transition-all duration-200 border border-zinc-700  cursor-pointer`}
+            >
               <input
                 type="file"
                 accept="image/*"
                 className="hidden"
                 onChange={handleImageSelect}
+                disabled={hasMedia}
               />
               <ImagePlus
-                className="size-5 text-blue-500 hover:text-blue-400 transition-colors"
+                size={18}
+                className={hasMedia ? "opacity-50" : ""}
                 aria-label="Add image"
               />
             </label>
 
-            <label className="cursor-pointer">
+            <label
+              className={`p-1.5 ${
+                hasMedia
+                  ? " bg-zinc-700 cursor-not-allowed"
+                  : "hover:bg-zinc-700 bg-zinc-800 "
+              } rounded-xl transition-all duration-200 border border-zinc-700  cursor-pointer`}
+            >
               <input
                 type="file"
                 accept="video/*"
                 className="hidden"
                 onChange={handleVideoSelect}
+                disabled={hasMedia}
               />
               <MdOutlineVideoCameraBack
-                className="size-5 text-blue-500 hover:text-blue-400 transition-colors"
+                size={18}
+                className={hasMedia ? "opacity-50" : ""}
                 aria-label="Add video"
               />
             </label>
@@ -288,30 +304,33 @@ const CreateComment = ({ commentActive }: { commentActive: boolean }) => {
               ref={emojiButtonRef}
               onClick={toggleEmojiPicker}
               type="button"
-              aria-label="Add emoji"
+              className={`${
+                showEmojiPicker
+                  ? "bg-zinc-700 cursor-not-allowed"
+                  : "hover:bg-zinc-700 bg-zinc-800 "
+              } p-1.5 rounded-xl transition-all duration-200 border border-zinc-700  cursor-pointer`}
             >
-              <SmilePlus className="size-5 text-blue-500 hover:text-blue-400 transition-colors" />
+              <SmilePlus size={18} />
+              {showEmojiPicker && (
+                <EmojiPickerPortal
+                  isOpen={showEmojiPicker}
+                  onClose={() => setShowEmojiPicker(false)}
+                  position={emojiPosition}
+                  onEmojiClick={onEmojiClick}
+                  buttonRef={emojiButtonRef}
+                />
+              )}
             </button>
-
-            {showEmojiPicker && (
-              <EmojiPickerPortal
-                isOpen={showEmojiPicker}
-                onClose={() => setShowEmojiPicker(false)}
-                position={emojiPosition}
-                onEmojiClick={onEmojiClick}
-                buttonRef={emojiButtonRef}
-              />
-            )}
           </div>
 
           <button
             type="button"
             onClick={handleSubmitReply}
             disabled={isReplyPending || (!formData.text && !hasMedia)}
-            className={`flex gap-1 items-center px-4 py-1.5 rounded-full font-semibold ${
+            className={`flex gap-1 items-center px-4 py-1.5 rounded-xl font-semibold ${
               isReplyPending || (!formData.text && !hasMedia)
                 ? "bg-zinc-700 text-zinc-500 cursor-not-allowed"
-                : "bg-blue-500 text-white hover:bg-blue-400 transition-colors"
+                : "bg-mainclr text-white hover:bg-mainclr/80 transition-colors"
             }`}
           >
             {isReplyPending ? (
