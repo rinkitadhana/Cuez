@@ -5,89 +5,35 @@ export interface IPost extends Document {
   text?: string
   img?: string
   video?: string
-  editedAt?: Date
+  parent?: mongoose.Types.ObjectId
+  threadRoot?: mongoose.Types.ObjectId
   likes: mongoose.Types.ObjectId[]
   bookmarks: mongoose.Types.ObjectId[]
-  comments: IComment[]
-  createdAt: Date
-  updatedAt: Date
-}
-
-export interface IComment extends Document {
-  user: mongoose.Types.ObjectId
-  text?: string
-  img?: string
-  video?: string
   createdAt: Date
   updatedAt: Date
 }
 
 const postSchema = new mongoose.Schema<IPost>(
   {
-    user: {
+    user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+    text: String,
+    img: String,
+    video: String,
+
+    parent: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
+      ref: "Post",
+      default: null,
     },
-    text: {
-      type: String,
+
+    threadRoot: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Post",
+      default: null,
     },
-    img: {
-      type: String,
-    },
-    video: {
-      type: String,
-    },
-    likes: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-      },
-    ],
-    bookmarks: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-      },
-    ],
-    editedAt: {
-      type: Date,
-      default: Date.now,
-    },
-    createdAt: {
-      type: Date,
-      default: Date.now,
-    },
-    updatedAt: {
-      type: Date,
-      default: Date.now,
-    },
-    comments: [
-      {
-        user: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "User",
-          required: true,
-        },
-        text: {
-          type: String,
-        },
-        img: {
-          type: String,
-        },
-        video: {
-          type: String,
-        },
-        createdAt: {
-          type: Date,
-          default: Date.now,
-        },
-        updatedAt: {
-          type: Date,
-          default: Date.now,
-        },
-      },
-    ],
+
+    likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+    bookmarks: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   },
   { timestamps: true, collection: "post-data" }
 )

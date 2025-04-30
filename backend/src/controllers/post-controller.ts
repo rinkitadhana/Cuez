@@ -1,15 +1,23 @@
 import { Request, Response } from "express"
 import User from "../models/user-model"
 import { errorHandler } from "../utils/errorHandler"
-import Post, { IComment } from "../models/post-model"
+import Post, { IPost } from "../models/post-model"
 import { v2 as cloudinary } from "cloudinary"
 import Notification from "../models/notification-model"
+import mongoose from "mongoose"
 
+/**
+ * Creates a new post or reply
+ * - For creating a top-level post: Send only text, img, and/or video
+ * - For creating a reply/comment: Also include parentId of the post being replied to
+ * The function automatically handles setting up the thread structure and notifications
+ */
 const createPost = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { text, img, video } = req.body
+    const { text, img, video, parentId } = req.body
     const userId = req.user._id.toString()
     const user = await User.findById(userId)
+
     if (!user) {
       res.status(404).json({ message: "User not found!" })
       return
@@ -18,40 +26,85 @@ const createPost = async (req: Request, res: Response): Promise<void> => {
       res.status(400).json({ message: "Text or Image or Video is required!" })
       return
     }
-
     let postData: {
       user: typeof user._id
       text?: string
       img?: string
       video?: string
-    } = {
-      user: user._id,
-    }
+      parent?: string
+      threadRoot?: mongoose.Types.ObjectId | string
+    } = { user: user._id }
 
     if (img) {
-      const uploadedResponse = await cloudinary.uploader.upload(img, {
+      const uploaded = await cloudinary.uploader.upload(img, {
         folder: "cuez/posts",
         resource_type: "image",
       })
-      postData = { ...postData, img: uploadedResponse.secure_url }
+      postData.img = uploaded.secure_url
     }
 
     if (video) {
-      const uploadedResponse = await cloudinary.uploader.upload(video, {
+      const uploaded = await cloudinary.uploader.upload(video, {
         folder: "cuez/posts",
         resource_type: "video",
       })
-      postData = { ...postData, video: uploadedResponse.secure_url }
+      postData.video = uploaded.secure_url
     }
 
-    if (text) {
-      postData = { ...postData, text }
+    if (text) postData.text = text
+
+    if (parentId) {
+      const parentPost = await Post.findById(parentId)
+      if (!parentPost) {
+        res.status(404).json({ message: "Parent post not found!" })
+        return
+      }
+
+      postData.parent = parentId
+      postData.threadRoot = parentPost.threadRoot || parentId
+
+      if (userId !== parentPost.user.toString()) {
+        const notification = new Notification({
+          from: userId,
+          to: parentPost.user.toString(),
+          type: "reply",
+          post: parentPost._id,
+        })
+        await notification.save()
+      }
     }
 
-    const post = await Post.create(postData)
-    await post.save()
+    const newPost = await Post.create(postData)
+    res.status(201).json({ message: "Post created", post: newPost })
+  } catch (error) {
+    errorHandler(res, error)
+  }
+}
 
-    res.status(201).json({ message: "Post created successfully!" })
+const getThread = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { postId } = req.params
+
+    let currentPost = await Post.findById(postId)
+      .populate("user", "-password")
+      .lean()
+
+    if (!currentPost) {
+      res.status(404).json({ message: "Post not found!" })
+      return
+    }
+
+    const thread: any[] = [currentPost]
+
+    while (currentPost.parent) {
+      currentPost = await Post.findById(currentPost.parent)
+        .populate("user", "-password")
+        .lean()
+      if (currentPost) thread.unshift(currentPost)
+      else break
+    }
+
+    res.status(200).json({ message: "Thread fetched", thread })
   } catch (error) {
     errorHandler(res, error)
   }
@@ -206,72 +259,6 @@ const deletePost = async (req: Request, res: Response): Promise<void> => {
   }
 }
 
-const commentPost = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const { text, img, video } = req.body
-    const post = await Post.findById(req.params.id)
-    const userId = req.user._id.toString()
-    const user = await User.findById(userId)
-    if (!user) {
-      res.status(404).json({ message: "User not found!" })
-      return
-    }
-    if (!text && !img && !video) {
-      res.status(400).json({ message: "Comment is required!" })
-      return
-    }
-    if (!post) {
-      res.status(404).json({ message: "Post not found!" })
-      return
-    }
-
-    let commentData: {
-      user: typeof user._id
-      text?: string
-      img?: string
-      video?: string
-    } = {
-      user: user._id,
-    }
-
-    if (img) {
-      const uploadedResponse = await cloudinary.uploader.upload(img, {
-        folder: "cuez/comments",
-        resource_type: "image",
-      })
-      commentData = { ...commentData, img: uploadedResponse.secure_url }
-    }
-
-    if (video) {
-      const uploadedResponse = await cloudinary.uploader.upload(video, {
-        folder: "cuez/comments",
-        resource_type: "video",
-      })
-      commentData = { ...commentData, video: uploadedResponse.secure_url }
-    }
-
-    if (text) {
-      commentData = { ...commentData, text }
-    }
-    post.comments.push(commentData as IComment)
-    await post.save()
-
-    if (userId !== post.user.toString()) {
-      const notification = new Notification({
-        from: userId,
-        to: post.user.toString(),
-        type: "reply",
-        post: post._id,
-      })
-      await notification.save()
-    }
-
-    res.status(200).json({ message: "Comment added successfully!" })
-  } catch (error) {
-    errorHandler(res, error)
-  }
-}
-
 const likeUnlikePost = async (req: Request, res: Response): Promise<void> => {
   try {
     const post = await Post.findById(req.params.id)
@@ -315,14 +302,10 @@ const likeUnlikePost = async (req: Request, res: Response): Promise<void> => {
 
 const getAllPosts = async (req: Request, res: Response): Promise<void> => {
   try {
-    const posts = await Post.find()
+    const posts = await Post.find({ parent: null })
       .sort({ createdAt: -1 })
       .populate({
         path: "user",
-        select: "-password",
-      })
-      .populate({
-        path: "comments.user",
         select: "-password",
       })
     if (posts.length === 0) {
@@ -349,10 +332,6 @@ const getLikedPosts = async (req: Request, res: Response): Promise<void> => {
         path: "user",
         select: "-password",
       })
-      .populate({
-        path: "comments.user",
-        select: "-password",
-      })
     res
       .status(200)
       .json({ message: "Liked posts fetched successfully!", likedPosts })
@@ -372,14 +351,13 @@ const getFollowingPosts = async (
       res.status(404).json({ message: "User not found!" })
       return
     }
-    const followingPosts = await Post.find({ user: { $in: user.followings } })
+    const followingPosts = await Post.find({
+      user: { $in: user.followings },
+      parent: null, // Only get top-level posts
+    })
       .sort({ createdAt: -1 })
       .populate({
         path: "user",
-        select: "-password",
-      })
-      .populate({
-        path: "comments.user",
         select: "-password",
       })
     if (followingPosts.length === 0) {
@@ -400,6 +378,9 @@ const getTrendingPosts = async (req: Request, res: Response): Promise<void> => {
   try {
     const trendingPosts = await Post.aggregate([
       {
+        $match: { parent: null }, // Only get top-level posts
+      },
+      {
         $addFields: {
           likesCount: { $size: "$likes" },
         },
@@ -412,10 +393,6 @@ const getTrendingPosts = async (req: Request, res: Response): Promise<void> => {
     const populatedPosts = await Post.populate(trendingPosts, [
       {
         path: "user",
-        select: "-password",
-      },
-      {
-        path: "comments.user",
         select: "-password",
       },
     ])
@@ -442,14 +419,13 @@ const getUserPosts = async (req: Request, res: Response): Promise<void> => {
       res.status(404).json({ message: "User not found!" })
       return
     }
-    const userPosts = await Post.find({ user: user._id })
+    const userPosts = await Post.find({
+      user: user._id,
+      parent: null, // Only get top-level posts
+    })
       .sort({ createdAt: -1 })
       .populate({
         path: "user",
-        select: "-password",
-      })
-      .populate({
-        path: "comments.user",
         select: "-password",
       })
     res
@@ -478,20 +454,29 @@ const isLiked = async (req: Request, res: Response) => {
 
 const getPostById = async (req: Request, res: Response): Promise<void> => {
   try {
-    const post = await Post.findById(req.params.id)
-      .populate({
-        path: "user",
-        select: "-password",
-      })
-      .populate({
-        path: "comments.user",
-        select: "-password",
-      })
+    const post = await Post.findById(req.params.id).populate({
+      path: "user",
+      select: "-password",
+    })
+
     if (!post) {
       res.status(404).json({ message: "Post not found" })
       return
     }
-    res.status(200).json({ message: "Post found", post })
+
+    // Find replies (comments) to this post
+    const replies = await Post.find({ parent: post._id })
+      .sort({ createdAt: 1 })
+      .populate({
+        path: "user",
+        select: "-password",
+      })
+
+    res.status(200).json({
+      message: "Post found",
+      post,
+      replies,
+    })
   } catch (error) {
     errorHandler(res, error)
   }
@@ -589,10 +574,40 @@ const getBookmarkedPosts = async (
   }
 }
 
+const getReplies = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { postId } = req.params
+
+    const parentPost = await Post.findById(postId)
+    if (!parentPost) {
+      res.status(404).json({ message: "Post not found!" })
+      return
+    }
+
+    const replies = await Post.find({ parent: postId })
+      .sort({ createdAt: 1 })
+      .populate({
+        path: "user",
+        select: "-password",
+      })
+
+    if (replies.length === 0) {
+      res.status(200).json({ message: "No replies found!", replies: [] })
+      return
+    }
+
+    res.status(200).json({
+      message: "Replies fetched successfully!",
+      replies,
+    })
+  } catch (error) {
+    errorHandler(res, error)
+  }
+}
+
 export {
   createPost,
   deletePost,
-  commentPost,
   likeUnlikePost,
   getAllPosts,
   getLikedPosts,
@@ -605,4 +620,6 @@ export {
   bookmarkPost,
   isBookmarked,
   getBookmarkedPosts,
+  getThread,
+  getReplies,
 }
