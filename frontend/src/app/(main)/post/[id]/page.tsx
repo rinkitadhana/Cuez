@@ -33,8 +33,6 @@ import { useIsFollowing } from "@/hooks/useUser"
 import { useFollowUnfollowUser } from "@/hooks/useUser"
 import CuezBadge from "@/components/pageComponents/CuezBadge"
 import PageHead from "@/components/pageComponents/PageHead"
-import PostStructure from "@/components/pageComponents/PostStructure"
-import { Post } from "@/types/Post"
 
 const PostPage = () => {
   const { id } = useParams()

@@ -429,9 +429,8 @@ const getPostById = async (req: Request, res: Response): Promise<void> => {
       return
     }
 
-    // Find replies (comments) to this post
     const replies = await Post.find({ parent: post._id })
-      .sort({ createdAt: 1 })
+      .sort({ createdAt: -1 })
       .populate({
         path: "user",
         select: "-password",
@@ -550,7 +549,7 @@ const getReplies = async (req: Request, res: Response): Promise<void> => {
     }
 
     const replies = await Post.find({ parent: postId })
-      .sort({ createdAt: 1 })
+      .sort({ createdAt: -1 })
       .populate({
         path: "user",
         select: "-password",
