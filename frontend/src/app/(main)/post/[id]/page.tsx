@@ -60,7 +60,10 @@ const PostPage = () => {
     useIsBookmarked(id as string)
   const { data: isLiked, isPending: isLikedPending } = useIsLiked(id as string)
   const { data: replyCount } = useGetReplyCount(id as string)
-  const isUpdated = post?.post.editedAt !== post?.post.createdAt
+  const isUpdated =
+    post?.post.editedAt &&
+    new Date(post.post.editedAt).getTime() !==
+      new Date(post.post.createdAt).getTime()
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {

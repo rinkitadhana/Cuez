@@ -8,6 +8,7 @@ export interface IPost extends Document {
   parent?: mongoose.Types.ObjectId
   likes: mongoose.Types.ObjectId[]
   bookmarks: mongoose.Types.ObjectId[]
+  editedAt?: Date
   createdAt: Date
   updatedAt: Date
 }
@@ -27,6 +28,9 @@ const postSchema = new mongoose.Schema<IPost>(
 
     likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     bookmarks: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+    editedAt: {
+      type: Date,
+    },
   },
   { timestamps: true, collection: "post-data" }
 )
