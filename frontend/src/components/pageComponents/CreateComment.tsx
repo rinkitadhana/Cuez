@@ -4,25 +4,22 @@ import Image from "next/image"
 import { useGetMe } from "@/hooks/useAuth"
 import { MdOutlineVideoCameraBack } from "react-icons/md"
 import EmojiPickerPortal from "./EmojiPickerPortal"
-import { useCommentPost } from "@/hooks/usePost"
+import { useCreateReply } from "@/hooks/usePost"
 import { useParams } from "next/navigation"
 import useMessageStore from "@/store/messageStore"
 
 const CreateComment = ({ commentActive }: { commentActive: boolean }) => {
   const { data: authUser } = useGetMe()
-  const { mutate: commentPost, isPending: isCommentPostPending } =
-    useCommentPost()
+  const { mutate: createReply, isPending: isReplyPending } = useCreateReply()
   const { setMessage } = useMessageStore()
   const [formData, setFormData] = useState<{
     text?: string
     img?: string
     video?: string
-    user: string
   }>({
     text: "",
     img: "",
     video: "",
-    user: authUser?.user._id || "",
   })
   const { id: postId } = useParams()
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
@@ -85,32 +82,36 @@ const CreateComment = ({ commentActive }: { commentActive: boolean }) => {
     })
   }
 
-  const handleCommentPost = async () => {
+  const handleSubmitReply = async () => {
     if (!formData.text && !formData.img && !formData.video) {
-      setMessage("Please add some content to your comment", "error")
+      setMessage("Please add some content to your reply", "error")
       return
     }
 
     try {
+      const replyData = { ...formData }
+
       if (selectedFiles.imageFile) {
         const base64Image = await convertFileToBase64(selectedFiles.imageFile)
-        formData.img = base64Image
+        replyData.img = base64Image
       }
       if (selectedFiles.videoFile) {
         const base64Video = await convertFileToBase64(selectedFiles.videoFile)
-        formData.video = base64Video
+        replyData.video = base64Video
       }
 
-      commentPost(
-        { postId: postId as string, commentData: formData },
+      createReply(
+        {
+          postData: replyData,
+          parentId: postId as string,
+        },
         {
           onSuccess: () => {
-            setFormData((prev) => ({
-              ...prev,
+            setFormData({
               text: "",
               img: "",
               video: "",
-            }))
+            })
             setSelectedFiles({})
             if (textareaRef.current) {
               textareaRef.current.style.height = "auto"
@@ -198,135 +199,129 @@ const CreateComment = ({ commentActive }: { commentActive: boolean }) => {
           height={32}
           className="rounded-xl size-9 select-none object-cover bg-white"
         />
+      </div>
 
-        <div className="flex items-center justify-start gap-2">
-          <button
-            onClick={() => document.getElementById("imageInput")?.click()}
-            disabled={hasMedia}
-            className={`p-1.5 ${
-              hasMedia
-                ? "opacity-50 bg-zinc-700 cursor-not-allowed"
-                : "hover:bg-zinc-700 bg-zinc-800 "
-            } rounded-xl transition-all duration-200 border border-zinc-700`}
-          >
-            <input
-              id="imageInput"
-              type="file"
-              accept="image/*"
-              className="hidden"
-              onChange={handleImageSelect}
-              disabled={hasMedia}
-            />
-            <ImagePlus size={18} className={hasMedia ? "opacity-50" : ""} />
-          </button>
-          <button
-            onClick={() => document.getElementById("videoInput")?.click()}
-            disabled={hasMedia}
-            className={`p-1.5 ${
-              hasMedia
-                ? "opacity-50 bg-zinc-700 cursor-not-allowed"
-                : "hover:bg-zinc-700 bg-zinc-800 "
-            } rounded-xl transition-all duration-200 border border-zinc-700`}
-          >
-            <input
-              id="videoInput"
-              type="file"
-              accept="video/*"
-              className="hidden"
-              onChange={handleVideoSelect}
-              disabled={hasMedia}
-            />
-            <MdOutlineVideoCameraBack
-              size={18}
-              className={hasMedia ? "opacity-50" : ""}
-            />
-          </button>
-          <div className="relative">
+      <form className="flex flex-col gap-3 w-full">
+        <div className="flex flex-col gap-3">
+          <textarea
+            id="comment-input"
+            ref={textareaRef}
+            value={formData.text || ""}
+            onChange={(e) => {
+              setFormData((prev) => ({ ...prev, text: e.target.value }))
+              // Auto-resize the textarea
+              e.target.style.height = "auto"
+              e.target.style.height = `${e.target.scrollHeight}px`
+            }}
+            className="w-full bg-transparent border border-gray-600 rounded-lg px-2 py-2 focus:outline-none resize-none"
+            placeholder="Post your reply..."
+            rows={2}
+          />
+
+          {hasMedia && (
+            <div className="relative mt-2">
+              {formData.img && (
+                <div className="relative rounded-lg overflow-hidden">
+                  <button
+                    onClick={clearMedia}
+                    className="absolute top-2 right-2 bg-black rounded-full p-1 z-10"
+                  >
+                    <X className="size-5" />
+                  </button>
+                  <Image
+                    src={formData.img}
+                    alt="Selected image"
+                    width={200}
+                    height={200}
+                    className="w-full max-h-[200px] object-contain"
+                  />
+                </div>
+              )}
+              {formData.video && (
+                <div className="relative rounded-lg overflow-hidden">
+                  <button
+                    onClick={clearMedia}
+                    className="absolute top-2 right-2 bg-black bg-opacity-50 rounded-full p-1 z-10"
+                  >
+                    <X className="size-5" />
+                  </button>
+                  <video
+                    src={formData.video}
+                    controls
+                    className="w-full max-h-[300px]"
+                  />
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+
+        <div className="flex justify-between items-center">
+          <div className="flex gap-2">
+            <label className="cursor-pointer">
+              <input
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handleImageSelect}
+              />
+              <ImagePlus
+                className="size-5 text-blue-500 hover:text-blue-400 transition-colors"
+                aria-label="Add image"
+              />
+            </label>
+
+            <label className="cursor-pointer">
+              <input
+                type="file"
+                accept="video/*"
+                className="hidden"
+                onChange={handleVideoSelect}
+              />
+              <MdOutlineVideoCameraBack
+                className="size-5 text-blue-500 hover:text-blue-400 transition-colors"
+                aria-label="Add video"
+              />
+            </label>
+
             <button
               ref={emojiButtonRef}
               onClick={toggleEmojiPicker}
-              className={`p-1.5 ${
-                showEmojiPicker
-                  ? "bg-zinc-700 "
-                  : "hover:bg-zinc-700 bg-zinc-800  "
-              } rounded-xl transition-all duration-200 border border-zinc-700 cursor-pointer`}
+              type="button"
+              aria-label="Add emoji"
             >
-              <SmilePlus size={18} />
+              <SmilePlus className="size-5 text-blue-500 hover:text-blue-400 transition-colors" />
             </button>
-            <EmojiPickerPortal
-              isOpen={showEmojiPicker}
-              onClose={() => setShowEmojiPicker(false)}
-              onEmojiClick={onEmojiClick}
-              buttonRef={emojiButtonRef}
-              position={emojiPosition}
-            />
+
+            {showEmojiPicker && (
+              <EmojiPickerPortal
+                isOpen={showEmojiPicker}
+                onClose={() => setShowEmojiPicker(false)}
+                position={emojiPosition}
+                onEmojiClick={onEmojiClick}
+                buttonRef={emojiButtonRef}
+              />
+            )}
           </div>
+
           <button
-            onClick={handleCommentPost}
-            disabled={
-              isCommentPostPending ||
-              (!formData.text && !formData.img && !formData.video)
-            }
-            className={`p-1.5 ${
-              isCommentPostPending ||
-              (!formData.text && !formData.img && !formData.video)
-                ? "opacity-50 bg-zinc-800 cursor-not-allowed"
-                : "bg-mainclr hover:bg-mainclr/80"
-            } rounded-xl transition-all duration-200`}
+            type="button"
+            onClick={handleSubmitReply}
+            disabled={isReplyPending || (!formData.text && !hasMedia)}
+            className={`flex gap-1 items-center px-4 py-1.5 rounded-full font-semibold ${
+              isReplyPending || (!formData.text && !hasMedia)
+                ? "bg-zinc-700 text-zinc-500 cursor-not-allowed"
+                : "bg-blue-500 text-white hover:bg-blue-400 transition-colors"
+            }`}
           >
-            {isCommentPostPending ? (
-              <Loader2 size={20} className="animate-spin" />
+            {isReplyPending ? (
+              <Loader2 className="size-4 animate-spin" />
             ) : (
-              <ArrowUpFromDot size={20} />
+              "Reply"
             )}
           </button>
         </div>
-      </div>
-      <div className="w-full">
-        <textarea
-          id="comment-input"
-          ref={textareaRef}
-          value={formData.text}
-          onChange={(e) => {
-            setFormData((prev) => ({
-              ...prev,
-              text: e.target.value,
-            }))
-            e.target.style.height = "auto"
-            e.target.style.height = `${e.target.scrollHeight}px`
-          }}
-          placeholder="Add a comment..."
-          className="w-full outline-none placeholder:select-none bg-transparent resize-none overflow-hidden min-h-[40px]"
-        />
-        {(formData.img || formData.video) && (
-          <div className="relative w-full mt-2">
-            <div className="relative">
-              {formData.img ? (
-                <Image
-                  src={formData.img}
-                  alt="Selected image"
-                  className="rounded-lg w-full"
-                  width={1000}
-                  height={1000}
-                />
-              ) : (
-                <video
-                  src={formData.video}
-                  controls
-                  className="rounded-lg w-full"
-                />
-              )}
-              <button
-                type="button"
-                onClick={clearMedia}
-                className="absolute top-2 right-2 bg-black/50 text-white px-2 py-2 rounded-full hover:bg-black/70 transition-all duration-200"
-              >
-                <X size={20} />
-              </button>
-            </div>
-          </div>
-        )}
-      </div>
+      </form>
     </div>
   )
 }

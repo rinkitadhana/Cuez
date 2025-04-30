@@ -6,7 +6,6 @@ export interface IPost extends Document {
   img?: string
   video?: string
   parent?: mongoose.Types.ObjectId
-  threadRoot?: mongoose.Types.ObjectId
   likes: mongoose.Types.ObjectId[]
   bookmarks: mongoose.Types.ObjectId[]
   createdAt: Date
@@ -21,12 +20,6 @@ const postSchema = new mongoose.Schema<IPost>(
     video: String,
 
     parent: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Post",
-      default: null,
-    },
-
-    threadRoot: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Post",
       default: null,

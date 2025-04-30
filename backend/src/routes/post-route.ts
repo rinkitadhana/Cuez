@@ -15,8 +15,8 @@ import {
   bookmarkPost,
   getBookmarkedPosts,
   isBookmarked,
-  getThread,
   getReplies,
+  getReplyCount,
 } from "../controllers/post-controller"
 const router = express.Router()
 
@@ -33,8 +33,8 @@ router.get("/user-posts/:username", protectRoute, getUserPosts)
 router.post("/bookmark-post/:id", protectRoute, bookmarkPost)
 router.get("/is-bookmarked/:id", protectRoute, isBookmarked)
 router.get("/bookmarked-posts", protectRoute, getBookmarkedPosts)
-router.get("/thread/:id", getThread)
-router.get("/replies/:id", getReplies)
+router.get("/replies/:postId", getReplies)
+router.get("/reply-count/:postId", getReplyCount)
 
 router.get("/post/:id", getPostById)
 export default router

@@ -1,17 +1,10 @@
 import { Request, Response } from "express"
 import User from "../models/user-model"
 import { errorHandler } from "../utils/errorHandler"
-import Post, { IPost } from "../models/post-model"
+import Post from "../models/post-model"
 import { v2 as cloudinary } from "cloudinary"
 import Notification from "../models/notification-model"
-import mongoose from "mongoose"
 
-/**
- * Creates a new post or reply
- * - For creating a top-level post: Send only text, img, and/or video
- * - For creating a reply/comment: Also include parentId of the post being replied to
- * The function automatically handles setting up the thread structure and notifications
- */
 const createPost = async (req: Request, res: Response): Promise<void> => {
   try {
     const { text, img, video, parentId } = req.body
@@ -32,7 +25,6 @@ const createPost = async (req: Request, res: Response): Promise<void> => {
       img?: string
       video?: string
       parent?: string
-      threadRoot?: mongoose.Types.ObjectId | string
     } = { user: user._id }
 
     if (img) {
@@ -61,7 +53,6 @@ const createPost = async (req: Request, res: Response): Promise<void> => {
       }
 
       postData.parent = parentId
-      postData.threadRoot = parentPost.threadRoot || parentId
 
       if (userId !== parentPost.user.toString()) {
         const notification = new Notification({
@@ -76,35 +67,6 @@ const createPost = async (req: Request, res: Response): Promise<void> => {
 
     const newPost = await Post.create(postData)
     res.status(201).json({ message: "Post created", post: newPost })
-  } catch (error) {
-    errorHandler(res, error)
-  }
-}
-
-const getThread = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const { postId } = req.params
-
-    let currentPost = await Post.findById(postId)
-      .populate("user", "-password")
-      .lean()
-
-    if (!currentPost) {
-      res.status(404).json({ message: "Post not found!" })
-      return
-    }
-
-    const thread: any[] = [currentPost]
-
-    while (currentPost.parent) {
-      currentPost = await Post.findById(currentPost.parent)
-        .populate("user", "-password")
-        .lean()
-      if (currentPost) thread.unshift(currentPost)
-      else break
-    }
-
-    res.status(200).json({ message: "Thread fetched", thread })
   } catch (error) {
     errorHandler(res, error)
   }
@@ -252,6 +214,9 @@ const deletePost = async (req: Request, res: Response): Promise<void> => {
         })
       }
     }
+
+    await Notification.deleteMany({ post: post._id })
+
     await Post.findByIdAndDelete(req.params.id)
     res.status(200).json({ message: "Post deleted successfully!" })
   } catch (error) {
@@ -605,6 +570,21 @@ const getReplies = async (req: Request, res: Response): Promise<void> => {
   }
 }
 
+const getReplyCount = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { postId } = req.params
+
+    const count = await Post.countDocuments({ parent: postId })
+
+    res.status(200).json({
+      message: "Reply count fetched successfully",
+      count,
+    })
+  } catch (error) {
+    errorHandler(res, error)
+  }
+}
+
 export {
   createPost,
   deletePost,
@@ -620,6 +600,6 @@ export {
   bookmarkPost,
   isBookmarked,
   getBookmarkedPosts,
-  getThread,
   getReplies,
+  getReplyCount,
 }

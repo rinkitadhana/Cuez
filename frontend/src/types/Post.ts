@@ -1,5 +1,4 @@
 import { z } from "zod"
-import { commentSchema } from "./Comment"
 import { userSchema } from "./User"
 
 export const postSchema = z.object({
@@ -11,7 +10,7 @@ export const postSchema = z.object({
   cuezBadge: z.string().optional(),
   likes: z.array(z.string()),
   bookmarks: z.array(z.string()),
-  comments: z.array(commentSchema),
+  parent: z.string().optional(),
   createdAt: z.string(),
   updatedAt: z.string(),
   editedAt: z.string().optional(),

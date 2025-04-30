@@ -51,6 +51,7 @@ interface CreatePostData {
   text?: string
   img?: string
   video?: string
+  parentId?: string
 }
 
 const createPost = async (
@@ -434,5 +435,81 @@ export const useGetBookmarkedPosts = () => {
   return useQuery<GetBookmarkedPostsResponse, AxiosError>({
     queryKey: ["bookmarked-posts"],
     queryFn: () => getBookmarkedPosts(),
+  })
+}
+
+export const useCreateReply = () => {
+  const { setMessage } = useMessageStore()
+  const queryClient = useQueryClient()
+  return useMutation<
+    CreatePostResponse,
+    AxiosError,
+    { postData: CreatePostData; parentId: string }
+  >({
+    mutationFn: ({ postData, parentId }) => {
+      return createPost({
+        ...postData,
+        parentId,
+      })
+    },
+    onSuccess: (data: CreatePostResponse, variables) => {
+      setMessage(data.message, "success")
+      queryClient.invalidateQueries({ queryKey: ["posts"] })
+      queryClient.invalidateQueries({ queryKey: ["post", variables.parentId] })
+      queryClient.invalidateQueries({
+        queryKey: ["replies", variables.parentId],
+      })
+    },
+    onError: (error: AxiosError) => {
+      const message =
+        (error.response?.data as CreatePostResponse)?.message ||
+        "Failed to create reply!"
+      setMessage(message, "error")
+    },
+  })
+}
+
+interface GetRepliesResponse {
+  message: string
+  replies: Post[]
+}
+
+const getReplies = async (postId: string): Promise<GetRepliesResponse> => {
+  const { data } = await axios.get<GetRepliesResponse>(
+    config.backendUrl + `/post/replies/${postId}`,
+    { withCredentials: true }
+  )
+  return data
+}
+
+export const useGetReplies = (postId: string) => {
+  return useQuery<GetRepliesResponse, AxiosError>({
+    queryKey: ["replies", postId],
+    queryFn: () => getReplies(postId),
+    enabled: !!postId,
+  })
+}
+
+// Add a function to get the number of replies for a post
+interface GetReplyCountResponse {
+  message: string
+  count: number
+}
+
+const getReplyCount = async (
+  postId: string
+): Promise<GetReplyCountResponse> => {
+  const { data } = await axios.get<GetReplyCountResponse>(
+    config.backendUrl + `/post/reply-count/${postId}`,
+    { withCredentials: true }
+  )
+  return data
+}
+
+export const useGetReplyCount = (postId: string) => {
+  return useQuery<GetReplyCountResponse, AxiosError>({
+    queryKey: ["reply-count", postId],
+    queryFn: () => getReplyCount(postId),
+    enabled: !!postId,
   })
 }

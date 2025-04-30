@@ -14,6 +14,7 @@ import {
   useIsBookmarked,
   useIsLiked,
   useLikeUnlikePost,
+  useGetReplyCount,
 } from "@/hooks/usePost"
 import { Loader2, X } from "lucide-react"
 import config from "@/config/config"
@@ -32,6 +33,8 @@ import { useIsFollowing } from "@/hooks/useUser"
 import { useFollowUnfollowUser } from "@/hooks/useUser"
 import CuezBadge from "@/components/pageComponents/CuezBadge"
 import PageHead from "@/components/pageComponents/PageHead"
+import PostStructure from "@/components/pageComponents/PostStructure"
+import { Post } from "@/types/Post"
 
 const PostPage = () => {
   const { id } = useParams()
@@ -58,6 +61,7 @@ const PostPage = () => {
   const { data: isBookmarked, isPending: isBookmarkedPending } =
     useIsBookmarked(id as string)
   const { data: isLiked, isPending: isLikedPending } = useIsLiked(id as string)
+  const { data: replyCount } = useGetReplyCount(id as string)
   const isUpdated = post?.post.editedAt !== post?.post.createdAt
 
   useEffect(() => {
@@ -321,7 +325,7 @@ const PostPage = () => {
                           <BiCommentDetail className="group-hover/comment:scale-[85%] transition-all duration-300" />
                         </button>
                         <span className="text-sm">
-                          {post?.post?.comments?.length}
+                          {replyCount?.count || 0}
                         </span>
                       </div>
                       <div className="flex items-center gap-1">
@@ -381,6 +385,7 @@ const PostPage = () => {
               </div>
             </div>
           </div>
+
           <CreateComment commentActive={commentActive} />
           <GetComments />
 

@@ -14,6 +14,7 @@ import {
   useIsBookmarked,
   useIsLiked,
   useLikeUnlikePost,
+  useGetReplyCount,
 } from "@/hooks/usePost"
 import { Loader2, X } from "lucide-react"
 import config from "@/config/config"
@@ -24,9 +25,10 @@ import { useFollowUnfollowUser, useIsFollowing } from "@/hooks/useUser"
 import CuezBadge from "./CuezBadge"
 interface PostStructureProps {
   post: Post
+  isReply?: boolean
 }
 
-const PostStructure = ({ post }: PostStructureProps) => {
+const PostStructure = ({ post, isReply = false }: PostStructureProps) => {
   const router = useRouter()
   const [isOpen, setIsOpen] = useState(false)
   const [isImageModalOpen, setIsImageModalOpen] = useState(false)
@@ -43,6 +45,7 @@ const PostStructure = ({ post }: PostStructureProps) => {
   const { data: isBookmarked, isPending: isBookmarkedPending } =
     useIsBookmarked(post._id)
   const { data: isLiked, isPending: isLikedPending } = useIsLiked(post._id)
+  const { data: replyCount } = useGetReplyCount(post._id)
   const { data: isFollowing, isPending: isFollowingPending } = useIsFollowing(
     post?.user?._id || ""
   )
@@ -137,7 +140,9 @@ const PostStructure = ({ post }: PostStructureProps) => {
     <section
       onClick={() => router.push(`/post/${post._id}`)}
       ref={postRef}
-      className="flex relative flex-col gap-4 p-4 border-b border-zinc-700 hover:bg-zinc-900 transition-all duration-200 cursor-pointer"
+      className={`flex relative flex-col gap-4 p-4 border-b border-zinc-700 hover:bg-zinc-900 transition-all duration-200 cursor-pointer ${
+        isReply ? "pl-8 border-l border-l-zinc-700" : ""
+      }`}
     >
       <div className="flex gap-2 w-full">
         <Image
@@ -283,7 +288,7 @@ const PostStructure = ({ post }: PostStructureProps) => {
                   >
                     <BiCommentDetail className="group-hover/comment:scale-[85%] transition-all duration-300" />
                   </button>
-                  <span className="text-sm">{post?.comments.length}</span>
+                  <span className="text-sm">{replyCount?.count || 0}</span>
                 </div>
                 <div className="flex items-center gap-1">
                   <button className="p-1.5 hover:bg-green-500/30 rounded-lg transition-all group/repost  duration-200">
