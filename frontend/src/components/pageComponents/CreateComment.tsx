@@ -1,4 +1,4 @@
-import { ArrowUpFromDot, ImagePlus, Loader2, SmilePlus, X } from "lucide-react"
+import { ImagePlus, Loader2, SmilePlus, X } from "lucide-react"
 import React, { useState, useRef, useEffect } from "react"
 import Image from "next/image"
 import { useGetMe } from "@/hooks/useAuth"

@@ -25,10 +25,9 @@ import { useFollowUnfollowUser, useIsFollowing } from "@/hooks/useUser"
 import CuezBadge from "./CuezBadge"
 interface PostStructureProps {
   post: Post
-  isReply?: boolean
 }
 
-const PostStructure = ({ post, isReply = false }: PostStructureProps) => {
+const PostStructure = ({ post }: PostStructureProps) => {
   const router = useRouter()
   const [isOpen, setIsOpen] = useState(false)
   const [isImageModalOpen, setIsImageModalOpen] = useState(false)
