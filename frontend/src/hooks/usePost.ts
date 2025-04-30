@@ -82,6 +82,10 @@ export const useCreatePost = () => {
       queryClient.invalidateQueries({ queryKey: ["liked-posts"] })
       queryClient.invalidateQueries({ queryKey: ["bookmarked-posts"] })
       queryClient.invalidateQueries({ queryKey: ["is-bookmarked"] })
+      queryClient.invalidateQueries({ queryKey: ["reply-count"] })
+      queryClient.invalidateQueries({ queryKey: ["replies"] })
+      queryClient.invalidateQueries({ queryKey: ["is-liked"] })
+      queryClient.invalidateQueries({ queryKey: ["post"] })
     },
     onError: (error: AxiosError) => {
       const message =
@@ -121,6 +125,10 @@ export const useDeletePost = () => {
       queryClient.invalidateQueries({ queryKey: ["liked-posts"] })
       queryClient.invalidateQueries({ queryKey: ["bookmarked-posts"] })
       queryClient.invalidateQueries({ queryKey: ["is-bookmarked"] })
+      queryClient.invalidateQueries({ queryKey: ["reply-count"] })
+      queryClient.invalidateQueries({ queryKey: ["replies"] })
+      queryClient.invalidateQueries({ queryKey: ["is-liked"] })
+      queryClient.invalidateQueries({ queryKey: ["post"] })
     },
     onError: (error: AxiosError) => {
       const message =
@@ -177,6 +185,17 @@ export const useEditPost = () => {
       queryClient.invalidateQueries({
         queryKey: ["is-bookmarked", variables.postId],
       })
+      queryClient.invalidateQueries({ queryKey: ["is-bookmarked"] })
+      queryClient.invalidateQueries({
+        queryKey: ["reply-count", variables.postId],
+      })
+      queryClient.invalidateQueries({ queryKey: ["reply-count"] })
+      queryClient.invalidateQueries({ queryKey: ["replies", variables.postId] })
+      queryClient.invalidateQueries({ queryKey: ["replies"] })
+      queryClient.invalidateQueries({
+        queryKey: ["is-liked", variables.postId],
+      })
+      queryClient.invalidateQueries({ queryKey: ["is-liked"] })
     },
     onError: (error: AxiosError) => {
       const message =
@@ -216,10 +235,16 @@ export const useLikeUnlikePost = () => {
       queryClient.invalidateQueries({ queryKey: ["posts"] })
       queryClient.invalidateQueries({ queryKey: ["post", postId] })
       queryClient.invalidateQueries({ queryKey: ["is-liked", postId] })
+      queryClient.invalidateQueries({ queryKey: ["is-liked"] })
       queryClient.invalidateQueries({ queryKey: ["user-posts"] })
       queryClient.invalidateQueries({ queryKey: ["liked-posts"] })
       queryClient.invalidateQueries({ queryKey: ["bookmarked-posts"] })
       queryClient.invalidateQueries({ queryKey: ["is-bookmarked", postId] })
+      queryClient.invalidateQueries({ queryKey: ["is-bookmarked"] })
+      queryClient.invalidateQueries({ queryKey: ["reply-count", postId] })
+      queryClient.invalidateQueries({ queryKey: ["reply-count"] })
+      queryClient.invalidateQueries({ queryKey: ["replies", postId] })
+      queryClient.invalidateQueries({ queryKey: ["replies"] })
     },
     onError: (error: AxiosError) => {
       const message =
@@ -303,11 +328,19 @@ export const useCommentPost = () => {
     mutationFn: ({ postId, commentData }) => commentPost(postId, commentData),
     onSuccess: (data: CommentPostResponse, { postId }) => {
       setMessage(data.message, "success")
+      queryClient.invalidateQueries({ queryKey: ["posts"] })
       queryClient.invalidateQueries({ queryKey: ["post", postId] })
       queryClient.invalidateQueries({ queryKey: ["user-posts"] })
       queryClient.invalidateQueries({ queryKey: ["liked-posts"] })
       queryClient.invalidateQueries({ queryKey: ["bookmarked-posts"] })
       queryClient.invalidateQueries({ queryKey: ["is-bookmarked", postId] })
+      queryClient.invalidateQueries({ queryKey: ["is-bookmarked"] })
+      queryClient.invalidateQueries({ queryKey: ["is-liked", postId] })
+      queryClient.invalidateQueries({ queryKey: ["is-liked"] })
+      queryClient.invalidateQueries({ queryKey: ["reply-count", postId] })
+      queryClient.invalidateQueries({ queryKey: ["reply-count"] })
+      queryClient.invalidateQueries({ queryKey: ["replies", postId] })
+      queryClient.invalidateQueries({ queryKey: ["replies"] })
     },
     onError: (error: AxiosError) => {
       const message =
@@ -385,9 +418,16 @@ export const useBookmarkPost = () => {
       queryClient.invalidateQueries({ queryKey: ["posts"] })
       queryClient.invalidateQueries({ queryKey: ["post", postId] })
       queryClient.invalidateQueries({ queryKey: ["is-bookmarked", postId] })
+      queryClient.invalidateQueries({ queryKey: ["is-bookmarked"] })
       queryClient.invalidateQueries({ queryKey: ["user-posts"] })
       queryClient.invalidateQueries({ queryKey: ["liked-posts"] })
       queryClient.invalidateQueries({ queryKey: ["bookmarked-posts"] })
+      queryClient.invalidateQueries({ queryKey: ["is-liked", postId] })
+      queryClient.invalidateQueries({ queryKey: ["is-liked"] })
+      queryClient.invalidateQueries({ queryKey: ["reply-count", postId] })
+      queryClient.invalidateQueries({ queryKey: ["reply-count"] })
+      queryClient.invalidateQueries({ queryKey: ["replies", postId] })
+      queryClient.invalidateQueries({ queryKey: ["replies"] })
     },
     onError: (error: AxiosError) => {
       const message =
@@ -459,6 +499,22 @@ export const useCreateReply = () => {
       queryClient.invalidateQueries({
         queryKey: ["replies", variables.parentId],
       })
+      queryClient.invalidateQueries({ queryKey: ["replies"] })
+      queryClient.invalidateQueries({ queryKey: ["user-posts"] })
+      queryClient.invalidateQueries({ queryKey: ["liked-posts"] })
+      queryClient.invalidateQueries({ queryKey: ["bookmarked-posts"] })
+      queryClient.invalidateQueries({
+        queryKey: ["is-bookmarked", variables.parentId],
+      })
+      queryClient.invalidateQueries({ queryKey: ["is-bookmarked"] })
+      queryClient.invalidateQueries({
+        queryKey: ["is-liked", variables.parentId],
+      })
+      queryClient.invalidateQueries({ queryKey: ["is-liked"] })
+      queryClient.invalidateQueries({
+        queryKey: ["reply-count", variables.parentId],
+      })
+      queryClient.invalidateQueries({ queryKey: ["reply-count"] })
     },
     onError: (error: AxiosError) => {
       const message =
