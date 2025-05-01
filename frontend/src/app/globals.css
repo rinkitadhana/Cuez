@@ -1,0 +1,65 @@
+/* Thread Styling - Simple Implementation */
+
+/* Global thread styles */
+.twitter-thread-container {
+  --thread-line-color: #1d9bf0;
+  --thread-line-width: 3px;
+  --thread-line-left: 25px;
+}
+
+/* Thread line - MADE MORE VISIBLE */
+.twitter-thread-container::before,
+.thread-post::before,
+.has-connector::after,
+.parent-thread::after {
+  content: "" !important;
+  position: absolute !important;
+  top: 50px !important;
+  bottom: 0 !important;
+  left: var(--thread-line-left) !important;
+  width: var(--thread-line-width) !important;
+  background-color: var(--thread-line-color) !important;
+  z-index: 1 !important;
+  pointer-events: none !important;
+  display: block !important;
+}
+
+/* Force visibility of thread line */
+.twitter-thread-container * {
+  transition: none !important;
+}
+
+/* Special connector line between posts */
+.parent-thread::after {
+  top: auto !important;
+  height: 20px !important;
+  bottom: -10px !important;
+}
+
+/* Explicitly add thread line to each post */
+.twitter-thread-container .thread-post::after {
+  content: "" !important;
+  position: absolute !important;
+  top: 0 !important;
+  bottom: 0 !important;
+  left: var(--thread-line-left) !important;
+  width: var(--thread-line-width) !important;
+  background-color: var(--thread-line-color) !important;
+  z-index: 1 !important;
+  pointer-events: none !important;
+  display: block !important;
+}
+
+/* Profile image styling - only z-index, no size changes */
+.thread-post .size-10 {
+  position: relative !important;
+  z-index: 10 !important;
+}
+
+/* Ensure overflow is visible */
+.thread-post,
+.has-connector,
+.parent-thread {
+  position: relative !important;
+  overflow: visible !important;
+}

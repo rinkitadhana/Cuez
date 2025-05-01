@@ -584,6 +584,40 @@ const getReplyCount = async (req: Request, res: Response): Promise<void> => {
   }
 }
 
+const getParentThread = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { postId } = req.params
+    let currentPost = await Post.findById(postId)
+
+    if (!currentPost) {
+      res.status(404).json({ message: "Post not found!" })
+      return
+    }
+
+    const thread: any[] = []
+
+    // Traverse up the parent chain and collect all parent posts
+    while (currentPost && currentPost.parent) {
+      currentPost = await Post.findById(currentPost.parent).populate({
+        path: "user",
+        select: "-password",
+      })
+
+      if (currentPost) {
+        thread.push(currentPost)
+      }
+    }
+
+    // Return the posts in chronological order (oldest first)
+    res.status(200).json({
+      message: "Parent thread fetched successfully!",
+      thread: thread.reverse(),
+    })
+  } catch (error) {
+    errorHandler(res, error)
+  }
+}
+
 export {
   createPost,
   deletePost,
@@ -601,4 +635,5 @@ export {
   getBookmarkedPosts,
   getReplies,
   getReplyCount,
+  getParentThread,
 }

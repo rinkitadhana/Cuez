@@ -15,6 +15,7 @@ import {
   useIsLiked,
   useLikeUnlikePost,
   useGetReplyCount,
+  useGetParentThread,
 } from "@/hooks/usePost"
 import { Loader2, X } from "lucide-react"
 import config from "@/config/config"
@@ -33,6 +34,7 @@ import { useIsFollowing } from "@/hooks/useUser"
 import { useFollowUnfollowUser } from "@/hooks/useUser"
 import CuezBadge from "@/components/pageComponents/CuezBadge"
 import PageHead from "@/components/pageComponents/PageHead"
+import ParentThread from "@/components/pageComponents/ParentThread"
 
 const PostPage = () => {
   const { id } = useParams()
@@ -64,6 +66,9 @@ const PostPage = () => {
     post?.post.editedAt &&
     new Date(post.post.editedAt).getTime() !==
       new Date(post.post.createdAt).getTime()
+  const { data: parentThreadData } = useGetParentThread(id as string)
+  const parentUser =
+    parentThreadData?.thread?.[parentThreadData.thread.length - 1]?.user
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -190,7 +195,22 @@ const PostPage = () => {
       <Header title="Post" />
       {post?.post ? (
         <section>
+          {post.post.parent && <ParentThread postId={id as string} />}
           <div className="flex relative flex-col gap-4 p-4">
+            {post.post.parent && parentUser && (
+              <div className="text-sm text-zinc-400 mb-2 flex items-center">
+                <span>Replying to </span>
+                <span
+                  className="text-blue-500 hover:underline cursor-pointer ml-1"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    router.push(`/${parentUser.username}`)
+                  }}
+                >
+                  @{parentUser.username}
+                </span>
+              </div>
+            )}
             <div className="flex gap-2 w-full">
               <Image
                 onClick={userProfile}

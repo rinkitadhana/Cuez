@@ -569,3 +569,26 @@ export const useGetReplyCount = (postId: string) => {
     enabled: !!postId,
   })
 }
+
+interface GetParentThreadResponse {
+  message: string
+  thread: Post[]
+}
+
+const getParentThread = async (
+  postId: string
+): Promise<GetParentThreadResponse> => {
+  const { data } = await axios.get<GetParentThreadResponse>(
+    config.backendUrl + `/post/parent-thread/${postId}`,
+    { withCredentials: true }
+  )
+  return data
+}
+
+export const useGetParentThread = (postId: string) => {
+  return useQuery<GetParentThreadResponse, AxiosError>({
+    queryKey: ["parent-thread", postId],
+    queryFn: () => getParentThread(postId),
+    enabled: !!postId,
+  })
+}
