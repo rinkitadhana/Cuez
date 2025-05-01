@@ -38,7 +38,7 @@ const ParentThread: React.FC<ParentThreadProps> = ({ postId }) => {
           <div
             style={{
               position: "absolute",
-              top: "0",
+              top: index === 0 ? "50px" : "0",
               bottom: "0",
               left: "35px",
               width: "2px",
