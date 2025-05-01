@@ -27,7 +27,7 @@ const GetComments = () => {
   return (
     <div className="replies-container">
       {repliesData.replies.map((reply) => (
-        <PostStructure key={reply._id} post={reply} isReply={true} />
+        <PostStructure key={reply._id} post={reply} />
       ))}
     </div>
   )
