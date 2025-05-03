@@ -11,8 +11,8 @@ import { useLogout, useGetMe } from "@/hooks/useAuth"
 import {
   IoBookmarks,
   IoBookmarksOutline,
-  IoFolderOpen,
-  IoFolderOpenOutline,
+  // IoFolderOpen,
+  // IoFolderOpenOutline,
   IoSettingsOutline,
   IoSettingsSharp,
 } from "react-icons/io5"
@@ -20,8 +20,8 @@ import { LuLogOut } from "react-icons/lu"
 import {
   MdChatBubble,
   MdChatBubbleOutline,
-  MdOutlineWork,
-  MdWorkOutline,
+  // MdOutlineWork,
+  // MdWorkOutline,
 } from "react-icons/md"
 import {
   RiHome2Fill,
