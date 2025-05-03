@@ -1,15 +1,19 @@
 {
-  "name": "backend",
-  "version": "0.0.1",
-  "main": "index.js",
+  "name": "cuez-backend",
+  "version": "1.0.0",
+  "main": "dist/index.js",
   "scripts": {
     "dev": "nodemon",
     "start": "node dist/index.js",
-    "build": "tsc"
+    "build": "tsc",
+    "render-build": "npm install && npm run build"
   },
   "author": "Rinkit Adhana",
   "license": "ISC",
-  "description": "",
+  "engines": {
+    "node": ">=18.x"
+  },
+  "description": "backend for cuez",
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
     "@types/cookie-parser": "^1.4.8",
@@ -20,7 +24,9 @@
     "@types/mongoose": "^5.11.97",
     "@types/node": "^22.15.3",
     "@types/nodemailer": "^6.4.17",
-    "nodemon": "^3.1.9"
+    "nodemon": "^3.1.9",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
@@ -31,8 +37,6 @@
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.10.1",
-    "nodemailer": "^6.10.0",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.7.3"
+    "nodemailer": "^6.10.0"
   }
 }
