@@ -418,7 +418,7 @@ const PostStructure = ({ post, inThread = false }: PostStructureProps) => {
           }}
           className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center"
         >
-          <div className="relative max-w-4xl w-full mx-2">
+          <div className="relative w-[50%]  mx-2">
             <button
               onClick={() => setIsImageModalOpen(false)}
               className="absolute right-4 top-4 p-2 rounded-full bg-zinc-800 hover:bg-zinc-700 transition-all duration-200"

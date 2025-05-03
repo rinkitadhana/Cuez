@@ -23,6 +23,8 @@ export const useGetSuggestedUsers = () => {
   return useQuery<SuggestedUsersResponse, AxiosError>({
     queryKey: ["suggested-users"],
     queryFn: getSuggestedUsers,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
   })
 }
 
