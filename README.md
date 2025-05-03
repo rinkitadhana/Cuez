@@ -8,9 +8,9 @@
 Cuez is a social media platform designed specifically for programmers.  
 It offers multiple features tailored to developers, including:
 
-- 🔄 Uploading and sharing projects
-- ❓ Asking and answering doubts
-- 💼 Exploring job opportunities
+- Uploading and sharing projects
+- Asking and answering doubts
+- Exploring job opportunities
 
 With a community-driven approach, **Cuez** helps programmers connect, learn, and grow together.
 
@@ -44,7 +44,7 @@ With a community-driven approach, **Cuez** helps programmers connect, learn, and
 
 ---
 
-## 📚 Features
+## Features
 
 - Project Uploads
 - Job Listings
