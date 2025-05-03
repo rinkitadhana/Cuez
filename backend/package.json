@@ -15,7 +15,6 @@
   },
   "description": "backend for cuez",
   "devDependencies": {
-   
     "nodemon": "^3.1.9",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.3"
@@ -38,6 +37,6 @@
     "@types/jsonwebtoken": "^9.0.9",
     "@types/mongoose": "^5.11.97",
     "@types/node": "^22.15.3",
-    "@types/nodemailer": "^6.4.17",
+    "@types/nodemailer": "^6.4.17"
   }
 }
