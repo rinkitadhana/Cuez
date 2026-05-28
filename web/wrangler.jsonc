@@ -1,6 +1,11 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "cuez",
+  "main": ".open-next/worker.js",
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
   "compatibility_date": "2026-05-29",
   "compatibility_flags": ["nodejs_compat"],
   "observability": {
