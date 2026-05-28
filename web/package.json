@@ -7,8 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "preview": "pnpm dlx opennextjs-cloudflare@latest build && pnpm dlx opennextjs-cloudflare@latest preview",
-    "deploy": "pnpm dlx opennextjs-cloudflare@latest build && pnpm dlx opennextjs-cloudflare@latest deploy"
+    "preview": "pnpm dlx @opennextjs/cloudflare@latest build && pnpm dlx @opennextjs/cloudflare@latest preview",
+    "deploy": "pnpm dlx @opennextjs/cloudflare@latest build && pnpm dlx @opennextjs/cloudflare@latest deploy"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.66.9",
