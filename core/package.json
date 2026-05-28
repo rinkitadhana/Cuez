@@ -4,9 +4,8 @@
   "main": "dist/index.js",
   "scripts": {
     "dev": "nodemon",
-    "start": "node dist/index.js",
     "build": "tsc",
-    "render-build": "npm install && npm run build"
+    "start": "node dist/index.js"
   },
   "author": "Rinkit Adhana",
   "license": "ISC",
